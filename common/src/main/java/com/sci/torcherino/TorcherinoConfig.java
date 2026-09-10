@@ -21,6 +21,16 @@ public final class TorcherinoConfig {
     private static final String GENERAL = "general";
     private static final String BLACKLIST = "blacklist";
 
+    /**
+     * Modern config location: {@code config/torcherino.toml}.
+     *
+     * <p>7.5 used {@code config/sci4me/torcherino.cfg}; the {@code sci4me} folder and the
+     * {@code .cfg} extension are intentionally dropped in favour of the convention every
+     * current loader uses. Key names and sections inside the file are still the original
+     * ones, so a server owner can migrate by hand.</p>
+     */
+    public static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".toml";
+
     /** (For Server Owners) Is it logged when someone places a Torcherino? */
     public static boolean logPlacement = false;
     /** Is the recipe for Torcherino extremely OP? */
@@ -41,7 +51,7 @@ public final class TorcherinoConfig {
     }
 
     public static synchronized void load() {
-        final Path path = Services.PLATFORM.getConfigDir().resolve(Constants.MOD_ID + ".toml");
+        final Path path = Services.PLATFORM.getConfigDir().resolve(CONFIG_FILE_NAME);
         try {
             if (path.getParent() != null) {
                 Files.createDirectories(path.getParent());
@@ -49,6 +59,7 @@ public final class TorcherinoConfig {
         } catch (Exception e) {
             Constants.LOG.warn("Could not create the config directory for {}", path, e);
         }
+        Constants.LOG.info("Loading Torcherino configuration from {}", path.toAbsolutePath());
 
         try (CommentedFileConfig cfg = CommentedFileConfig.builder(path).preserveInsertionOrder().build()) {
             cfg.load();
