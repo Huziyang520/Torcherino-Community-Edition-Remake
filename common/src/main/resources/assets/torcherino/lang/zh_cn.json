@@ -1,0 +1,14 @@
+{
+  "block.torcherino.blocktorcherino": "加速火把",
+  "block.torcherino.blockcompressedtorcherino": "压缩加速火把",
+  "block.torcherino.blockdoublecompressedtorcherino": "二重压缩加速火把",
+  "block.torcherino.blocktriplecompressedtorcherino": "三重压缩加速火把",
+  "block.torcherino.blocklanterino": "加速南瓜灯",
+  "block.torcherino.blockcompressedlanterino": "压缩加速南瓜灯",
+  "block.torcherino.blockdoublecompressedlanterino": "二重压缩加速南瓜灯",
+  "block.torcherino.wall_blocktorcherino": "加速火把",
+  "block.torcherino.wall_blockcompressedtorcherino": "压缩加速火把",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "二重压缩加速火把",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "三重压缩加速火把",
+  "key.torcherino.useage_key": "切换加速模式"
+}

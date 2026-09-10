@@ -1,0 +1,14 @@
+{
+  "block.torcherino.blocktorcherino": "Факел ускорения",
+  "block.torcherino.blockcompressedtorcherino": "Сжатый факел ускорения",
+  "block.torcherino.blockdoublecompressedtorcherino": "Дважды сжатый факел ускорения",
+  "block.torcherino.blocktriplecompressedtorcherino": "Трижды сжатый факел ускорения",
+  "block.torcherino.blocklanterino": "Светильник ускорения",
+  "block.torcherino.blockcompressedlanterino": "Сжатый светильник ускорения",
+  "block.torcherino.blockdoublecompressedlanterino": "Дваждый сжатый ветильник ускорения",
+  "block.torcherino.wall_blocktorcherino": "Факел ускорения",
+  "block.torcherino.wall_blockcompressedtorcherino": "Сжатый факел ускорения",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "Дважды сжатый факел ускорения",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "Трижды сжатый факел ускорения",
+  "key.torcherino.useage_key": "Модификатор ускорения"
+}

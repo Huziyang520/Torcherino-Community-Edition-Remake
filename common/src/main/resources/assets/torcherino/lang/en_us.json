@@ -1,0 +1,14 @@
+{
+  "block.torcherino.blocktorcherino": "Torcherino",
+  "block.torcherino.blockcompressedtorcherino": "Compressed Torcherino",
+  "block.torcherino.blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "block.torcherino.blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "block.torcherino.blocklanterino": "Jack o'Lanterino",
+  "block.torcherino.blockcompressedlanterino": "Compressed Jack o'Lanterino",
+  "block.torcherino.blockdoublecompressedlanterino": "Double Compressed Jack o'Lanterino",
+  "block.torcherino.wall_blocktorcherino": "Torcherino",
+  "block.torcherino.wall_blockcompressedtorcherino": "Compressed Torcherino",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "key.torcherino.useage_key": "Torcherino Modifier"
+}

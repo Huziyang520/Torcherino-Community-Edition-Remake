@@ -1,0 +1,19 @@
+package com.sci.torcherino.blocks.tiles;
+
+import com.sci.torcherino.blocks.ModBlockEntities;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
+/** Compression tier 1 - nine times the base speed. */
+public final class TileCompressedTorcherino extends TileTorcherino {
+
+    public TileCompressedTorcherino(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.COMPRESSED_TORCHERINO, pos, state);
+    }
+
+    @Override
+    protected int speed(int base) {
+        return base * 9;
+    }
+}

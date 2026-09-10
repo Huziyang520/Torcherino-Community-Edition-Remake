@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:block/orientable",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [ 0, 135, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
+  "textures": {
+    "top": "minecraft:block/pumpkin_top",
+    "front": "torcherino:block/double_compressed_lanterino",
+    "side": "minecraft:block/pumpkin_side"
+  }
+}

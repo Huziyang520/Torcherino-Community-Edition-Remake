@@ -1,0 +1,14 @@
+{
+  "block.torcherino.blocktorcherino": "Beschleunigungsfackel",
+  "block.torcherino.blockcompressedtorcherino": "komprimierte Beschleunigungsfackel",
+  "block.torcherino.blockdoublecompressedtorcherino": "Doppelt komprimierte Beschleunigungsfackel",
+  "block.torcherino.blocktriplecompressedtorcherino": "Dreifach komprimierte Beschleunigungsfackel",
+  "block.torcherino.blocklanterino": "Beschleunigungs Kürbislaterne",
+  "block.torcherino.blockcompressedlanterino": "komprimierte Beschleunigungs Kürbislaterne",
+  "block.torcherino.blockdoublecompressedlanterino": "Doppelt komprimierte Beschleunigungs Kürbislaterne",
+  "block.torcherino.wall_blocktorcherino": "Beschleunigungsfackel",
+  "block.torcherino.wall_blockcompressedtorcherino": "komprimierte Beschleunigungsfackel",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "Doppelt komprimierte Beschleunigungsfackel",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "Dreifach komprimierte Beschleunigungsfackel",
+  "key.torcherino.useage_key": "Beschleunigungsfackel Modifikator"
+}
