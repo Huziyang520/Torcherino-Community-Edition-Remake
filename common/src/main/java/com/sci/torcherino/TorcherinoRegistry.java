@@ -70,7 +70,11 @@ public final class TorcherinoRegistry {
     }
 
     public static void blacklistBlock(Block block) {
-        BLACKLISTED_BLOCKS.add(block);
+        // Registry entries resolve lazily, so an entry that is not registered yet yields
+        // null. Skipping it is harmless: nothing can match null in the acceleration loop.
+        if (block != null) {
+            BLACKLISTED_BLOCKS.add(block);
+        }
     }
 
     public static void blacklistTile(Class<? extends BlockEntity> tile) {
@@ -100,17 +104,17 @@ public final class TorcherinoRegistry {
         blacklistBlock(Blocks.LAVA);
 
         // Own blocks, so Torcherinos never accelerate each other.
-        blacklistBlock(ModBlocks.TORCHERINO);
-        blacklistBlock(ModBlocks.WALL_TORCHERINO);
-        blacklistBlock(ModBlocks.COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.WALL_COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.WALL_DOUBLE_COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.TRIPLE_COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.WALL_TRIPLE_COMPRESSED_TORCHERINO);
-        blacklistBlock(ModBlocks.LANTERINO);
-        blacklistBlock(ModBlocks.COMPRESSED_LANTERINO);
-        blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_LANTERINO);
+        blacklistBlock(ModBlocks.TORCHERINO.get());
+        blacklistBlock(ModBlocks.WALL_TORCHERINO.get());
+        blacklistBlock(ModBlocks.COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.WALL_COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.WALL_DOUBLE_COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.TRIPLE_COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.WALL_TRIPLE_COMPRESSED_TORCHERINO.get());
+        blacklistBlock(ModBlocks.LANTERINO.get());
+        blacklistBlock(ModBlocks.COMPRESSED_LANTERINO.get());
+        blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_LANTERINO.get());
 
         blacklistTile(TileTorcherino.class);
         blacklistTile(TileCompressedTorcherino.class);

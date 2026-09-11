@@ -5,6 +5,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
+import java.util.function.Supplier;
+
 /**
  * Performs the actual registry writes for the common code.
  *
@@ -13,18 +15,25 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
  * narrow callback interface that each loader implements with its own preferred
  * mechanism (deferred registers on Forge, immediate registration on Fabric).</p>
  *
- * <p>Block entity types deserve special mention: the vanilla {@code Builder.of} takes a
- * package private supplier interface that the common code cannot reference, so the
- * loader creates and returns the type instead.</p>
+ * <p><b>Everything is a supplier on purpose.</b> {@code Block}'s constructor writes to
+ * {@code BuiltInRegistries.BLOCK} through {@code createIntrusiveHolder}, so a block may
+ * only be instantiated while the loader holds the registry open - inside the deferred
+ * register callback on Forge, inside {@code onInitialize} on Fabric. Building instances
+ * eagerly in the mod constructor throws {@code Registry is already frozen}.</p>
+ *
+ * <p>Block entity types are built by the loader as well, because vanilla's
+ * {@code BlockEntityType.Builder.of} takes a package private supplier interface that the
+ * common code cannot reference. The common side only supplies the factory and a lazy
+ * array of valid blocks.</p>
  *
  * <p>Implementations are invoked from inside the loader registration window only.</p>
  */
 public interface IRegistrationHelper {
 
-    void registerBlock(String name, Block block);
+    <T extends Block> RegistryEntry<T> registerBlock(String name, Supplier<T> supplier);
 
-    void registerItem(String name, Item item);
+    <T extends Item> RegistryEntry<T> registerItem(String name, Supplier<T> supplier);
 
-    <T extends BlockEntity> BlockEntityType<T> registerBlockEntityType(
-            String name, BlockEntityFactory<T> factory, Block... validBlocks);
+    <T extends BlockEntity> RegistryEntry<BlockEntityType<T>> registerBlockEntityType(
+            String name, BlockEntityFactory<T> factory, Supplier<Block[]> validBlocks);
 }

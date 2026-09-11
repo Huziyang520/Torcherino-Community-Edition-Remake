@@ -68,7 +68,7 @@ public class TileTorcherino extends BlockEntity {
     private int zMax;
 
     public TileTorcherino(BlockPos pos, BlockState state) {
-        this(ModBlockEntities.TORCHERINO, pos, state);
+        this(ModBlockEntities.TORCHERINO.get(), pos, state);
     }
 
     protected TileTorcherino(BlockEntityType<?> type, BlockPos pos, BlockState state) {

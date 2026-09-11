@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TileDoubleCompressedTorcherino extends TileTorcherino {
 
     public TileDoubleCompressedTorcherino(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.DOUBLE_COMPRESSED_TORCHERINO, pos, state);
+        super(ModBlockEntities.DOUBLE_COMPRESSED_TORCHERINO.get(), pos, state);
     }
 
     @Override

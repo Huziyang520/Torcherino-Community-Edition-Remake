@@ -12,13 +12,14 @@ import com.sci.torcherino.blocks.blocks.BlockWallDoubleCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallTripleCompressedTorcherino;
 import com.sci.torcherino.platform.services.IRegistrationHelper;
+import com.sci.torcherino.platform.services.RegistryEntry;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
@@ -29,101 +30,110 @@ import java.util.List;
 /**
  * All blocks and block items of the mod.
  *
- * <p>Registry names are copied verbatim from Torcherino 7.5. The four torch variants
- * additionally ship a wall counterpart named {@code wall_<name>} because modern
- * Minecraft models floor and wall torches as separate blocks.</p>
+ * <p>7.5 registered seven blocks, each backed by a single {@code BlockTorch}. Modern
+ * Minecraft separates the floor and wall torch, so the four Torcherino tiers become
+ * eight blocks ({@code blockX} plus {@code wall_blockX}) while the three Lanterino
+ * variants stay as they were. The original registry names are kept for the floor
+ * variants; the wall variants are new and have no item of their own - the torch item
+ * places both through {@link StandingAndWallBlockItem}.</p>
  *
- * <p>Instances are constructed here, inside the loader registration window, and then
- * handed to the loader through {@link IRegistrationHelper}. Nothing is instantiated
- * during class loading, which modern registries forbid.</p>
+ * <p><b>Every instance is created lazily</b>, inside the supplier handed to the loader.
+ * {@code Block}'s constructor writes to {@code BuiltInRegistries.BLOCK} through
+ * {@code createIntrusiveHolder}, so instantiating a block here - while the mod
+ * constructor runs and the registry is frozen - throws
+ * {@code IllegalStateException: Registry is already frozen}.</p>
  */
 public final class ModBlocks {
 
-    public static BlockTorcherino TORCHERINO;
-    public static BlockWallTorcherino WALL_TORCHERINO;
+    public static RegistryEntry<BlockTorcherino> TORCHERINO;
+    public static RegistryEntry<BlockWallTorcherino> WALL_TORCHERINO;
+    public static RegistryEntry<BlockCompressedTorcherino> COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockWallCompressedTorcherino> WALL_COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockDoubleCompressedTorcherino> DOUBLE_COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockWallDoubleCompressedTorcherino> WALL_DOUBLE_COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockTripleCompressedTorcherino> TRIPLE_COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockWallTripleCompressedTorcherino> WALL_TRIPLE_COMPRESSED_TORCHERINO;
+    public static RegistryEntry<BlockLanterino> LANTERINO;
+    public static RegistryEntry<BlockCompressedLanterino> COMPRESSED_LANTERINO;
+    public static RegistryEntry<BlockDoubleCompressedLanterino> DOUBLE_COMPRESSED_LANTERINO;
 
-    public static BlockCompressedTorcherino COMPRESSED_TORCHERINO;
-    public static BlockWallCompressedTorcherino WALL_COMPRESSED_TORCHERINO;
-
-    public static BlockDoubleCompressedTorcherino DOUBLE_COMPRESSED_TORCHERINO;
-    public static BlockWallDoubleCompressedTorcherino WALL_DOUBLE_COMPRESSED_TORCHERINO;
-
-    public static BlockTripleCompressedTorcherino TRIPLE_COMPRESSED_TORCHERINO;
-    public static BlockWallTripleCompressedTorcherino WALL_TRIPLE_COMPRESSED_TORCHERINO;
-
-    public static BlockLanterino LANTERINO;
-    public static BlockCompressedLanterino COMPRESSED_LANTERINO;
-    public static BlockDoubleCompressedLanterino DOUBLE_COMPRESSED_LANTERINO;
-
-    private static final List<Item> CREATIVE_ITEMS = new ArrayList<>();
+    private static final List<RegistryEntry<Item>> CREATIVE_ITEMS = new ArrayList<>();
 
     private ModBlocks() {
     }
 
     public static void register(IRegistrationHelper helper) {
-        // ---- tier 0: regular Torcherino ----
-        TORCHERINO = new BlockTorcherino(torchProperties());
-        WALL_TORCHERINO = new BlockWallTorcherino(torchProperties().dropsLike(TORCHERINO));
-        helper.registerBlock("blocktorcherino", TORCHERINO);
-        helper.registerBlock("wall_blocktorcherino", WALL_TORCHERINO);
-        registerTorchItem(helper, "blocktorcherino", TORCHERINO, WALL_TORCHERINO);
+        CREATIVE_ITEMS.clear();
 
-        // ---- tier 1: compressed ----
-        COMPRESSED_TORCHERINO = new BlockCompressedTorcherino(torchProperties());
-        WALL_COMPRESSED_TORCHERINO = new BlockWallCompressedTorcherino(torchProperties().dropsLike(COMPRESSED_TORCHERINO));
-        helper.registerBlock("blockcompressedtorcherino", COMPRESSED_TORCHERINO);
-        helper.registerBlock("wall_blockcompressedtorcherino", WALL_COMPRESSED_TORCHERINO);
-        registerTorchItem(helper, "blockcompressedtorcherino", COMPRESSED_TORCHERINO, WALL_COMPRESSED_TORCHERINO);
+        // ---- floor torches: original registry names ------------------------
+        TORCHERINO = helper.registerBlock("blocktorcherino",
+                () -> new BlockTorcherino(torchProperties()));
+        COMPRESSED_TORCHERINO = helper.registerBlock("blockcompressedtorcherino",
+                () -> new BlockCompressedTorcherino(torchProperties()));
+        DOUBLE_COMPRESSED_TORCHERINO = helper.registerBlock("blockdoublecompressedtorcherino",
+                () -> new BlockDoubleCompressedTorcherino(torchProperties()));
+        TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlock("blocktriplecompressedtorcherino",
+                () -> new BlockTripleCompressedTorcherino(torchProperties()));
 
-        // ---- tier 2: double compressed ----
-        DOUBLE_COMPRESSED_TORCHERINO = new BlockDoubleCompressedTorcherino(torchProperties());
-        WALL_DOUBLE_COMPRESSED_TORCHERINO = new BlockWallDoubleCompressedTorcherino(torchProperties().dropsLike(DOUBLE_COMPRESSED_TORCHERINO));
-        helper.registerBlock("blockdoublecompressedtorcherino", DOUBLE_COMPRESSED_TORCHERINO);
-        helper.registerBlock("wall_blockdoublecompressedtorcherino", WALL_DOUBLE_COMPRESSED_TORCHERINO);
-        registerTorchItem(helper, "blockdoublecompressedtorcherino", DOUBLE_COMPRESSED_TORCHERINO, WALL_DOUBLE_COMPRESSED_TORCHERINO);
+        // ---- wall torches: new names, no items -----------------------------
+        WALL_TORCHERINO = helper.registerBlock("wall_blocktorcherino",
+                () -> new BlockWallTorcherino(torchProperties()));
+        WALL_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blockcompressedtorcherino",
+                () -> new BlockWallCompressedTorcherino(torchProperties()));
+        WALL_DOUBLE_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blockdoublecompressedtorcherino",
+                () -> new BlockWallDoubleCompressedTorcherino(torchProperties()));
+        WALL_TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blocktriplecompressedtorcherino",
+                () -> new BlockWallTripleCompressedTorcherino(torchProperties()));
 
-        // ---- tier 3: triple compressed ----
-        TRIPLE_COMPRESSED_TORCHERINO = new BlockTripleCompressedTorcherino(torchProperties());
-        WALL_TRIPLE_COMPRESSED_TORCHERINO = new BlockWallTripleCompressedTorcherino(torchProperties().dropsLike(TRIPLE_COMPRESSED_TORCHERINO));
-        helper.registerBlock("blocktriplecompressedtorcherino", TRIPLE_COMPRESSED_TORCHERINO);
-        helper.registerBlock("wall_blocktriplecompressedtorcherino", WALL_TRIPLE_COMPRESSED_TORCHERINO);
-        registerTorchItem(helper, "blocktriplecompressedtorcherino", TRIPLE_COMPRESSED_TORCHERINO, WALL_TRIPLE_COMPRESSED_TORCHERINO);
+        // ---- Lanterino: original registry names ----------------------------
+        LANTERINO = helper.registerBlock("blocklanterino",
+                () -> new BlockLanterino(lanterinoProperties()));
+        COMPRESSED_LANTERINO = helper.registerBlock("blockcompressedlanterino",
+                () -> new BlockCompressedLanterino(lanterinoProperties()));
+        DOUBLE_COMPRESSED_LANTERINO = helper.registerBlock("blockdoublecompressedlanterino",
+                () -> new BlockDoubleCompressedLanterino(lanterinoProperties()));
 
-        // ---- Lanterino family ----
-        LANTERINO = new BlockLanterino(lanterinoProperties());
-        helper.registerBlock("blocklanterino", LANTERINO);
-        registerBlockItem(helper, "blocklanterino", LANTERINO);
+        // ---- items: 1.12.2 registered one ItemBlock per block --------------
+        // Torches use StandingAndWallBlockItem so that placing against a wall produces
+        // the wall variant, exactly like the vanilla torch item does.
+        CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new StandingAndWallBlockItem(
+                TORCHERINO.get(), WALL_TORCHERINO.get(), new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blockcompressedtorcherino", () -> new StandingAndWallBlockItem(
+                COMPRESSED_TORCHERINO.get(), WALL_COMPRESSED_TORCHERINO.get(),
+                new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedtorcherino", () -> new StandingAndWallBlockItem(
+                DOUBLE_COMPRESSED_TORCHERINO.get(), WALL_DOUBLE_COMPRESSED_TORCHERINO.get(),
+                new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedtorcherino", () -> new StandingAndWallBlockItem(
+                TRIPLE_COMPRESSED_TORCHERINO.get(), WALL_TRIPLE_COMPRESSED_TORCHERINO.get(),
+                new Item.Properties(), Direction.DOWN)));
 
-        COMPRESSED_LANTERINO = new BlockCompressedLanterino(lanterinoProperties());
-        helper.registerBlock("blockcompressedlanterino", COMPRESSED_LANTERINO);
-        registerBlockItem(helper, "blockcompressedlanterino", COMPRESSED_LANTERINO);
-
-        DOUBLE_COMPRESSED_LANTERINO = new BlockDoubleCompressedLanterino(lanterinoProperties());
-        helper.registerBlock("blockdoublecompressedlanterino", DOUBLE_COMPRESSED_LANTERINO);
-        registerBlockItem(helper, "blockdoublecompressedlanterino", DOUBLE_COMPRESSED_LANTERINO);
-    }
-
-    private static void registerTorchItem(IRegistrationHelper helper, String name,
-                                          BlockTorcherino standing, BlockWallTorcherino wall) {
-        final Item item = new StandingAndWallBlockItem(standing, wall, new Item.Properties(), Direction.DOWN);
-        helper.registerItem(name, item);
-        CREATIVE_ITEMS.add(item);
-    }
-
-    private static void registerBlockItem(IRegistrationHelper helper, String name, net.minecraft.world.level.block.Block block) {
-        final Item item = new BlockItem(block, new Item.Properties());
-        helper.registerItem(name, item);
-        CREATIVE_ITEMS.add(item);
-    }
-
-    /** @return every item of the mod, in the original display order. */
-    public static List<Item> creativeItems() {
-        return Collections.unmodifiableList(CREATIVE_ITEMS);
+        CREATIVE_ITEMS.add(helper.registerItem("blocklanterino",
+                () -> new BlockItem(LANTERINO.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blockcompressedlanterino",
+                () -> new BlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlanterino",
+                () -> new BlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
     }
 
     /**
-     * Torch properties. 7.5 called {@code setLightLevel(0.9375F)} which evaluates to
-     * light level 15, one step brighter than a vanilla torch.
+     * Every item belonging to this mod, resolved on demand. Only valid once registration
+     * has finished, which is when creative tabs are built.
+     */
+    public static List<Item> creativeItems() {
+        final List<Item> resolved = new ArrayList<>(CREATIVE_ITEMS.size());
+        for (RegistryEntry<Item> entry : CREATIVE_ITEMS) {
+            final Item item = entry.get();
+            if (item != null) {
+                resolved.add(item);
+            }
+        }
+        return Collections.unmodifiableList(resolved);
+    }
+
+    /**
+     * 7.5 called {@code setLightLevel(0.9375F)}, which renders as light 15, and inherited
+     * the vanilla torch's wood sound, zero hardness and "no collision" behaviour.
      */
     private static BlockBehaviour.Properties torchProperties() {
         return BlockBehaviour.Properties.of()
@@ -135,7 +145,8 @@ public final class ModBlocks {
     }
 
     /**
-     * Lanterino properties. 7.5 set hardness 1.0, wood sounds and a full light level.
+     * 7.5 used {@code BlockPumpkin} with hardness 1.0, wood sound and light level
+     * {@code 1.0F}. The map colour follows the modern pumpkin.
      */
     private static BlockBehaviour.Properties lanterinoProperties() {
         return BlockBehaviour.Properties.of()
@@ -143,7 +154,6 @@ public final class ModBlocks {
                 .strength(1.0F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 15)
-                .isValidSpawn((state, level, pos, entityType) -> true)
                 .pushReaction(PushReaction.DESTROY);
     }
 }
