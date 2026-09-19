@@ -52,7 +52,6 @@ public final class TorcherinoForgeConfig {
         private static final ForgeConfigSpec.BooleanValue COMPRESSED;
         private static final ForgeConfigSpec.BooleanValue DOUBLE_COMPRESSED;
         private static final ForgeConfigSpec.BooleanValue TRIPLE_COMPRESSED;
-        private static final ForgeConfigSpec.IntValue MAX_TICKS_PER_BLOCK;
         private static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_BLOCKS;
         private static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_TILES;
 
@@ -71,9 +70,6 @@ public final class TorcherinoForgeConfig {
             TRIPLE_COMPRESSED = builder
                     .comment("Enable the recipes of the Triple Compressed variants. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well.")
                     .define("tripleCompressedTorcherino", false);
-            MAX_TICKS_PER_BLOCK = builder
-                    .comment("How many extra ticks one block may receive per game tick. A machine ticked hundreds of times inside a single game tick finishes its progress bar before you can see it; a smaller value keeps the progress animation visible and costs less server time.")
-                    .defineInRange("maxTicksPerBlock", 20, 1, 1000);
             builder.pop();
             builder.comment("Things the Torcherino may never accelerate.").push("blacklist");
             BLACKLISTED_BLOCKS = builder
@@ -118,7 +114,6 @@ public final class TorcherinoForgeConfig {
             TorcherinoConfig.compressedTorcherino = Server.COMPRESSED.get();
             TorcherinoConfig.doubleCompressedTorcherino = Server.DOUBLE_COMPRESSED.get();
             TorcherinoConfig.tripleCompressedTorcherino = Server.TRIPLE_COMPRESSED.get();
-            TorcherinoConfig.maxTicksPerBlock = Server.MAX_TICKS_PER_BLOCK.get();
             TorcherinoConfig.blacklistedBlocks = new ArrayList<>(Server.BLACKLISTED_BLOCKS.get());
             TorcherinoConfig.blacklistedTiles = new ArrayList<>(Server.BLACKLISTED_TILES.get());
             TorcherinoRegistry.registerDefaults();

@@ -5,7 +5,6 @@
  */
 package com.sci.torcherino.blocks.tiles;
 
-import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.TorcherinoRegistry;
 import com.sci.torcherino.blocks.ModBlockEntities;
 
@@ -88,6 +87,13 @@ public class TileTorcherino extends BlockEntity {
     private final RandomSource rand = RandomSource.create();
 
     /**
+     * Resolved tickers per block state. Resolving one walks the block class and allocates a
+     * lambda, and the answer for a given state never changes, so the high tiers (where the
+     * same position is ticked hundreds of times per game tick) stop paying for it.
+     */
+    private final java.util.Map<BlockState, java.util.Optional<BlockEntityTicker<BlockEntity>>> tickerCache = new java.util.HashMap<>();
+
+    /**
      * Pre-computed scan area. {@code BlockPos.betweenClosed} hands out one reused mutable
      * position, so iterating it allocates nothing per visited block. It is rebuilt only
      * when a range or the block position changes.
@@ -161,11 +167,7 @@ public class TileTorcherino extends BlockEntity {
             this.speedCarry -= 1.0D;
             whole++;
         }
-        // A machine ticked hundreds of times inside one game tick finishes its progress bar
-        // before the client can ever see it: the arrow never moves and a whole stack is
-        // consumed at once. Capping the extra ticks per block keeps the animation visible,
-        // and on the high tiers it also removes a lot of pointless server work.
-        this.scannerMultiplier = Math.min(whole, TorcherinoConfig.maxTicksPerBlock);
+        this.scannerMultiplier = whole;
         // The iterator hands out one reused position, so this loop allocates nothing per
         // visited block; only the blocks that really tick get an immutable copy.
         for (BlockPos cursor : this.area) {
@@ -227,7 +229,7 @@ public class TileTorcherino extends BlockEntity {
         if (TorcherinoRegistry.isTileBlacklisted(blockEntity.getClass())) {
             return;
         }
-        final BlockEntityTicker<BlockEntity> ticker = resolveTicker(block, level, blockState, blockEntity);
+        final BlockEntityTicker<BlockEntity> ticker = resolveTicker(level, blockState, blockEntity);
         if (ticker == null) {
             return;
         }
@@ -238,15 +240,19 @@ public class TileTorcherino extends BlockEntity {
     }
 
     /**
-     * Resolves the ticker the game itself would run for this block entity.
+     * Resolves the ticker the game itself would run for this block entity, remembering the
+     * answer per block state (the lookup is pure, so caching it changes nothing).
      */
-    @SuppressWarnings("unchecked")
-    private static BlockEntityTicker<BlockEntity> resolveTicker(Block block, Level level, BlockState state, BlockEntity blockEntity) {
-        if (!(block instanceof net.minecraft.world.level.block.EntityBlock entityBlock)) {
-            return null;
-        }
-        return (BlockEntityTicker<BlockEntity>) entityBlock.getTicker(
-                level, state, (BlockEntityType<BlockEntity>) blockEntity.getType());
+    private BlockEntityTicker<BlockEntity> resolveTicker(Level level, BlockState state, BlockEntity blockEntity) {
+        return this.tickerCache.computeIfAbsent(state, key -> {
+            if (!(key.getBlock() instanceof net.minecraft.world.level.block.EntityBlock entityBlock)) {
+                return java.util.Optional.empty();
+            }
+            @SuppressWarnings("unchecked")
+            final BlockEntityTicker<BlockEntity> ticker = (BlockEntityTicker<BlockEntity>) entityBlock.getTicker(
+                    level, key, (BlockEntityType<BlockEntity>) blockEntity.getType());
+            return java.util.Optional.ofNullable(ticker);
+        }).orElse(null);
     }
 
 
