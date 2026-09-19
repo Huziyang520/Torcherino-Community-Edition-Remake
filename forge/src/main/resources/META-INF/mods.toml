@@ -8,7 +8,7 @@ version = "${version}"
 displayName = "${mod_name}"
 authors = "${mod_author}"
 credits = "${credits}"
-description = "${description}" #use \n inside gradle.properties for a line break; a real newline is invalid here
+description = "${description}" #mandatory (single line; a line break must stay escaped in gradle.properties)
 logoFile = "${mod_id}.png"
 displayURL = "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake"
 [[dependencies.${mod_id}]]
