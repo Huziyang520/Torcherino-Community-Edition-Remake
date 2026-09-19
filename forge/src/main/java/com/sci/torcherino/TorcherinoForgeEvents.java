@@ -1,3 +1,7 @@
+/*
+ * 本文件：Forge 侧事件处理器。
+ * 说明：右键方块切换模式并取消原版交互、玩家登出时清理按键状态、把 7 个物品塞进原版功能方块创造栏。
+ */
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.ModBlocks;
@@ -9,7 +13,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 /**
- * Forge event handlers, ported from the 1.12.2 {@code EventHandler}.
+ * Forge event handlers: right click, logout cleanup and creative tab contents.
  */
 public final class TorcherinoForgeEvents {
 

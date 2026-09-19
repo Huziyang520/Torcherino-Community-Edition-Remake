@@ -1,0 +1,17 @@
+{
+  "block.torcherino.blocktorcherino": "Torcherino",
+  "block.torcherino.blockcompressedtorcherino": "Torcherino comprimido",
+  "block.torcherino.blockdoublecompressedtorcherino": "Torcherino doblemente comprimido",
+  "block.torcherino.blocktriplecompressedtorcherino": "Torcherino triplemente comprimido",
+  "block.torcherino.blocklanterino": "Lanterino calabaza",
+  "block.torcherino.blockcompressedlanterino": "Lanterino calabaza comprimido",
+  "block.torcherino.blockdoublecompressedlanterino": "Lanterino calabaza doblemente comprimido",
+  "block.torcherino.wall_blocktorcherino": "Torcherino",
+  "block.torcherino.wall_blockcompressedtorcherino": "Torcherino comprimido",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "Torcherino doblemente comprimido",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "Torcherino triplemente comprimido",
+  "key.torcherino.useage_key": "Modificador de Torcherino",
+  "message.torcherino.status": "%s | Velocidad: %s",
+  "message.torcherino.mode.stopped": "Detenido",
+  "message.torcherino.mode.area": "Área: %sx%sx%s"
+}

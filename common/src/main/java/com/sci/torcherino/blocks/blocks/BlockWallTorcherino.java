@@ -1,3 +1,7 @@
+/*
+ * 本文件：基础加速火把的贴墙形态方块。
+ * 说明：注册名 wall_blocktorcherino，继承 WallTorchBlock；与落地形态共用 TileTorcherino，不单独注册物品。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;

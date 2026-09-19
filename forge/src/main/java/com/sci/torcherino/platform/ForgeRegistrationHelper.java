@@ -1,3 +1,7 @@
+/*
+ * 本文件：IRegistrationHelper 的 Forge 实现。
+ * 说明：用 DeferredRegister 延迟注册；RegistryObject 未就绪时 get() 会抛异常，故包一层 isPresent() 以满足「未注册返回 null」的约定。
+ */
 package com.sci.torcherino.platform;
 
 import com.sci.torcherino.Constants;

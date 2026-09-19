@@ -1,3 +1,7 @@
+/*
+ * 本文件：IPlatformHelper 的 Forge 实现。
+ * 说明：用 FMLLoader / ModList / FMLPaths 回答平台信息，并把发包动作转交给 Forge 网络类。
+ */
 package com.sci.torcherino.platform;
 
 import com.sci.torcherino.platform.services.IPlatformHelper;

@@ -1,0 +1,17 @@
+{
+  "block.torcherino.blocktorcherino": "가속 횃불",
+  "block.torcherino.blockcompressedtorcherino": "압축 가속 횃불",
+  "block.torcherino.blockdoublecompressedtorcherino": "이중 압축 가속 횃불",
+  "block.torcherino.blocktriplecompressedtorcherino": "삼중 압축 가속 횃불",
+  "block.torcherino.blocklanterino": "가속 호박등",
+  "block.torcherino.blockcompressedlanterino": "압축 가속 호박등",
+  "block.torcherino.blockdoublecompressedlanterino": "이중 압축 가속 호박등",
+  "block.torcherino.wall_blocktorcherino": "가속 횃불",
+  "block.torcherino.wall_blockcompressedtorcherino": "압축 가속 횃불",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "이중 압축 가속 횃불",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "삼중 압축 가속 횃불",
+  "key.torcherino.useage_key": "가속 횃불 설정 키",
+  "message.torcherino.status": "%s | 속도: %s",
+  "message.torcherino.mode.stopped": "정지",
+  "message.torcherino.mode.area": "범위: %sx%sx%s"
+}

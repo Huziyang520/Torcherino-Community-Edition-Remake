@@ -10,5 +10,8 @@
   "block.torcherino.wall_blockcompressedtorcherino": "Сжатый факел ускорения",
   "block.torcherino.wall_blockdoublecompressedtorcherino": "Дважды сжатый факел ускорения",
   "block.torcherino.wall_blocktriplecompressedtorcherino": "Трижды сжатый факел ускорения",
-  "key.torcherino.useage_key": "Модификатор ускорения"
+  "key.torcherino.useage_key": "Модификатор ускорения",
+  "message.torcherino.status": "%s | Скорость: %s",
+  "message.torcherino.mode.stopped": "Остановлено",
+  "message.torcherino.mode.area": "Область: %sx%sx%s"
 }

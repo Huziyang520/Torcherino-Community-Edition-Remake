@@ -1,3 +1,7 @@
+/*
+ * 本文件：压缩南瓜灯形态的加速火把。
+ * 说明：注册名 blockcompressedlanterino，继承 BlockLanterino，方块实体为 ×9 的 TileCompressedTorcherino。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileCompressedTorcherino;

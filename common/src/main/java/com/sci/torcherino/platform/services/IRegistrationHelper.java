@@ -1,3 +1,7 @@
+/*
+ * 本文件：注册助手接口（加载器无关）。
+ * 说明：common 通过它登记方块 / 物品 / 方块实体类型；参数一律是 Supplier，因为方块实例只能在加载器的注册窗口内创建，否则会「Registry is already frozen」。
+ */
 package com.sci.torcherino.platform.services;
 
 import net.minecraft.world.item.Item;

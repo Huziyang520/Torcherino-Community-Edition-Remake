@@ -1,3 +1,7 @@
+/*
+ * 本文件：运行时的加速黑名单。
+ * 说明：把配置 / 代码里的字符串解析成方块或方块实体类并登记；加速核心每 tick 用它跳过不该被加速的对象。
+ */
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.ModBlocks;
@@ -19,7 +23,7 @@ import java.util.Set;
 /**
  * Runtime blacklist used by the acceleration core.
  *
- * <p>Carried over from 7.5 with the same string semantics: an entry containing a
+ * <p>String semantics: an entry containing a
  * colon is treated as {@code modid:unlocalized} and resolved against the block
  * registry, while an entry without a colon is treated as a fully qualified
  * BlockEntity class name.</p>
@@ -97,8 +101,7 @@ public final class TorcherinoRegistry {
         BLACKLISTED_BLOCKS.clear();
         BLACKLISTED_TILES.clear();
 
-        // Fluids and air: 7.5 blacklisted air, still/flowing water and still/flowing lava.
-        // Modern Minecraft models all of them with a single block each.
+        // Air and fluids are never worth accelerating; each fluid is a single block here.
         blacklistBlock(Blocks.AIR);
         blacklistBlock(Blocks.WATER);
         blacklistBlock(Blocks.LAVA);

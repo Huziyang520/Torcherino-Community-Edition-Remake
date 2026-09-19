@@ -1,3 +1,7 @@
+/*
+ * 本文件：Fabric 侧事件接线。
+ * 说明：右键方块切换模式、玩家掉线时清理按键状态、并把 7 个物品塞进原版功能方块创造栏。
+ */
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.ModBlocks;
@@ -18,9 +22,8 @@ public final class TorcherinoFabricEvents {
     }
 
     public static void register() {
-        // Right click on a Torcherino toggles mode / speed, exactly like the 1.12.2
-        // PlayerInteractEvent.RightClickBlock handler. The result is sided so client and
-        // server agree and neither block nor item usage is processed afterwards.
+        // Right click on a Torcherino toggles mode / speed. The result is sided so client
+        // and server agree and neither block nor item usage is processed afterwards.
         UseBlockCallback.EVENT.register((player, level, hand, hitResult) ->
                 TorcherinoInteraction.useBlock(level, hitResult.getBlockPos(), player, hand)
                         ? InteractionResult.sidedSuccess(level.isClientSide())

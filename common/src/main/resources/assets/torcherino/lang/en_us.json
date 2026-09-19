@@ -10,5 +10,8 @@
   "block.torcherino.wall_blockcompressedtorcherino": "Compressed Torcherino",
   "block.torcherino.wall_blockdoublecompressedtorcherino": "Double Compressed Torcherino",
   "block.torcherino.wall_blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
-  "key.torcherino.useage_key": "Torcherino Modifier"
+  "key.torcherino.useage_key": "Torcherino Modifier",
+  "message.torcherino.status": "%s | Speed: %s",
+  "message.torcherino.mode.stopped": "Stopped",
+  "message.torcherino.mode.area": "Area: %sx%sx%s"
 }

@@ -1,12 +1,21 @@
+/*
+ * 本文件：Forge 侧客户端事件处理器（只在 Dist.CLIENT 下被引用）。
+ * 说明：注册「改装键（左 Shift）」、把 11 个方块登记进 cutout 渲染层（否则透明像素会变黑）、每 tick 轮询按键并把状态变化发给服务端。
+ */
 package com.sci.torcherino.client;
 
+import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.network.TorcherinoNetwork;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -43,5 +52,19 @@ public final class TorcherinoForgeClientEvents {
             TorcherinoNetwork.sendToServer(down);
             lastState = down;
         }
+    }
+
+    /**
+     * Custom blocks default to {@code RenderType.solid()}, which paints the fully
+     * transparent pixels of the torch textures black instead of discarding them.
+     * Vanilla registers its own torch blocks as cutout, so every block of this mod
+     * is put on the same layer here.
+     */
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            for (Block block : ModBlocks.blocksForRendering()) {
+                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
+            }
+        });
     }
 }

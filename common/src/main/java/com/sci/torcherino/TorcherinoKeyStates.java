@@ -1,3 +1,7 @@
+/*
+ * 本文件：服务端保存的「改装键（左 Shift）」按下状态表。
+ * 说明：客户端按键状态变化时发包，服务端记在这里，右键火把时用来判断是切范围还是切速度。
+ */
 package com.sci.torcherino;
 
 import net.minecraft.world.entity.player.Player;
@@ -9,9 +13,8 @@ import java.util.UUID;
 /**
  * Server side record of the client's modifier key state.
  *
- * <p>7.5 kept a {@code HashMap<EntityPlayer, Boolean>} which leaked entries when a
- * player disconnected. The behaviour is identical here, only keyed by UUID and with
- * an explicit removal hook.</p>
+ * <p>Entries are keyed by player UUID and removed explicitly when a player disconnects,
+ * so a long running server does not accumulate stale entries.</p>
  */
 public final class TorcherinoKeyStates {
 

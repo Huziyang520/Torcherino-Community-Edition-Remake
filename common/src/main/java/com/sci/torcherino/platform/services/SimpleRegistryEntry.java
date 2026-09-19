@@ -1,3 +1,7 @@
+/*
+ * 本文件：RegistryEntry 的通用实现。
+ * 说明：Fabric 直接用它；Forge 也复用它，只是把 supplier 包一层 RegistryObject 的存在性判断。
+ */
 package com.sci.torcherino.platform.services;
 
 import net.minecraft.resources.ResourceLocation;

@@ -1,3 +1,7 @@
+/*
+ * 本文件：Forge 侧网络通道。
+ * 说明：只注册一个「客户端 → 服务端」的改装键状态包，内部以 record 承载载荷。
+ */
 package com.sci.torcherino.network;
 
 import com.sci.torcherino.Constants;
@@ -14,8 +18,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.function.Supplier;
 
 /**
- * Forge replacement for the 1.12.2 {@code SimpleNetworkWrapper} channel. Only the
- * server bound modifier key message exists, as in 7.5.
+ * Forge network channel. Only the server bound modifier key message exists.
  */
 public final class TorcherinoNetwork {
 

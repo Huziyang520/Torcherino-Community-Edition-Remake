@@ -1,3 +1,7 @@
+/*
+ * 本文件：Fabric 侧网络通道。
+ * 说明：只有「客户端 → 服务端」一个方向的改装键状态包。
+ */
 package com.sci.torcherino.network;
 
 import com.sci.torcherino.Constants;
@@ -10,9 +14,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Fabric counterpart of the 7.5 {@code SimpleNetworkWrapper} channel that carried the
- * client modifier key state. Only the server bound direction exists, matching the
- * original {@code registerMessage(..., Side.SERVER)}.
+ * Fabric network channel carrying the client modifier key state. Only the server bound
+ * direction exists.
  */
 public final class TorcherinoFabricNetworking {
 

@@ -1,3 +1,7 @@
+/*
+ * 本文件：二重压缩（第 2 级）加速火把的方块实体。
+ * 说明：只覆写倍率 —— 基础速度 ×81。
+ */
 package com.sci.torcherino.blocks.tiles;
 
 import com.sci.torcherino.blocks.ModBlockEntities;

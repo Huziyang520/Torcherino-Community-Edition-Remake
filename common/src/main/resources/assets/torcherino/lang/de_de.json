@@ -10,5 +10,8 @@
   "block.torcherino.wall_blockcompressedtorcherino": "komprimierte Beschleunigungsfackel",
   "block.torcherino.wall_blockdoublecompressedtorcherino": "Doppelt komprimierte Beschleunigungsfackel",
   "block.torcherino.wall_blocktriplecompressedtorcherino": "Dreifach komprimierte Beschleunigungsfackel",
-  "key.torcherino.useage_key": "Beschleunigungsfackel Modifikator"
+  "key.torcherino.useage_key": "Beschleunigungsfackel Modifikator",
+  "message.torcherino.status": "%s | Geschwindigkeit: %s",
+  "message.torcherino.mode.stopped": "Gestoppt",
+  "message.torcherino.mode.area": "Bereich: %sx%sx%s"
 }

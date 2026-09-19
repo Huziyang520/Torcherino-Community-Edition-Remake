@@ -1,3 +1,7 @@
+/*
+ * 本文件：基础加速火把的落地形态方块。
+ * 说明：注册名 blocktorcherino，继承 TorchBlock；负责挂方块实体、红石刷新，贴墙形态见 BlockWallTorcherino。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -17,11 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Floor standing Torcherino.
  *
- * <p>1.12.2 modelled floor and wall torches with a single {@code BlockTorch} carrying
- * a {@code facing} property. Modern Minecraft splits them into {@code TorchBlock} and
- * {@code WallTorchBlock}; the matching wall block is
- * {@link BlockWallTorcherino} and the item is a {@code StandingAndWallBlockItem} so
- * placement still picks the right variant.</p>
+ * <p>Minecraft splits floor and wall torches into {@code TorchBlock} and
+ * {@code WallTorchBlock}; the matching wall block is {@link BlockWallTorcherino} and the
+ * item is a {@code StandingAndWallBlockItem}, so placement picks the right variant.</p>
  */
 public class BlockTorcherino extends TorchBlock implements EntityBlock {
 

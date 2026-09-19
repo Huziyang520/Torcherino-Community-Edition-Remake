@@ -1,3 +1,7 @@
+/*
+ * 本文件：注册条目的惰性句柄接口。
+ * 说明：common 不持有裸实例、也不持有加载器类型，只留「id + 按需 get()」；注册完成前 get() 返回 null，调用方必须自行判空。
+ */
 package com.sci.torcherino.platform.services;
 
 import net.minecraft.resources.ResourceLocation;

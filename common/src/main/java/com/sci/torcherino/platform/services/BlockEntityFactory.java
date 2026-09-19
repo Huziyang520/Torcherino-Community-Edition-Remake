@@ -1,3 +1,7 @@
+/*
+ * 本文件：方块实体工厂接口。
+ * 说明：原版 BlockEntityType.Builder.of 用的 supplier 接口是包私有的，common 无法引用，故自定义这个公开替代品交给加载器适配。
+ */
 package com.sci.torcherino.platform.services;
 
 import net.minecraft.core.BlockPos;

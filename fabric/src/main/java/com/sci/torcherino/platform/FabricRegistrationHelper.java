@@ -1,3 +1,7 @@
+/*
+ * 本文件：IRegistrationHelper 的 Fabric 实现。
+ * 说明：Fabric 是「立即注册」——直接写 BuiltInRegistries，并用 FabricBlockEntityTypeBuilder 构造方块实体类型。
+ */
 package com.sci.torcherino.platform;
 
 import com.sci.torcherino.Constants;

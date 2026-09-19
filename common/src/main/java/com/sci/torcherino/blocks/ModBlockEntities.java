@@ -1,3 +1,7 @@
+/*
+ * 本文件：4 个方块实体类型的注册。
+ * 说明：注册名形如 torcherino_tile；每个类型列出共用的落地 / 贴墙 / 南瓜灯方块，类型本身由加载器构造。
+ */
 package com.sci.torcherino.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileCompressedTorcherino;
@@ -13,10 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 /**
  * Block entity types.
  *
- * <p>Registry names are copied verbatim from 7.5 ({@code torcherino_tile} and friends).
- * Every type lists both the floor and the wall block that share it, plus the matching
- * Lanterino variant when one exists - 7.5 achieved the same result through
- * {@code Block#createTileEntity}.</p>
+ * <p>Every type lists both the floor and the wall block that share it, plus the matching
+ * Lanterino variant when one exists.</p>
  *
  * <p>Everything is lazy for the same reason as {@link ModBlocks}, and because the valid
  * blocks can only be resolved once the block registry has been filled. The loader builds

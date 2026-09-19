@@ -1,3 +1,7 @@
+/*
+ * 本文件：加速火把的方块实体 —— 整个模组的加速核心。
+ * 说明：保存范围 / 速度 / 红石状态；每服务端 tick 遍历以自身为中心、半径等于当前范围档位的立方体，对随机刻方块补 randomTick、对方块实体补 ticker 调用。
+ */
 package com.sci.torcherino.blocks.tiles;
 
 import com.sci.torcherino.TorcherinoRegistry;
@@ -20,19 +24,22 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Acceleration core, ported 1:1 from Torcherino 7.5.
+ * Acceleration core of the Torcherino family.
  *
  * <p>Every server tick the block entity walks the cube of radius {@code mode}
  * centred on itself. Randomly ticking blocks receive {@code speed(speed)} extra
  * {@code randomTick} calls and block entities receive {@code speed(speed)} extra
  * ticker invocations.</p>
  *
- * <p>Fields and NBT keys keep the original names so existing worlds keep their
+ * <p>Fields and NBT keys keep their classic names so existing worlds keep their
  * saved speed/mode/redstone state.</p>
  */
 public class TileTorcherino extends BlockEntity {
 
-    /** Original mode table, index == radius used by the acceleration loop. */
+    /**
+     * Area mode labels (English fallback strings); the index doubles as the radius used
+     * by the acceleration loop. The player facing text comes from the language files.
+     */
     private static final String[] MODES = new String[]{
             "Stopped",
             "Area: 1x1x1",
@@ -161,8 +168,7 @@ public class TileTorcherino extends BlockEntity {
     }
 
     /**
-     * Resolves the ticker the game itself would run for this block entity, which is
-     * the modern equivalent of the 1.12.2 {@code ITickable#update()} call.
+     * Resolves the ticker the game itself would run for this block entity.
      */
     @SuppressWarnings("unchecked")
     private static BlockEntityTicker<BlockEntity> resolveTicker(Block block, Level level, BlockState state, BlockEntity blockEntity) {
@@ -198,8 +204,35 @@ public class TileTorcherino extends BlockEntity {
         }
     }
 
+    /**
+     * Action bar text shown after a mode change.
+     *
+     * <p>It is a translatable component: the client resolves the keys against
+     * {@code assets/torcherino/lang/*.json}, so the text follows the player's language.
+     * The percent sign is part of the argument, not of the format string, to keep the
+     * pattern free of literal {@code %}.</p>
+     */
     public Component getDescription() {
-        return Component.literal(MODES[this.mode] + " | Speed: " + this.speed(this.speed) * 100 + "%");
+        return Component.translatable("message.torcherino.status",
+                this.getModeDescription(),
+                this.speed(this.speed) * 100 + "%");
+    }
+
+    /**
+     * Translatable form of {@link #getMode()}.
+     *
+     * <p>The last entry keeps the legacy {@code "Area: 15x5x15"} wording (see the
+     * {@link #MODES} note) instead of the real {@code 15x15x15} radius.</p>
+     */
+    public Component getModeDescription() {
+        if (this.mode == 0) {
+            return Component.translatable("message.torcherino.mode.stopped");
+        }
+        if (this.mode == MODES.length - 1) {
+            return Component.translatable("message.torcherino.mode.area", 15, 5, 15);
+        }
+        final int radius = this.mode;
+        return Component.translatable("message.torcherino.mode.area", radius, radius, radius);
     }
 
     public String getMode() {
@@ -209,8 +242,8 @@ public class TileTorcherino extends BlockEntity {
     @Override
     public void setLevel(Level level) {
         super.setLevel(level);
-        // Mirrors the original onBlockAdded/neighbourChanged refresh for freshly created
-        // block entities: Level may call setLevel before the block's onPlace hook.
+        // Refresh the redstone state for freshly created block entities: Level may call
+        // setLevel before the block's onPlace hook.
         if (!level.isClientSide() && !this.poweredByRedstone) {
             this.poweredByRedstone = level.hasNeighborSignal(this.worldPosition);
         }

@@ -1,3 +1,7 @@
+/*
+ * 本文件：Forge 侧模组入口。
+ * 说明：构造期只登记延迟注册器与事件监听（客户端监听放在 Dist 判断里，避免专用服务端加载客户端类），真正的实例化推迟到 FMLCommonSetup。
+ */
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.ModBlockEntities;
@@ -38,6 +42,7 @@ public class TorcherinoForge {
         // only classes are never loaded on a dedicated server.
         if (FMLLoader.getDist().isClient()) {
             modEventBus.addListener(TorcherinoForgeClientEvents::onRegisterKeyMappings);
+            modEventBus.addListener(TorcherinoForgeClientEvents::onClientSetup);
             MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onClientTick);
         }
     }

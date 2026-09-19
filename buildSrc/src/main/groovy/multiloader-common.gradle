@@ -12,6 +12,15 @@ java {
     withSourcesJar()
 }
 
+// Source files carry Chinese header comments. javac defaults to the *platform*
+// charset (GBK on this machine) rather than file.encoding, which makes UTF-8
+// sources fail with "unmappable character" errors. Pin UTF-8 for every compile
+// task, in every module, including the re-compilation of common sources that the
+// loader projects perform.
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 // No javadoc jar: this is a mod, not a published library. The workspace path contains
 // non-ASCII characters and Gradle writes the javadoc options file using the platform
 // default charset (GBK on this machine), which makes javadoc report "File not found"

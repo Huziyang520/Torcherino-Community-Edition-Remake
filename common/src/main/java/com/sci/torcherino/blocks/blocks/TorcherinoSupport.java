@@ -1,3 +1,7 @@
+/*
+ * 本文件：火把方块族的包内共用小工具。
+ * 说明：红石状态刷新与服务端 ticker 的构造，供 11 个方块类复用；包私有，不对外暴露。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -17,9 +21,9 @@ final class TorcherinoSupport {
     }
 
     /**
-     * Re-reads the redstone state of the Torcherino at {@code pos}. Ported from the
-     * original {@code BlockTorcherino#onBlockAdded} and {@code #neighborChanged}
-     * handlers, both of which used {@code World#isBlockIndirectlyGettingPowered}.
+     * Re-reads the redstone state of the Torcherino at {@code pos}. Called from the
+     * block's place and neighbour-changed hooks, so the state is correct no matter which
+     * of them fires first.
      */
     static void refreshPoweredState(Level level, BlockPos pos) {
         if (level.isClientSide()) {

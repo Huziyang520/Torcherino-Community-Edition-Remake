@@ -1,3 +1,7 @@
+/*
+ * 本文件：二重压缩加速火把的落地形态方块。
+ * 说明：注册名 blockdoublecompressedtorcherino；方块实体换成 ×81 的 TileDoubleCompressedTorcherino。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileDoubleCompressedTorcherino;

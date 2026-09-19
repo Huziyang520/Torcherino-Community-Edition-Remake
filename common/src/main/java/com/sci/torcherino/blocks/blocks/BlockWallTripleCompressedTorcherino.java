@@ -1,3 +1,7 @@
+/*
+ * 本文件：三重压缩加速火把的贴墙形态方块。
+ * 说明：注册名 wall_blocktriplecompressedtorcherino，共用 ×729 的方块实体，不单独注册物品。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileTripleCompressedTorcherino;

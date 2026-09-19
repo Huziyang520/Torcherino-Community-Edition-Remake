@@ -1,3 +1,7 @@
+/*
+ * 本文件：全部方块与方块物品的注册。
+ * 说明：共 11 个方块（四档火把各有落地 / 贴墙两种形态，另有三个南瓜灯），注册名规则见类注释；所有实例都延迟到加载器的注册窗口内创建。
+ */
 package com.sci.torcherino.blocks;
 
 import com.sci.torcherino.blocks.blocks.BlockCompressedLanterino;
@@ -18,6 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -26,15 +31,14 @@ import net.minecraft.world.level.material.PushReaction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * All blocks and block items of the mod.
  *
- * <p>7.5 registered seven blocks, each backed by a single {@code BlockTorch}. Modern
- * Minecraft separates the floor and wall torch, so the four Torcherino tiers become
- * eight blocks ({@code blockX} plus {@code wall_blockX}) while the three Lanterino
- * variants stay as they were. The original registry names are kept for the floor
- * variants; the wall variants are new and have no item of their own - the torch item
+ * <p>Minecraft separates floor and wall torches, so the four Torcherino tiers are eight
+ * blocks ({@code blockX} plus {@code wall_blockX}) while the three Lanterino variants are
+ * ordinary carved pumpkins. The wall variants have no item of their own - the torch item
  * places both through {@link StandingAndWallBlockItem}.</p>
  *
  * <p><b>Every instance is created lazily</b>, inside the supplier handed to the loader.
@@ -59,41 +63,58 @@ public final class ModBlocks {
 
     private static final List<RegistryEntry<Item>> CREATIVE_ITEMS = new ArrayList<>();
 
+    /**
+     * Every registered block, in registration order. Kept separately from the fields
+     * above so the client side render layer setup of each loader can iterate them
+     * without knowing the individual names.
+     */
+    private static final List<RegistryEntry<? extends Block>> BLOCKS = new ArrayList<>();
+
     private ModBlocks() {
+    }
+
+    /**
+     * Registers a block and remembers its handle for the render layer pass.
+     */
+    private static <T extends Block> RegistryEntry<T> registerBlock(IRegistrationHelper helper, String name, Supplier<T> supplier) {
+        final RegistryEntry<T> entry = helper.registerBlock(name, supplier);
+        BLOCKS.add(entry);
+        return entry;
     }
 
     public static void register(IRegistrationHelper helper) {
         CREATIVE_ITEMS.clear();
+        BLOCKS.clear();
 
         // ---- floor torches: original registry names ------------------------
-        TORCHERINO = helper.registerBlock("blocktorcherino",
+        TORCHERINO = registerBlock(helper, "blocktorcherino",
                 () -> new BlockTorcherino(torchProperties()));
-        COMPRESSED_TORCHERINO = helper.registerBlock("blockcompressedtorcherino",
+        COMPRESSED_TORCHERINO = registerBlock(helper, "blockcompressedtorcherino",
                 () -> new BlockCompressedTorcherino(torchProperties()));
-        DOUBLE_COMPRESSED_TORCHERINO = helper.registerBlock("blockdoublecompressedtorcherino",
+        DOUBLE_COMPRESSED_TORCHERINO = registerBlock(helper, "blockdoublecompressedtorcherino",
                 () -> new BlockDoubleCompressedTorcherino(torchProperties()));
-        TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlock("blocktriplecompressedtorcherino",
+        TRIPLE_COMPRESSED_TORCHERINO = registerBlock(helper, "blocktriplecompressedtorcherino",
                 () -> new BlockTripleCompressedTorcherino(torchProperties()));
 
         // ---- wall torches: new names, no items -----------------------------
-        WALL_TORCHERINO = helper.registerBlock("wall_blocktorcherino",
+        WALL_TORCHERINO = registerBlock(helper, "wall_blocktorcherino",
                 () -> new BlockWallTorcherino(torchProperties()));
-        WALL_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blockcompressedtorcherino",
+        WALL_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blockcompressedtorcherino",
                 () -> new BlockWallCompressedTorcherino(torchProperties()));
-        WALL_DOUBLE_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blockdoublecompressedtorcherino",
+        WALL_DOUBLE_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blockdoublecompressedtorcherino",
                 () -> new BlockWallDoubleCompressedTorcherino(torchProperties()));
-        WALL_TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlock("wall_blocktriplecompressedtorcherino",
+        WALL_TRIPLE_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blocktriplecompressedtorcherino",
                 () -> new BlockWallTripleCompressedTorcherino(torchProperties()));
 
         // ---- Lanterino: original registry names ----------------------------
-        LANTERINO = helper.registerBlock("blocklanterino",
+        LANTERINO = registerBlock(helper, "blocklanterino",
                 () -> new BlockLanterino(lanterinoProperties()));
-        COMPRESSED_LANTERINO = helper.registerBlock("blockcompressedlanterino",
+        COMPRESSED_LANTERINO = registerBlock(helper, "blockcompressedlanterino",
                 () -> new BlockCompressedLanterino(lanterinoProperties()));
-        DOUBLE_COMPRESSED_LANTERINO = helper.registerBlock("blockdoublecompressedlanterino",
+        DOUBLE_COMPRESSED_LANTERINO = registerBlock(helper, "blockdoublecompressedlanterino",
                 () -> new BlockDoubleCompressedLanterino(lanterinoProperties()));
 
-        // ---- items: 1.12.2 registered one ItemBlock per block --------------
+        // ---- items: one item per block --------------------------------------
         // Torches use StandingAndWallBlockItem so that placing against a wall produces
         // the wall variant, exactly like the vanilla torch item does.
         CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new StandingAndWallBlockItem(
@@ -132,8 +153,26 @@ public final class ModBlocks {
     }
 
     /**
-     * 7.5 called {@code setLightLevel(0.9375F)}, which renders as light 15, and inherited
-     * the vanilla torch's wood sound, zero hardness and "no collision" behaviour.
+     * All blocks of this mod, resolved on demand. Used by the client render layer setup.
+     *
+     * <p>Without an explicit render layer every custom block falls back to
+     * {@code RenderType.solid()}. The torch textures are 16x16 with 236 fully
+     * transparent pixels, so a solid layer paints those pixels black instead of
+     * discarding them, which is why the torches showed up as black slabs.</p>
+     */
+    public static List<Block> blocksForRendering() {
+        final List<Block> resolved = new ArrayList<>(BLOCKS.size());
+        for (RegistryEntry<? extends Block> entry : BLOCKS) {
+            final Block block = entry.get();
+            if (block != null) {
+                resolved.add(block);
+            }
+        }
+        return Collections.unmodifiableList(resolved);
+    }
+
+    /**
+     * Torch-like properties: light level 15, wood sound, zero hardness, no collision.
      */
     private static BlockBehaviour.Properties torchProperties() {
         return BlockBehaviour.Properties.of()
@@ -145,8 +184,8 @@ public final class ModBlocks {
     }
 
     /**
-     * 7.5 used {@code BlockPumpkin} with hardness 1.0, wood sound and light level
-     * {@code 1.0F}. The map colour follows the modern pumpkin.
+     * Pumpkin-like properties: hardness 1.0, wood sound, light level 15 and the pumpkin
+     * map colour.
      */
     private static BlockBehaviour.Properties lanterinoProperties() {
         return BlockBehaviour.Properties.of()

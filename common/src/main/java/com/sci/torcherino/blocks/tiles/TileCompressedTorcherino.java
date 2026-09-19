@@ -1,3 +1,7 @@
+/*
+ * 本文件：压缩（第 1 级）加速火把的方块实体。
+ * 说明：只覆写倍率 —— 基础速度 ×9，其余逻辑全部继承 TileTorcherino。
+ */
 package com.sci.torcherino.blocks.tiles;
 
 import com.sci.torcherino.blocks.ModBlockEntities;

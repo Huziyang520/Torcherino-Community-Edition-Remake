@@ -1,3 +1,7 @@
+/*
+ * 本文件：加速火把的共用右键交互逻辑。
+ * 说明：所有火把 / 南瓜灯方块共用；服务端切换范围或速度，并把提示推到玩家行动栏（返回 true 表示已消费该次交互）。
+ */
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -12,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * Shared right-click behaviour of every Torcherino block.
  *
- * <p>Ported from {@code EventHandler#onPlayerRightClick}: the off hand is ignored,
+ * <p>The off hand is ignored,
  * the interaction is only consumed when the clicked block actually owns a
  * {@link TileTorcherino}, the mode change happens server side and the resulting
  * description is pushed to the player's action bar.</p>

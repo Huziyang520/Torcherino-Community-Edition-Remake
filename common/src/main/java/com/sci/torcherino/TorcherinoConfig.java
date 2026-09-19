@@ -1,3 +1,7 @@
+/*
+ * 本文件：TOML 配置读写。
+ * 说明：读写 config/torcherino.toml；缺失的键会自动补写并带上注释，键名与段落保持稳定，跨版本可直接沿用旧设置。
+ */
 package com.sci.torcherino;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
@@ -11,10 +15,8 @@ import java.util.List;
 /**
  * TOML backed configuration.
  *
- * <p>Key names, sections and default values are carried over verbatim from the
- * original 1.12.2 {@code sci4me/torcherino.cfg} so that server owners can migrate
- * their settings by hand. The file itself moved to the modern location
- * {@code config/torcherino.toml}.</p>
+ * <p>Key names, sections and default values are stable across versions, so server owners
+ * can carry their settings over by hand.</p>
  */
 public final class TorcherinoConfig {
 
@@ -22,12 +24,8 @@ public final class TorcherinoConfig {
     private static final String BLACKLIST = "blacklist";
 
     /**
-     * Modern config location: {@code config/torcherino.toml}.
-     *
-     * <p>7.5 used {@code config/sci4me/torcherino.cfg}; the {@code sci4me} folder and the
-     * {@code .cfg} extension are intentionally dropped in favour of the convention every
-     * current loader uses. Key names and sections inside the file are still the original
-     * ones, so a server owner can migrate by hand.</p>
+     * Config location: {@code config/torcherino.toml}, the convention every current loader
+     * uses. Key names and sections inside the file are stable across versions.
      */
     public static final String CONFIG_FILE_NAME = Constants.MOD_ID + ".toml";
 

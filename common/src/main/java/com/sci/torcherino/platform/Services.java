@@ -1,3 +1,7 @@
+/*
+ * 本文件：平台服务的统一入口。
+ * 说明：用 ServiceLoader 找到当前加载器的实现（IPlatformHelper / IRegistrationHelper），common 代码只通过这里拿平台能力。
+ */
 package com.sci.torcherino.platform;
 
 import com.sci.torcherino.Constants;

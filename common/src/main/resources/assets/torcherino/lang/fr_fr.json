@@ -1,0 +1,17 @@
+{
+  "block.torcherino.blocktorcherino": "Torcherino",
+  "block.torcherino.blockcompressedtorcherino": "Torcherino compressé",
+  "block.torcherino.blockdoublecompressedtorcherino": "Torcherino doublement compressé",
+  "block.torcherino.blocktriplecompressedtorcherino": "Torcherino triplement compressé",
+  "block.torcherino.blocklanterino": "Lanterino citrouille",
+  "block.torcherino.blockcompressedlanterino": "Lanterino citrouille compressé",
+  "block.torcherino.blockdoublecompressedlanterino": "Lanterino citrouille doublement compressé",
+  "block.torcherino.wall_blocktorcherino": "Torcherino",
+  "block.torcherino.wall_blockcompressedtorcherino": "Torcherino compressé",
+  "block.torcherino.wall_blockdoublecompressedtorcherino": "Torcherino doublement compressé",
+  "block.torcherino.wall_blocktriplecompressedtorcherino": "Torcherino triplement compressé",
+  "key.torcherino.useage_key": "Modificateur de Torcherino",
+  "message.torcherino.status": "%s | Vitesse: %s",
+  "message.torcherino.mode.stopped": "Arrêté",
+  "message.torcherino.mode.area": "Zone: %sx%sx%s"
+}

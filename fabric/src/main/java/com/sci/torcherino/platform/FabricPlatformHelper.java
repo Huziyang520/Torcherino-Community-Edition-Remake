@@ -1,3 +1,7 @@
+/*
+ * 本文件：IPlatformHelper 的 Fabric 实现。
+ * 说明：用 FabricLoader 回答平台名 / 模组是否加载 / 是否开发环境 / 配置目录，并把发包动作转交给 Fabric 网络类。
+ */
 package com.sci.torcherino.platform;
 
 import com.sci.torcherino.platform.services.IRegistrationHelper;

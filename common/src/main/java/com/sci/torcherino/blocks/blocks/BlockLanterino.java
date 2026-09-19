@@ -1,3 +1,7 @@
+/*
+ * 本文件：南瓜灯形态的加速火把（基础款）。
+ * 说明：注册名 blocklanterino，继承 CarvedPumpkinBlock；也是两个压缩款的父类。
+ */
 package com.sci.torcherino.blocks.blocks;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -16,10 +20,9 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Jack o'Lanterino - the pumpkin shaped Torcherino variant.
  *
- * <p>1.12.2 derived this from {@code BlockPumpkin}; the modern counterpart is
- * {@code CarvedPumpkinBlock}. The vanilla golem patterns only match
- * {@code carved_pumpkin} and {@code jack_o_lantern}, so extending this class does not
- * make Lanterinos spawn golems - exactly like the original.</p>
+ * <p>The vanilla golem patterns only match {@code carved_pumpkin} and
+ * {@code jack_o_lantern}, so extending {@code CarvedPumpkinBlock} does not make
+ * Lanterinos spawn golems.</p>
  */
 public class BlockLanterino extends CarvedPumpkinBlock implements EntityBlock {
 
