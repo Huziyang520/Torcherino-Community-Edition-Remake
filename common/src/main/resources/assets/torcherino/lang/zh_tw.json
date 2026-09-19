@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "關",
   "gui.torcherino.config.useGui": "可視化編輯介面",
   "gui.torcherino.config.smoothSlider": "滑條平滑滑動",
-  "gui.torcherino.config.logPlacement": "記錄放置日誌",
-  "gui.torcherino.config.overPoweredRecipe": "廉價（OP）配方",
+  "gui.torcherino.config.overPoweredRecipe": "廉價配方",
+  "gui.torcherino.config.serverFile": "伺服器設定：torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "配方與黑名單需重啟或 /reload 生效",
   "gui.torcherino.config.compressedTorcherino": "壓縮配方",
   "gui.torcherino.config.doubleCompressedTorcherino": "二重壓縮配方",
   "gui.torcherino.config.tripleCompressedTorcherino": "三重壓縮配方"

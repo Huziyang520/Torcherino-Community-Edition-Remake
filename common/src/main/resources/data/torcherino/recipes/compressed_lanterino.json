@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    { "type": "torcherino:config", "config": "compressedTorcherino", "value": true }
+  ],
+  "fabric:load_conditions": [
+    { "condition": "torcherino:config", "config": "compressedTorcherino", "value": true }
+  ],
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blockcompressedlanterino",
   "ingredients": [

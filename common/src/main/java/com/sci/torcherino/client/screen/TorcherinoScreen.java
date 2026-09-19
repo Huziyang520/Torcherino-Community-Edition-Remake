@@ -1,8 +1,9 @@
 /*
  * 本文件：加速火把的可视化编辑界面（仅客户端加载）。
  * 说明：面板贴图为 assets/torcherino/textures/gui/torcherino.png（245x123），四条滑条（速度 / X / Z / Y）
- *      加一个红石模式按钮；关闭界面时把数值回传服务端。滑条手感由 gui.smoothSlider 决定：
- *      false（默认）= 每档吸附，true = 连续拖动、松手取整。所有文字自绘且不带阴影，避免叠加发虚。
+ *      加一个红石模式按钮；关闭界面时把数值回传服务端。
+ *      滑条为自绘控件：手柄位置（连续）与数值（整档）分开保存 —— gui.smoothSlider = true 时手柄可在档位之间
+ *      自由拖动、数值仍取整；false 时手柄被吸附到最近整档。文字一律无阴影绘制，避免叠加发虚。
  */
 package com.sci.torcherino.client.screen;
 
@@ -12,9 +13,10 @@ import com.sci.torcherino.platform.Services;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -108,18 +110,18 @@ public class TorcherinoScreen extends Screen {
     protected void init() {
         this.left = (this.width - PANEL_WIDTH) / 2;
         this.top = (this.height - TOTAL_HEIGHT) / 2;
-        final boolean smooth = TorcherinoConfig.smoothSlider;
+        final boolean continuous = TorcherinoConfig.smoothSlider;
 
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW, SLIDER_WIDTH,
-                TileTorcherino.MAX_SPEED, smooth, this.speed, value -> this.speed = value, value -> this.speedLabel()));
+                TileTorcherino.MAX_SPEED, continuous, this.speed, value -> this.speed = value, value -> this.speedLabel()));
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP,
-                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, smooth, this.xRange, value -> this.xRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, continuous, this.xRange, value -> this.xRange = value,
                 value -> rangeLabel("X", value)));
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP * 2,
-                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, smooth, this.zRange, value -> this.zRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, continuous, this.zRange, value -> this.zRange = value,
                 value -> rangeLabel("Z", value)));
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP * 3,
-                SLIDER_WIDTH, TileTorcherino.MAX_Y_RANGE, smooth, this.yRange, value -> this.yRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_Y_RANGE, continuous, this.yRange, value -> this.yRange = value,
                 value -> rangeLabel("Y", value)));
 
         this.addRenderableWidget(Button.builder(this.redstoneButtonLabel(), button -> {
@@ -153,50 +155,99 @@ public class TorcherinoScreen extends Screen {
     }
 
     /**
-     * A slider over a fixed number of whole steps.
+     * A slider whose handle position and reported value are kept apart.
      *
-     * <p>In "snap" mode the handle is pulled onto the nearest step as soon as the value is
-     * applied. In smooth mode the handle keeps the dragged position and only the reported
-     * value is rounded. Drawing is done here instead of by the vanilla implementation so
-     * the label can be rendered without a drop shadow.</p>
+     * <p>The handle position is a raw {@code 0..1} fraction taken straight from the mouse,
+     * while the value handed to {@code onChange} is always a whole step. In "continuous"
+     * mode the handle is drawn at the raw fraction, so it can be parked anywhere inside a
+     * step while the number stays rounded; otherwise the handle is drawn on the step it
+     * snapped to. This is written by hand instead of using {@code AbstractSliderButton}
+     * because that class derives its drawing position from the value, which makes the two
+     * modes indistinguishable.</p>
      */
-    public static class ValueSlider extends AbstractSliderButton {
+    public static class ValueSlider extends AbstractWidget {
 
         private final int steps;
-        private final double stepSize;
-        private final boolean smooth;
+        private final boolean continuous;
         private final IntConsumer onChange;
         private final IntFunction<Component> labeller;
-        private int current;
 
-        public ValueSlider(int x, int y, int width, int steps, boolean smooth, int initial,
+        /** Raw handle position in {@code [0,1]}, only ever used for drawing. */
+        private double position;
+        /** The rounded value that is reported and shown in the label. */
+        private int value;
+
+        public ValueSlider(int x, int y, int width, int steps, boolean continuous, int initial,
                            IntConsumer onChange, IntFunction<Component> labeller) {
-            super(x, y, width, SLIDER_HEIGHT, Component.empty(), steps == 0 ? 0.0 : (double) initial / steps);
+            super(x, y, width, SLIDER_HEIGHT, Component.empty());
             this.steps = steps;
-            this.stepSize = steps == 0 ? 0.0 : 1.0 / steps;
-            this.smooth = smooth;
+            this.continuous = continuous;
             this.onChange = onChange;
             this.labeller = labeller;
-            this.current = Mth.clamp(initial, 0, steps);
-            this.updateMessage();
+            this.value = Mth.clamp(initial, 0, steps);
+            this.position = this.steps == 0 ? 0.0 : (double) this.value / this.steps;
+            this.updateLabel();
         }
 
-        @Override
-        protected void updateMessage() {
-            this.setMessage(this.labeller.apply(this.current));
+        private void updateLabel() {
+            this.setMessage(this.labeller.apply(this.value));
         }
 
-        @Override
-        protected void applyValue() {
-            final int rounded = (int) Math.round(this.value * this.steps);
-            if (rounded != this.current) {
-                this.current = rounded;
+        /** Where the handle is drawn: freely in continuous mode, on the step otherwise. */
+        private double handlePosition() {
+            if (this.continuous || this.steps == 0) {
+                return this.position;
+            }
+            return (double) this.value / this.steps;
+        }
+
+        private void moveHandleTo(double mouseX) {
+            this.position = Mth.clamp((mouseX - (double) (this.getX() + 4)) / (double) (this.getWidth() - 8), 0.0, 1.0);
+            this.applyPosition();
+        }
+
+        private void applyPosition() {
+            final int rounded = (int) Math.round(this.position * this.steps);
+            if (rounded != this.value) {
+                this.value = rounded;
                 this.onChange.accept(rounded);
             }
-            if (!this.smooth) {
-                this.value = this.current * this.stepSize;
+            this.updateLabel();
+        }
+
+        private void step(int direction) {
+            final int next = Mth.clamp(this.value + direction, 0, this.steps);
+            if (next == this.value) {
+                return;
             }
-            this.updateMessage();
+            this.value = next;
+            this.position = this.steps == 0 ? 0.0 : (double) next / this.steps;
+            this.onChange.accept(next);
+            this.updateLabel();
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY) {
+            this.moveHandleTo(mouseX);
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput narration) {
+            this.defaultButtonNarrationText(narration);
+        }
+
+        @Override
+        protected void onDrag(double mouseX, double mouseY, double dragX, double dragY) {
+            this.moveHandleTo(mouseX);
+        }
+
+        @Override
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            if (keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT) {
+                this.step(keyCode == GLFW.GLFW_KEY_LEFT ? -1 : 1);
+                return true;
+            }
+            return super.keyPressed(keyCode, scanCode, modifiers);
         }
 
         @Override
@@ -210,7 +261,7 @@ public class TorcherinoScreen extends Screen {
             graphics.fill(x + 1, y + 1, x + width - 1, y + height - 1,
                     this.isHoveredOrFocused() ? 0xFF5B5B5B : 0xFF4C4C4C);
 
-            final int handleX = x + 1 + (int) Math.round(this.value * (width - 10));
+            final int handleX = x + 1 + (int) Math.round(this.handlePosition() * (width - 10));
             graphics.fill(handleX, y + 1, handleX + 8, y + height - 1, 0xFFCFCFCF);
             graphics.fill(handleX, y + 1, handleX + 1, y + height - 1, 0xFFFFFFFF);
 
@@ -218,21 +269,6 @@ public class TorcherinoScreen extends Screen {
             final Component message = this.getMessage();
             graphics.drawString(font, message, x + (width - font.width(message)) / 2,
                     y + (height - 8) / 2, 0xFFFFFF, false);
-        }
-
-        @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT) {
-                final int next = Mth.clamp(this.current + (keyCode == GLFW.GLFW_KEY_LEFT ? -1 : 1), 0, this.steps);
-                if (next != this.current) {
-                    this.current = next;
-                    this.value = next * this.stepSize;
-                    this.onChange.accept(next);
-                    this.updateMessage();
-                }
-                return true;
-            }
-            return super.keyPressed(keyCode, scanCode, modifiers);
         }
     }
 }

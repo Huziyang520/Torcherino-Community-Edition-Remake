@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "꺼짐",
   "gui.torcherino.config.useGui": "그래픽 편집기",
   "gui.torcherino.config.smoothSlider": "부드러운 슬라이더",
-  "gui.torcherino.config.logPlacement": "설치 기록",
-  "gui.torcherino.config.overPoweredRecipe": "강화 레시피",
+  "gui.torcherino.config.overPoweredRecipe": "저렴한 레시피",
+  "gui.torcherino.config.serverFile": "서버 설정: torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "레시피는 재시작 또는 /reload 후 적용",
   "gui.torcherino.config.compressedTorcherino": "압축 레시피",
   "gui.torcherino.config.doubleCompressedTorcherino": "2중 압축 레시피",
   "gui.torcherino.config.tripleCompressedTorcherino": "3중 압축 레시피"

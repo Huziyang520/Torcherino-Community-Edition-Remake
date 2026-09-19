@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "オフ",
   "gui.torcherino.config.useGui": "グラフィカル編集",
   "gui.torcherino.config.smoothSlider": "スライダーを滑らかに",
-  "gui.torcherino.config.logPlacement": "設置ログ",
-  "gui.torcherino.config.overPoweredRecipe": "強化レシピ",
+  "gui.torcherino.config.overPoweredRecipe": "安価なレシピ",
+  "gui.torcherino.config.serverFile": "サーバー設定: torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "レシピは再起動か /reload で反映",
   "gui.torcherino.config.compressedTorcherino": "圧縮レシピ",
   "gui.torcherino.config.doubleCompressedTorcherino": "二重圧縮レシピ",
   "gui.torcherino.config.tripleCompressedTorcherino": "三重圧縮レシピ"

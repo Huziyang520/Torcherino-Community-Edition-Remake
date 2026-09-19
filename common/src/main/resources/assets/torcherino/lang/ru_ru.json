@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "Выкл.",
   "gui.torcherino.config.useGui": "Графический редактор",
   "gui.torcherino.config.smoothSlider": "Плавные ползунки",
-  "gui.torcherino.config.logPlacement": "Логировать установку",
-  "gui.torcherino.config.overPoweredRecipe": "Усиленный рецепт",
+  "gui.torcherino.config.overPoweredRecipe": "Дешёвый рецепт",
+  "gui.torcherino.config.serverFile": "Настройки сервера: torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "Рецепты применятся после перезапуска или /reload",
   "gui.torcherino.config.compressedTorcherino": "Сжатый рецепт",
   "gui.torcherino.config.doubleCompressedTorcherino": "Двойной сжатый рецепт",
   "gui.torcherino.config.tripleCompressedTorcherino": "Тройной сжатый рецепт"

@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "Désactivé",
   "gui.torcherino.config.useGui": "Éditeur graphique",
   "gui.torcherino.config.smoothSlider": "Curseurs fluides",
-  "gui.torcherino.config.logPlacement": "Journaliser la pose",
-  "gui.torcherino.config.overPoweredRecipe": "Recette surpuissante",
+  "gui.torcherino.config.overPoweredRecipe": "Recette économique",
+  "gui.torcherino.config.serverFile": "Config serveur : torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "Les recettes s'appliquent après un redémarrage ou /reload",
   "gui.torcherino.config.compressedTorcherino": "Recette compressée",
   "gui.torcherino.config.doubleCompressedTorcherino": "Recette doublement compressée",
   "gui.torcherino.config.tripleCompressedTorcherino": "Recette triplement compressée"

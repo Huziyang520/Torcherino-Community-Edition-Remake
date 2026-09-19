@@ -33,12 +33,12 @@
    **潜行时右键不会打开界面**（保持原版行为），方便你在它旁边正常放方块。
 3. **红石模式共四档**：`正常`（有红石信号就停止）、`反向`（有红石信号才工作）、
    `忽略红石`（一直工作）、`始终关闭`。
-4. 想换回老式的快捷操作：把 `config/torcherino.toml` 里的 `general.useGui` 改成 `false`，
+4. 想换回老式的快捷操作：把 `config/torcherino-client.toml` 里的 `gui.useGui` 改成 `false`，
    之后**右键切范围**、**按住左 Shift 再右键切速度**，行动栏会显示如 `范围: 3x3x3 | 速度: 200%`。
    两种方式**只会生效一种**。
 
-> 滑条手感由 `gui.smoothSlider` 决定：默认 `false` = 每一档吸附（拖动即跳到整档）；
-> `true` = 连续拖动、松手取整。
+> 滑条手感由客户端配置 `gui.smoothSlider` 决定：默认 `false` = 手柄被吸附到最近的整档；
+> `true` = 手柄可在档位之间**连续拖动**（数值仍按整档取），两者手感差异明显。
 > 快捷操作模式下，左 Shift 是默认键，可在「选项 → 控制」里搜索「切换加速模式」改键。
 
 ### 方块与倍率
@@ -56,22 +56,31 @@
 
 倍率越高，同一时间能加速的次数越多，适合后期大规模农场与工业流水线。
 
-### 配置（服主）
+### 配置（两个文件）
 
-配置文件位于 `config/torcherino.toml`：
+配置拆成两份，各归各的：
+
+| 文件 | 归属 | 内容 |
+|---|---|---|
+| `config/torcherino-client.toml` | **客户端** | `gui.useGui`（右键是否打开编辑界面）、`gui.smoothSlider`（滑条手柄能否连续拖动） |
+| `config/torcherino-server.toml` | **服务端 / 服主** | 配方开关与黑名单 |
+
+`torcherino-server.toml` 的键：
 
 | 配置项 | 默认值 | 含义 |
 |---|---|---|
-| `general.logPlacement` | `false` | 是否记录每一次放置加速火把 |
-| `general.overPoweredRecipe` | `true` | 是否使用廉价的「OP」配方（否则改用下界之星配方） |
-| `general.compressedTorcherino` | `false` | 压缩配方开关 |
-| `general.doubleCompressedTorcherino` | `false` | 二重压缩配方开关 |
-| `general.tripleCompressedTorcherino` | `false` | 三重压缩配方开关 |
+| `general.overPoweredRecipe` | `true` | 使用廉价配方（关闭则改用下界之星配方） |
+| `general.compressedTorcherino` | `false` | 压缩火把 / 压缩南瓜灯的配方开关 |
+| `general.doubleCompressedTorcherino` | `false` | 二重压缩配方开关（需同时开启压缩） |
+| `general.tripleCompressedTorcherino` | `false` | 三重压缩配方开关（需同时开启压缩与二重压缩） |
 | `blacklist.blacklistedBlocks` | `[]` | 禁止被加速的方块，格式 `modid:name` |
 | `blacklist.blacklistedTiles` | `[]` | 禁止被加速的机器的类全限定名 |
 
-> 注：目前只有 `overPoweredRecipe` 会实际影响配方；三个压缩开关虽然存在于配置里，但还没有配方引用它们，
-> 属于已知的保留行为，不必当作故障反馈。
+> ⚠️ 配方开关是在**数据包加载时**读取的：改完要**重启**或执行 `/reload` 才会生效；
+> 多人游戏里请改**服务端**那份文件，客户端改的不管用。
+> 三个压缩开关默认关闭（原版行为），想要压缩系请在服务端文件里打开。
+>
+> 从旧版本升级：若还存在拆分前的单文件 `config/torcherino.toml`，首次启动会把其中的取值搬进上面两个新文件。
 
 ### 支持的语言
 
@@ -126,12 +135,13 @@ does it several times in the same tick.
    blocks next to a Torcherino.
 3. **Four redstone modes**: `Normal` (a signal stops it), `Inverted` (only runs with a signal),
    `Ignored` (always runs) and `Always off`.
-4. Prefer the classic interaction? Set `general.useGui = false` in `config/torcherino.toml` and you get
+4. Prefer the classic interaction? Set `gui.useGui = false` in `config/torcherino-client.toml` and you get
    **right-click to change the area** and **hold Left Shift + right-click to change the speed** again,
    with the action bar showing e.g. `Area: 3x3x3 | Speed: 200%`. Only one of the two modes is active.
 
-> Slider feel is controlled by `gui.smoothSlider`: `false` (default) snaps every step,
-> `true` drags continuously and rounds on release.
+> Slider feel is controlled by the client setting `gui.smoothSlider`: `false` (default) pulls every
+> handle onto the nearest step, `true` lets the handle be dragged continuously between steps while
+> the reported value stays rounded.
 > Left Shift is only the default. You can rebind it in *Options → Controls* by searching for
 > *Torcherino Modifier*.
 
@@ -151,22 +161,33 @@ does it several times in the same tick.
 Higher tiers perform more acceleration ticks at once, which is what you want for large farms and
 late-game factories.
 
-### Configuration (server owners)
+### Configuration (two files)
 
-The configuration file lives at `config/torcherino.toml`:
+The configuration is split into two files with clearly different owners:
+
+| File | Owner | Contents |
+|---|---|---|
+| `config/torcherino-client.toml` | **client** | `gui.useGui` (open the editor on right click) and `gui.smoothSlider` (draggable slider handles) |
+| `config/torcherino-server.toml` | **server / server owner** | recipe switches and the blacklist |
+
+Keys of `torcherino-server.toml`:
 
 | Key | Default | Meaning |
 |---|---|---|
-| `general.logPlacement` | `false` | Log every Torcherino placement |
-| `general.overPoweredRecipe` | `true` | Use the cheap "OP" recipe instead of the nether star recipe |
-| `general.compressedTorcherino` | `false` | Compressed recipe toggle |
-| `general.doubleCompressedTorcherino` | `false` | Double compressed recipe toggle |
-| `general.tripleCompressedTorcherino` | `false` | Triple compressed recipe toggle |
+| `general.overPoweredRecipe` | `true` | Use the cheap recipe instead of the nether star one |
+| `general.compressedTorcherino` | `false` | Recipes of the Compressed Torcherino / Jack o'Lanterino |
+| `general.doubleCompressedTorcherino` | `false` | Double compressed recipes (compressed must be enabled too) |
+| `general.tripleCompressedTorcherino` | `false` | Triple compressed recipes (compressed and double must be enabled too) |
 | `blacklist.blacklistedBlocks` | `[]` | `modid:name` entries that must not be accelerated |
 | `blacklist.blacklistedTiles` | `[]` | Fully qualified machine class names that must not be accelerated |
 
-> Note: only `overPoweredRecipe` currently affects a recipe. The three compression toggles exist in
-> the config file but no recipe reads them yet — that is intended behaviour, not a bug.
+> ⚠️ Recipe switches are read while the **data pack loads**: restart or run `/reload` after a change,
+> and in multiplayer edit the **server's** file — the client copy has no effect there.
+> The three compression switches default to off (upstream behaviour); enable them in the server file
+> if you want the compressed tiers.
+>
+> Upgrading: if the pre-split file `config/torcherino.toml` still exists, its values are copied into
+> the two new files on first start.
 
 ### Languages
 

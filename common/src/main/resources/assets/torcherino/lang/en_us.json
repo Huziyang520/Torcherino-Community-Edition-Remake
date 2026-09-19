@@ -28,8 +28,9 @@
   "gui.torcherino.config.off": "Off",
   "gui.torcherino.config.useGui": "Graphical editor",
   "gui.torcherino.config.smoothSlider": "Smooth sliders",
-  "gui.torcherino.config.logPlacement": "Log placement",
-  "gui.torcherino.config.overPoweredRecipe": "Overpowered recipe",
+  "gui.torcherino.config.overPoweredRecipe": "Cheap recipe",
+  "gui.torcherino.config.serverFile": "Server config: torcherino-server.toml",
+  "gui.torcherino.config.serverReload": "Recipes apply after a restart or /reload",
   "gui.torcherino.config.compressedTorcherino": "Compressed recipe",
   "gui.torcherino.config.doubleCompressedTorcherino": "Double compressed recipe",
   "gui.torcherino.config.tripleCompressedTorcherino": "Triple compressed recipe"
