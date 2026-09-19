@@ -50,7 +50,8 @@ public final class ModBlockEntities {
 
         TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlockEntityType("triple_compressed_torcherino_tile",
                 TileTripleCompressedTorcherino::new,
-                () -> validBlocks(ModBlocks.TRIPLE_COMPRESSED_TORCHERINO, ModBlocks.WALL_TRIPLE_COMPRESSED_TORCHERINO));
+                () -> validBlocks(ModBlocks.TRIPLE_COMPRESSED_TORCHERINO, ModBlocks.WALL_TRIPLE_COMPRESSED_TORCHERINO,
+                        ModBlocks.TRIPLE_COMPRESSED_LANTERINO));
     }
 
     @SafeVarargs

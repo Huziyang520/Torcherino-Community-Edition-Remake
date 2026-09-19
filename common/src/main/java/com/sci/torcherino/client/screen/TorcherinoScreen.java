@@ -101,6 +101,11 @@ public class TorcherinoScreen extends Screen {
         });
     }
 
+    /** Full name of the current redstone mode, used by the button tooltip. */
+    private Component redstoneTooltip() {
+        return Component.translatable("gui.torcherino.redstone", this.redstoneModeName());
+    }
+
     private Component redstoneButtonLabel() {
         final String name = this.redstoneModeName().getString();
         // The notch in the panel only fits one character; the full name lives in the tooltip.
@@ -135,8 +140,11 @@ public class TorcherinoScreen extends Screen {
         this.addRenderableWidget(Button.builder(this.redstoneButtonLabel(), button -> {
             this.redstoneMode = (this.redstoneMode + 1) % TileTorcherino.REDSTONE_MODES;
             button.setMessage(this.redstoneButtonLabel());
+            // The tooltip is built once when the widget is created, so it has to be rebuilt
+            // here as well - otherwise it keeps showing the mode the screen was opened with.
+            button.setTooltip(Tooltip.create(this.redstoneTooltip()));
         }).bounds(this.left + MODE_BUTTON_LEFT, this.top + FIRST_ROW, 20, SLIDER_HEIGHT)
-                .tooltip(Tooltip.create(Component.translatable("gui.torcherino.redstone", this.redstoneModeName())))
+                .tooltip(Tooltip.create(this.redstoneTooltip()))
                 .build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
