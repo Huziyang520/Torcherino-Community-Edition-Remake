@@ -74,7 +74,7 @@ public final class TorcherinoFabricNetworking {
         buf.writeInt(torcherino.getXRange());
         buf.writeInt(torcherino.getZRange());
         buf.writeInt(torcherino.getYRange());
-        buf.writeInt(torcherino.getSpeed());
+        buf.writeInt(torcherino.getSpeedScaled());
         buf.writeInt(torcherino.getRedstoneMode());
         buf.writeInt(torcherino.getTierMultiplier());
         ServerPlayNetworking.send(player, OPEN_SCREEN, buf);

@@ -5,6 +5,7 @@
  */
 package com.sci.torcherino.blocks.tiles;
 
+import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.TorcherinoRegistry;
 import com.sci.torcherino.blocks.ModBlockEntities;
 
@@ -42,8 +43,17 @@ public class TileTorcherino extends BlockEntity {
     /** Upper bounds of the three ranges, shared by every tier. */
     public static final int MAX_XZ_RANGE = 15;
     public static final int MAX_Y_RANGE = 15;
-    /** Upper bound of the speed level. */
+    /** Upper bound of the speed level, i.e. how many gears the classic interaction offers. */
     public static final int MAX_SPEED = 8;
+    /**
+     * Resolution of the stored speed: it is kept in hundredths of a level, so
+     * {@code speedScaled / SPEED_SCALE} is the level the classic interaction counts in.
+     * The free multiplier mode allows every hundredth, the classic mode steps by
+     * {@code SPEED_SCALE} (one gear).
+     */
+    public static final int SPEED_SCALE = 100;
+    /** Upper bound of the stored speed; 800 is level 8, ten times the classic maximum. */
+    public static final int MAX_SPEED_SCALED = MAX_SPEED * SPEED_SCALE;
 
     /** Redstone modes, in the same order as the upstream interface. */
     public static final int REDSTONE_NORMAL = 0;
@@ -55,8 +65,16 @@ public class TileTorcherino extends BlockEntity {
     private int xRange;
     private int yRange;
     private int zRange;
-    private int speed;
+    /** Speed in hundredths of a level, see {@link #SPEED_SCALE}. */
+    private int speedScaled;
     private int redstoneMode;
+
+    /**
+     * Carry of the fractional part of the multiplier. A multiplier such as 3.5 cannot run
+     * "three and a half" ticks, so the half is spread over the following ticks; over time
+     * the work done matches the configured multiplier exactly.
+     */
+    private double speedCarry;
 
     /** Resolved from the redstone mode plus the last known signal. */
     private boolean active = true;
@@ -109,9 +127,9 @@ public class TileTorcherino extends BlockEntity {
         return this.speed(1);
     }
 
-    /** Percentage the editor and the action bar show for the current speed level. */
+    /** Percentage the editor and the action bar show for the current speed. */
     public int getSpeedPercent() {
-        return this.speed(this.speed) * 100;
+        return this.speedScaled * this.getTierMultiplier();
     }
 
     /**
@@ -131,12 +149,23 @@ public class TileTorcherino extends BlockEntity {
             this.pendingRedstoneRefresh = false;
             this.updateActive();
         }
-        if (!this.active || this.speed == 0 || (this.xRange == 0 && this.yRange == 0 && this.zRange == 0)) {
+        if (!this.active || this.speedScaled == 0 || (this.xRange == 0 && this.yRange == 0 && this.zRange == 0)) {
             return;
         }
         this.rebuildAreaIfNeeded();
         // Hoisted out of the scan: the multiplier cannot change while a tick runs.
-        this.scannerMultiplier = this.speed(this.speed);
+        final double exact = this.speedScaled * this.getTierMultiplier() / (double) SPEED_SCALE;
+        int whole = (int) Math.floor(exact);
+        this.speedCarry += exact - whole;
+        if (this.speedCarry >= 1.0D) {
+            this.speedCarry -= 1.0D;
+            whole++;
+        }
+        // A machine ticked hundreds of times inside one game tick finishes its progress bar
+        // before the client can ever see it: the arrow never moves and a whole stack is
+        // consumed at once. Capping the extra ticks per block keeps the animation visible,
+        // and on the high tiers it also removes a lot of pointless server work.
+        this.scannerMultiplier = Math.min(whole, TorcherinoConfig.maxTicksPerBlock);
         // The iterator hands out one reused position, so this loop allocates nothing per
         // visited block; only the blocks that really tick get an immutable copy.
         for (BlockPos cursor : this.area) {
@@ -235,8 +264,9 @@ public class TileTorcherino extends BlockEntity {
         return this.zRange;
     }
 
-    public int getSpeed() {
-        return this.speed;
+    /** Speed in hundredths of a level; {@link #getSpeedPercent()} is the human readable form. */
+    public int getSpeedScaled() {
+        return this.speedScaled;
     }
 
     public int getRedstoneMode() {
@@ -255,11 +285,11 @@ public class TileTorcherino extends BlockEntity {
      * @return {@code true} when the values were applied (they always are; the return value
      *         exists so callers can log a rejection if the rules get stricter).
      */
-    public boolean setValues(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+    public boolean setValues(int xRange, int zRange, int yRange, int speedScaled, int redstoneMode) {
         this.xRange = clamp(xRange, MAX_XZ_RANGE);
         this.zRange = clamp(zRange, MAX_XZ_RANGE);
         this.yRange = clamp(yRange, MAX_Y_RANGE);
-        this.speed = clamp(speed, MAX_SPEED);
+        this.speedScaled = clamp(speedScaled, MAX_SPEED_SCALED);
         this.redstoneMode = clamp(redstoneMode, REDSTONE_MODES - 1);
         this.updateActive();
         this.sync();
@@ -299,19 +329,22 @@ public class TileTorcherino extends BlockEntity {
      */
     public void changeMode(boolean modifier) {
         if (modifier) {
-            this.speed = this.speed < MAX_SPEED ? this.speed + 1 : 0;
+            // One step is one classic gear; free multiplier values are reachable through
+            // the editor only, they simply keep whatever is left of the last gear here.
+            this.speedScaled = this.speedScaled + SPEED_SCALE <= MAX_SPEED_SCALED
+                    ? this.speedScaled + SPEED_SCALE : 0;
             this.sync();
             return;
         }
         final int next = this.xRange < MAX_XZ_RANGE ? this.xRange + 1 : 0;
-        this.setValues(next, next, next, this.speed, this.redstoneMode);
+        this.setValues(next, next, next, this.speedScaled, this.redstoneMode);
     }
 
     /** Action bar text of the quick interaction. */
     public Component getDescription() {
         return Component.translatable("message.torcherino.status",
                 this.getModeDescription(),
-                this.speed(this.speed) * 100 + "%");
+                this.getSpeedPercent() + "%");
     }
 
     /** "Stopped" or the current area, as a translatable component. */
@@ -352,7 +385,9 @@ public class TileTorcherino extends BlockEntity {
         tag.putInt("XRange", this.xRange);
         tag.putInt("ZRange", this.zRange);
         tag.putInt("YRange", this.yRange);
-        tag.putInt("Speed", this.speed);
+        tag.putInt("SpeedScaled", this.speedScaled);
+        // Readers that only know the classic model understand a whole level, not hundredths.
+        tag.putInt("Speed", this.speedScaled / SPEED_SCALE);
         tag.putInt("RedstoneMode", this.redstoneMode);
         tag.putBoolean("Active", this.active);
         // Legacy keys are still written so a world stays readable by the classic radius
@@ -370,7 +405,8 @@ public class TileTorcherino extends BlockEntity {
             this.xRange = clamp(tag.getInt("XRange"), MAX_XZ_RANGE);
             this.zRange = clamp(tag.getInt("ZRange"), MAX_XZ_RANGE);
             this.yRange = clamp(tag.getInt("YRange"), MAX_Y_RANGE);
-            this.speed = clamp(tag.getInt("Speed"), MAX_SPEED);
+            this.speedScaled = clamp(tag.contains("SpeedScaled")
+                    ? tag.getInt("SpeedScaled") : tag.getInt("Speed") * SPEED_SCALE, MAX_SPEED_SCALED);
             this.redstoneMode = clamp(tag.getInt("RedstoneMode"), REDSTONE_MODES - 1);
         } else {
             // Classic save: one radius for all three axes, redstone could only switch it off.
@@ -378,7 +414,7 @@ public class TileTorcherino extends BlockEntity {
             this.xRange = radius;
             this.zRange = radius;
             this.yRange = radius;
-            this.speed = clamp(tag.getByte("Speed"), MAX_SPEED);
+            this.speedScaled = clamp(tag.getByte("Speed") * SPEED_SCALE, MAX_SPEED_SCALED);
             this.redstoneMode = REDSTONE_NORMAL;
         }
         this.updateActive();

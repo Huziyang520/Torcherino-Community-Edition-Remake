@@ -47,7 +47,7 @@ public final class TorcherinoConfig {
      * {@code true} slides the editor handles continuously inside a step, {@code false}
      * (default) pulls every handle onto the nearest step while dragging.
      */
-    public static boolean smoothSlider = false;
+    public static boolean freeSpeedMultiplier = false;
 
     // ---- server file -------------------------------------------------------------------
 
@@ -59,6 +59,16 @@ public final class TorcherinoConfig {
     public static boolean doubleCompressedTorcherino = false;
     /** Only takes effect if Compressed and Double Compressed Torcherinos are enabled. */
     public static boolean tripleCompressedTorcherino = false;
+    /**
+     * How many extra ticks one block may receive per game tick.
+     *
+     * <p>This is a visibility and performance guard, not a speed limit: a machine ticked
+     * hundreds of times inside a single game tick finishes its progress bar before the
+     * client can see it (the arrow never moves and a stack is consumed at once). Raising
+     * the value makes machines faster but the progress animation disappears; lowering it
+     * keeps the animation visible and costs less server time.</p>
+     */
+    public static int maxTicksPerBlock = 20;
 
     /** Entries of the form {@code modid:unlocalized}. */
     public static List<String> blacklistedBlocks = new ArrayList<>();
@@ -83,12 +93,17 @@ public final class TorcherinoConfig {
             case "doubleCompressedTorcherino" -> doubleCompressedTorcherino;
             case "tripleCompressedTorcherino" -> tripleCompressedTorcherino;
             case "useGui" -> useGui;
-            case "smoothSlider" -> smoothSlider;
+            case "freeSpeedMultiplier" -> freeSpeedMultiplier;
             default -> false;
         };
     }
 
     public static synchronized void load() {
+        if (Services.PLATFORM.usesForgeConfigSystem()) {
+            // Forge reads the two files through its own config system (which is what
+            // Configured turns into a screen), so the TOML code below must not touch them.
+            return;
+        }
         final Path dir = Services.PLATFORM.getConfigDir();
         final CommentedFileConfig legacy = openLegacy(dir);
         try {
@@ -114,7 +129,7 @@ public final class TorcherinoConfig {
         try (CommentedFileConfig cfg = CommentedFileConfig.builder(path).preserveInsertionOrder().build()) {
             cfg.load();
             cfg.set(GUI + ".useGui", useGui);
-            cfg.set(GUI + ".smoothSlider", smoothSlider);
+            cfg.set(GUI + ".freeSpeedMultiplier", freeSpeedMultiplier);
             cfg.save();
             Constants.LOG.info("Saved Torcherino client configuration to {}", path.toAbsolutePath());
         } catch (Exception e) {
@@ -148,13 +163,13 @@ public final class TorcherinoConfig {
             boolean changed = false;
             changed |= put(cfg, legacy, GUI + ".useGui", true,
                     "CLIENT SIDE. Open the graphical editor when right clicking a Torcherino. Set to false to use the classic quick interaction instead; only one of the two is active.");
-            changed |= put(cfg, legacy, GUI + ".smoothSlider", false,
+            changed |= put(cfg, legacy, GUI + ".freeSpeedMultiplier", false,
                     "CLIENT SIDE. true = the editor handles can be dragged continuously inside a step (the value is still rounded to a whole step); false = every handle snaps onto the nearest step.");
             if (changed) {
                 cfg.save();
             }
             useGui = bool(cfg, GUI + ".useGui", true);
-            smoothSlider = bool(cfg, GUI + ".smoothSlider", false);
+            freeSpeedMultiplier = bool(cfg, GUI + ".freeSpeedMultiplier", false);
         } catch (Exception e) {
             Constants.LOG.error("Failed to load {}", path, e);
         }
@@ -173,6 +188,8 @@ public final class TorcherinoConfig {
                     "SERVER SIDE. Enable the recipes of the Double Compressed Torcherino. Only takes effect if compressedTorcherino is enabled as well. Needs a restart or /reload.");
             changed |= put(cfg, legacy, GENERAL + ".tripleCompressedTorcherino", false,
                     "SERVER SIDE. Enable the recipes of the Triple Compressed Torcherino. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well. Needs a restart or /reload.");
+            changed |= put(cfg, legacy, GENERAL + ".maxTicksPerBlock", 20,
+                    "SERVER SIDE. How many extra ticks one block may receive per game tick. A machine ticked hundreds of times inside a single game tick finishes its progress bar before you can see it; a smaller value keeps the animation visible and costs less server time.");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedBlocks", new ArrayList<String>(),
                     "Blocks the Torcherino may not accelerate. Format: modid:unlocalized");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedTiles", new ArrayList<String>(),
@@ -184,6 +201,7 @@ public final class TorcherinoConfig {
             compressedTorcherino = bool(cfg, GENERAL + ".compressedTorcherino", false);
             doubleCompressedTorcherino = bool(cfg, GENERAL + ".doubleCompressedTorcherino", false);
             tripleCompressedTorcherino = bool(cfg, GENERAL + ".tripleCompressedTorcherino", false);
+            maxTicksPerBlock = intValue(cfg, GENERAL + ".maxTicksPerBlock", 20);
             blacklistedBlocks = stringList(cfg, BLACKLIST + ".blacklistedBlocks");
             blacklistedTiles = stringList(cfg, BLACKLIST + ".blacklistedTiles");
         } catch (Exception e) {
@@ -242,6 +260,11 @@ public final class TorcherinoConfig {
         }
         final Object value = legacy.get(key);
         return value != null ? value : fallback;
+    }
+
+    private static int intValue(CommentedFileConfig cfg, String key, int fallback) {
+        final Object value = cfg.get(key);
+        return value instanceof Number number ? Math.max(1, number.intValue()) : fallback;
     }
 
     private static boolean bool(CommentedFileConfig cfg, String key, boolean fallback) {

@@ -40,6 +40,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return FMLPaths.CONFIGDIR.get();
     }
 
+    /**
+     * Forge owns the configuration files through {@code ForgeConfigSpec}, which is also the
+     * only thing Configured can turn into a screen. The common TOML reader stays out of the
+     * way on this loader.
+     */
+    @Override
+    public boolean usesForgeConfigSystem() {
+        return true;
+    }
+
     @Override
     public void sendModifierKeyToServer(boolean pressed) {
         TorcherinoNetwork.sendToServer(pressed);

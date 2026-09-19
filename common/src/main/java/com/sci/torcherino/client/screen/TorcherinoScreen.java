@@ -58,13 +58,14 @@ public class TorcherinoScreen extends Screen {
     private int xRange;
     private int zRange;
     private int yRange;
-    private int speed;
+    /** Speed in hundredths of a level, so the free multiplier can hold any value. */
+    private int speedScaled;
     private int redstoneMode;
 
     private int left;
     private int top;
 
-    public TorcherinoScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speed,
+    public TorcherinoScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speedScaled,
                             int redstoneMode, int tierMultiplier) {
         super(Component.translatable(titleKey));
         this.pos = pos;
@@ -72,7 +73,7 @@ public class TorcherinoScreen extends Screen {
         this.xRange = xRange;
         this.zRange = zRange;
         this.yRange = yRange;
-        this.speed = speed;
+        this.speedScaled = speedScaled;
         this.redstoneMode = redstoneMode;
         this.tierMultiplier = tierMultiplier;
     }
@@ -82,9 +83,9 @@ public class TorcherinoScreen extends Screen {
         return false;
     }
 
-    /** Speed level times the tier factor - the same number the action bar prints. */
+    /** Speed times the tier factor - the same number the action bar prints. */
     private Component speedLabel() {
-        return Component.translatable("gui.torcherino.speed", this.speed * this.tierMultiplier * 100 + "%");
+        return Component.translatable("gui.torcherino.speed", this.speedScaled * this.tierMultiplier + "%");
     }
 
     private static Component rangeLabel(String axis, int range) {
@@ -110,18 +111,25 @@ public class TorcherinoScreen extends Screen {
     protected void init() {
         this.left = (this.width - PANEL_WIDTH) / 2;
         this.top = (this.height - TOTAL_HEIGHT) / 2;
-        final boolean continuous = TorcherinoConfig.smoothSlider;
+        final boolean free = TorcherinoConfig.freeSpeedMultiplier;
+        // Speed: eight classic gears by default; with the free multiplier the slider offers
+        // every hundredth of a level, i.e. any value from 0 % up to the tier maximum.
+        final int speedSteps = free ? TileTorcherino.MAX_SPEED_SCALED : TileTorcherino.MAX_SPEED;
+        final int speedFactor = TileTorcherino.MAX_SPEED_SCALED / speedSteps;
 
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW, SLIDER_WIDTH,
-                TileTorcherino.MAX_SPEED, continuous, this.speed, value -> this.speed = value, value -> this.speedLabel()));
+                speedSteps, free, Math.round(this.speedScaled / (float) speedFactor),
+                value -> this.speedScaled = value * speedFactor, value -> this.speedLabel()));
+        // The three ranges count whole blocks, so they always snap onto a step; a "3.5 block"
+        // wide area would not mean anything.
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP,
-                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, continuous, this.xRange, value -> this.xRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, false, this.xRange, value -> this.xRange = value,
                 value -> rangeLabel("X", value)));
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP * 2,
-                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, continuous, this.zRange, value -> this.zRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_XZ_RANGE, false, this.zRange, value -> this.zRange = value,
                 value -> rangeLabel("Z", value)));
         this.addRenderableWidget(new ValueSlider(this.left + SLIDER_LEFT, this.top + FIRST_ROW + ROW_STEP * 3,
-                SLIDER_WIDTH, TileTorcherino.MAX_Y_RANGE, continuous, this.yRange, value -> this.yRange = value,
+                SLIDER_WIDTH, TileTorcherino.MAX_Y_RANGE, false, this.yRange, value -> this.yRange = value,
                 value -> rangeLabel("Y", value)));
 
         this.addRenderableWidget(Button.builder(this.redstoneButtonLabel(), button -> {
@@ -150,7 +158,7 @@ public class TorcherinoScreen extends Screen {
     @Override
     public void onClose() {
         Services.PLATFORM.sendTorcherinoValues(this.pos, this.xRange, this.zRange, this.yRange,
-                this.speed, this.redstoneMode);
+                this.speedScaled, this.redstoneMode);
         super.onClose();
     }
 

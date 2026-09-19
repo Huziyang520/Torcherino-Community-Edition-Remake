@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "On",
   "gui.torcherino.config.off": "Off",
   "gui.torcherino.config.useGui": "Graphical editor",
-  "gui.torcherino.config.smoothSlider": "Smooth sliders",
+  "gui.torcherino.config.freeSpeedMultiplier": "Free multiplier",
   "gui.torcherino.config.overPoweredRecipe": "Cheap recipe",
   "gui.torcherino.config.serverFile": "Server config: torcherino-server.toml",
   "gui.torcherino.config.serverReload": "Recipes apply after a restart or /reload",

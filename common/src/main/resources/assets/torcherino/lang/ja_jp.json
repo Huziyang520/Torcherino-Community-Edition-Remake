@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "オン",
   "gui.torcherino.config.off": "オフ",
   "gui.torcherino.config.useGui": "グラフィカル編集",
-  "gui.torcherino.config.smoothSlider": "スライダーを滑らかに",
+  "gui.torcherino.config.freeSpeedMultiplier": "加速倍率を自由に",
   "gui.torcherino.config.overPoweredRecipe": "安価なレシピ",
   "gui.torcherino.config.serverFile": "サーバー設定: torcherino-server.toml",
   "gui.torcherino.config.serverReload": "レシピは再起動か /reload で反映",

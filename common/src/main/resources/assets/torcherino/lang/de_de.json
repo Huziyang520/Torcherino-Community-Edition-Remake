@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "An",
   "gui.torcherino.config.off": "Aus",
   "gui.torcherino.config.useGui": "Grafischer Editor",
-  "gui.torcherino.config.smoothSlider": "Weiche Regler",
+  "gui.torcherino.config.freeSpeedMultiplier": "Freie Beschleunigung",
   "gui.torcherino.config.overPoweredRecipe": "Günstiges Rezept",
   "gui.torcherino.config.serverFile": "Serverkonfiguration: torcherino-server.toml",
   "gui.torcherino.config.serverReload": "Rezepte gelten nach Neustart oder /reload",

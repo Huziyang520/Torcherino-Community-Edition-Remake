@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "开",
   "gui.torcherino.config.off": "关",
   "gui.torcherino.config.useGui": "可视化编辑界面",
-  "gui.torcherino.config.smoothSlider": "滑条平滑滑动",
+  "gui.torcherino.config.freeSpeedMultiplier": "加速倍率自由调节",
   "gui.torcherino.config.overPoweredRecipe": "廉价配方",
   "gui.torcherino.config.serverFile": "服务端配置：torcherino-server.toml",
   "gui.torcherino.config.serverReload": "配方与黑名单需重启或 /reload 生效",

@@ -69,7 +69,7 @@ public final class TorcherinoNetwork {
                 torcherino.getXRange(),
                 torcherino.getZRange(),
                 torcherino.getYRange(),
-                torcherino.getSpeed(),
+                torcherino.getSpeedScaled(),
                 torcherino.getRedstoneMode(),
                 torcherino.getTierMultiplier()));
     }

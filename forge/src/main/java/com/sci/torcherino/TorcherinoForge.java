@@ -43,6 +43,12 @@ public class TorcherinoForge {
         ModBlockEntities.register(Services.REGISTRATION);
         TorcherinoNetwork.register();
 
+        // Configuration through Forge's own config system: that is the only kind Configured
+        // picks up, and it replaces the bundled TOML reader on this loader. Registering it
+        // here (mod construction time) is required, the values arrive later through
+        // ModConfigEvent.
+        TorcherinoForgeConfig.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(TorcherinoForgeEvents::onBuildCreativeTabContents);
 

@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "Ativado",
   "gui.torcherino.config.off": "Desativado",
   "gui.torcherino.config.useGui": "Editor gráfico",
-  "gui.torcherino.config.smoothSlider": "Controles suaves",
+  "gui.torcherino.config.freeSpeedMultiplier": "Multiplicador livre",
   "gui.torcherino.config.overPoweredRecipe": "Receita barata",
   "gui.torcherino.config.serverFile": "Config do servidor: torcherino-server.toml",
   "gui.torcherino.config.serverReload": "As receitas valem após reiniciar ou /reload",

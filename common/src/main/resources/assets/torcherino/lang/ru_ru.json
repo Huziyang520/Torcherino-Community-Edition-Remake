@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "Вкл.",
   "gui.torcherino.config.off": "Выкл.",
   "gui.torcherino.config.useGui": "Графический редактор",
-  "gui.torcherino.config.smoothSlider": "Плавные ползунки",
+  "gui.torcherino.config.freeSpeedMultiplier": "Свободный множитель",
   "gui.torcherino.config.overPoweredRecipe": "Дешёвый рецепт",
   "gui.torcherino.config.serverFile": "Настройки сервера: torcherino-server.toml",
   "gui.torcherino.config.serverReload": "Рецепты применятся после перезапуска или /reload",

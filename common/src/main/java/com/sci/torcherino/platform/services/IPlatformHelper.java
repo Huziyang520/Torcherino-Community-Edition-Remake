@@ -63,4 +63,13 @@ public interface IPlatformHelper {
     default String getEnvironmentName() {
         return this.isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    /**
+     * @return true when the loader reads the configuration through its own config system.
+     *         Forge does, because that is what Configured turns into an in-game screen;
+     *         Fabric keeps the bundled TOML reader instead.
+     */
+    default boolean usesForgeConfigSystem() {
+        return false;
+    }
 }

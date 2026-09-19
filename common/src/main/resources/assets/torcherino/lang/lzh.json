@@ -27,7 +27,7 @@
   "gui.torcherino.config.on": "啟",
   "gui.torcherino.config.off": "閉",
   "gui.torcherino.config.useGui": "圖形之界面",
-  "gui.torcherino.config.smoothSlider": "滑條平滑",
+  "gui.torcherino.config.freeSpeedMultiplier": "加速倍率隨意調",
   "gui.torcherino.config.overPoweredRecipe": "廉價之方",
   "gui.torcherino.config.serverFile": "伺服之制：torcherino-server.toml",
   "gui.torcherino.config.serverReload": "方與禁單，須重啟或行 /reload",

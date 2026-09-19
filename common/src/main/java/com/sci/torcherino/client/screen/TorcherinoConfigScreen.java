@@ -1,6 +1,6 @@
 /*
  * 本文件：模组配置界面（仅客户端加载）。
- * 说明：只显示「客户端」设置（gui.useGui / gui.smoothSlider），关闭时写回 torcherino-client.toml；
+ * 说明：只显示「客户端」设置（gui.useGui / gui.freeSpeedMultiplier），关闭时写回 torcherino-client.toml；
  *      服务端的配方开关与黑名单在 config/torcherino-server.toml，界面里用两行提示说明位置与生效时机。
  */
 package com.sci.torcherino.client.screen;
@@ -44,8 +44,8 @@ public class TorcherinoConfigScreen extends Screen {
 
         int y = this.top;
         y = this.addToggle(y, "useGui", () -> TorcherinoConfig.useGui, value -> TorcherinoConfig.useGui = value);
-        y = this.addToggle(y, "smoothSlider", () -> TorcherinoConfig.smoothSlider,
-                value -> TorcherinoConfig.smoothSlider = value);
+        y = this.addToggle(y, "freeSpeedMultiplier", () -> TorcherinoConfig.freeSpeedMultiplier,
+                value -> TorcherinoConfig.freeSpeedMultiplier = value);
 
         this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
                 .bounds(this.left, y + 10, WIDTH, 20).build());
@@ -71,8 +71,9 @@ public class TorcherinoConfigScreen extends Screen {
         graphics.drawCenteredString(this.font, this.title, this.width / 2, this.top - 26, 0xFFFFFF);
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        // Two hint lines about the server file, drawn above the buttons.
-        final int hintY = this.top + ROW * TOGGLES + 2;
+        // Two hint lines about the server file, drawn below the buttons so they cannot
+        // overlap the "done" button.
+        final int hintY = this.top + ROW * TOGGLES + 36;
         graphics.drawCenteredString(this.font, Component.translatable("gui.torcherino.config.serverFile"),
                 this.width / 2, hintY, 0xA0A0A0);
         graphics.drawCenteredString(this.font, Component.translatable("gui.torcherino.config.serverReload"),
