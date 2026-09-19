@@ -1,19 +1,19 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=north": {
       "model": "torcherino:block/blocklanterino"
     },
-    "facing=north": {
-      "model": "torcherino:block/blocklanterino",
-      "y": 270
-    },
-    "facing=south": {
+    "facing=east": {
       "model": "torcherino:block/blocklanterino",
       "y": 90
     },
-    "facing=west": {
+    "facing=south": {
       "model": "torcherino:block/blocklanterino",
       "y": 180
+    },
+    "facing=west": {
+      "model": "torcherino:block/blocklanterino",
+      "y": 270
     }
   }
 }

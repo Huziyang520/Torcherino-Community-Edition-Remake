@@ -1,6 +1,6 @@
 /*
  * 本文件：南瓜灯形态的加速火把（基础款）。
- * 说明：注册名 blocklanterino，继承 CarvedPumpkinBlock；也是两个压缩款的父类。
+ * 说明：注册名 blocklanterino，继承 CarvedPumpkinBlock；也是三个压缩款的父类。
  */
 package com.sci.torcherino.blocks.blocks;
 

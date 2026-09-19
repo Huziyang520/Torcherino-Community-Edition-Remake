@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "torcherino:block/blocktriplecompressedlanterino"
+    },
+    "facing=east": {
+      "model": "torcherino:block/blocktriplecompressedlanterino",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "torcherino:block/blocktriplecompressedlanterino",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "torcherino:block/blocktriplecompressedlanterino",
+      "y": 270
+    }
+  }
+}

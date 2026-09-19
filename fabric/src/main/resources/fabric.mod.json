@@ -13,7 +13,7 @@
         "artiks4471 (Community Edition)"
     ],
     "contact": {
-        "homepage": "https://www.curseforge.com/minecraft/mc-mods/torcherino",
+        "homepage": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake",
         "sources": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake",
         "issues": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/issues"
     },
@@ -26,6 +26,9 @@
         ],
         "client": [
             "com.sci.torcherino.client.TorcherinoFabricClient"
+        ],
+        "modmenu": [
+            "com.sci.torcherino.client.TorcherinoModMenu"
         ]
     },
     "depends": {

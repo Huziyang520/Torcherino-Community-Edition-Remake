@@ -1,6 +1,6 @@
 /*
  * 本文件：全部方块与方块物品的注册。
- * 说明：共 11 个方块（四档火把各有落地 / 贴墙两种形态，另有三个南瓜灯），注册名规则见类注释；所有实例都延迟到加载器的注册窗口内创建。
+ * 说明：共 12 个方块（四档火把各有落地 / 贴墙两种形态，另有四个南瓜灯），注册名规则见类注释；所有实例都延迟到加载器的注册窗口内创建。
  */
 package com.sci.torcherino.blocks;
 
@@ -10,6 +10,7 @@ import com.sci.torcherino.blocks.blocks.BlockDoubleCompressedLanterino;
 import com.sci.torcherino.blocks.blocks.BlockDoubleCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockLanterino;
 import com.sci.torcherino.blocks.blocks.BlockTorcherino;
+import com.sci.torcherino.blocks.blocks.BlockTripleCompressedLanterino;
 import com.sci.torcherino.blocks.blocks.BlockTripleCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallDoubleCompressedTorcherino;
@@ -37,7 +38,7 @@ import java.util.function.Supplier;
  * All blocks and block items of the mod.
  *
  * <p>Minecraft separates floor and wall torches, so the four Torcherino tiers are eight
- * blocks ({@code blockX} plus {@code wall_blockX}) while the three Lanterino variants are
+ * blocks ({@code blockX} plus {@code wall_blockX}) while the four Lanterino variants are
  * ordinary carved pumpkins. The wall variants have no item of their own - the torch item
  * places both through {@link StandingAndWallBlockItem}.</p>
  *
@@ -60,6 +61,7 @@ public final class ModBlocks {
     public static RegistryEntry<BlockLanterino> LANTERINO;
     public static RegistryEntry<BlockCompressedLanterino> COMPRESSED_LANTERINO;
     public static RegistryEntry<BlockDoubleCompressedLanterino> DOUBLE_COMPRESSED_LANTERINO;
+    public static RegistryEntry<BlockTripleCompressedLanterino> TRIPLE_COMPRESSED_LANTERINO;
 
     private static final List<RegistryEntry<Item>> CREATIVE_ITEMS = new ArrayList<>();
 
@@ -113,6 +115,8 @@ public final class ModBlocks {
                 () -> new BlockCompressedLanterino(lanterinoProperties()));
         DOUBLE_COMPRESSED_LANTERINO = registerBlock(helper, "blockdoublecompressedlanterino",
                 () -> new BlockDoubleCompressedLanterino(lanterinoProperties()));
+        TRIPLE_COMPRESSED_LANTERINO = registerBlock(helper, "blocktriplecompressedlanterino",
+                () -> new BlockTripleCompressedLanterino(lanterinoProperties()));
 
         // ---- items: one item per block --------------------------------------
         // Torches use StandingAndWallBlockItem so that placing against a wall produces
@@ -135,6 +139,8 @@ public final class ModBlocks {
                 () -> new BlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlanterino",
                 () -> new BlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlanterino",
+                () -> new BlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
     }
 
     /**

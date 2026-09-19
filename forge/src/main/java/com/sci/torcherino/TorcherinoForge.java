@@ -10,8 +10,12 @@ import com.sci.torcherino.client.TorcherinoForgeClientEvents;
 import com.sci.torcherino.network.TorcherinoNetwork;
 import com.sci.torcherino.platform.ForgeRegistrationHelper;
 import com.sci.torcherino.platform.Services;
+import com.sci.torcherino.platform.TorcherinoConfigCondition;
 
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -28,6 +32,13 @@ public class TorcherinoForge {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ForgeRegistrationHelper.init(modEventBus);
+
+        // Recipe condition used by data/torcherino/recipes. Without it Forge logs
+        // "Unknown condition type: torcherino:config" and drops the recipe entirely.
+        // CraftingHelper.register only stores the serializer in a static map, so calling
+        // it here (mod construction time) is fine.
+        CraftingHelper.register(new TorcherinoConfigCondition.Serializer());
+
         ModBlocks.register(Services.REGISTRATION);
         ModBlockEntities.register(Services.REGISTRATION);
         TorcherinoNetwork.register();
@@ -44,6 +55,12 @@ public class TorcherinoForge {
             modEventBus.addListener(TorcherinoForgeClientEvents::onRegisterKeyMappings);
             modEventBus.addListener(TorcherinoForgeClientEvents::onClientSetup);
             MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onClientTick);
+
+            // Lets the vanilla mod list and "Configured" show a config button. Registered
+            // behind the dist guard because the handler class is client only.
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory(
+                            (minecraft, parent) -> TorcherinoForgeClientEvents.createConfigScreen(parent)));
         }
     }
 

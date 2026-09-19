@@ -10,7 +10,7 @@ authors = "${mod_author}"
 credits = "${credits}"
 description = '''${description}'''
 logoFile = "${mod_id}.png"
-displayURL = "https://www.curseforge.com/minecraft/mc-mods/torcherino"
+displayURL = "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake"
 [[dependencies.${mod_id}]]
 modId = "forge"
 mandatory = true

@@ -4,9 +4,12 @@
  */
 package com.sci.torcherino.platform;
 
-import com.sci.torcherino.platform.services.IPlatformHelper;
+import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.network.TorcherinoNetwork;
+import com.sci.torcherino.platform.services.IPlatformHelper;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
@@ -40,5 +43,15 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public void sendModifierKeyToServer(boolean pressed) {
         TorcherinoNetwork.sendToServer(pressed);
+    }
+
+    @Override
+    public void openTorcherinoScreen(ServerPlayer player, TileTorcherino torcherino) {
+        TorcherinoNetwork.openScreen(player, torcherino);
+    }
+
+    @Override
+    public void sendTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+        TorcherinoNetwork.sendValues(pos, xRange, zRange, yRange, speed, redstoneMode);
     }
 }

@@ -28,11 +28,18 @@
 ### 怎么用
 
 1. 手持加速火把，对着地面右键放下（对着墙放则会变成贴墙形态）。
-2. **右键**它：范围变大，行动栏会显示当前范围与速度，例如 `范围: 3x3x3 | 速度: 200%`。
-3. **按住左 Shift 再右键**：切换速度档位（0% → 800% → 0% 循环）。
-4. 想关掉它：给方块通上红石信号即可；也可以在范围切到「已停止」时停用。
+2. **右键**它：打开**可视化编辑界面**。界面里有四条滑条 —— 速度、X 轴范围、Z 轴范围、Y 轴范围 ——
+   外加一个红石模式按钮；调完关掉界面立刻生效，数值保存在方块里（拆掉再放回不丢）。
+   **潜行时右键不会打开界面**（保持原版行为），方便你在它旁边正常放方块。
+3. **红石模式共四档**：`正常`（有红石信号就停止）、`反向`（有红石信号才工作）、
+   `忽略红石`（一直工作）、`始终关闭`。
+4. 想换回老式的快捷操作：把 `config/torcherino.toml` 里的 `general.useGui` 改成 `false`，
+   之后**右键切范围**、**按住左 Shift 再右键切速度**，行动栏会显示如 `范围: 3x3x3 | 速度: 200%`。
+   两种方式**只会生效一种**。
 
-> 左 Shift 是默认键，可以在「选项 → 控制」里搜索「切换加速模式」改成任何你习惯的按键。
+> 滑条手感由 `gui.smoothSlider` 决定：默认 `false` = 每一档吸附（拖动即跳到整档）；
+> `true` = 连续拖动、松手取整。
+> 快捷操作模式下，左 Shift 是默认键，可在「选项 → 控制」里搜索「切换加速模式」改键。
 
 ### 方块与倍率
 
@@ -45,6 +52,7 @@
 | 加速南瓜灯 | ×1 | 南瓜外形，会发光 |
 | 压缩加速南瓜灯 | ×9 | |
 | 二重压缩加速南瓜灯 | ×81 | |
+| 三重压缩加速南瓜灯 | ×729 | |
 
 倍率越高，同一时间能加速的次数越多，适合后期大规模农场与工业流水线。
 
@@ -112,11 +120,18 @@ does it several times in the same tick.
 ### How to use
 
 1. Place a Torcherino on the ground (placing it against a wall gives the wall variant).
-2. **Right-click** it to enlarge the area. The action bar shows the current area and speed, for
-   example `Area: 3x3x3 | Speed: 200%`.
-3. **Hold Left Shift and right-click** to change the speed level (0% → 800% → wraps around).
-4. To switch it off, power the block with a redstone signal, or set the area to `Stopped`.
+2. **Right-click** it to open the **editor**: four sliders (speed, X range, Z range, Y range) plus a
+   redstone mode button. Close it to apply; the values are stored in the block.
+   **Sneak-right-click never opens the editor**, which keeps the vanilla interaction for placing
+   blocks next to a Torcherino.
+3. **Four redstone modes**: `Normal` (a signal stops it), `Inverted` (only runs with a signal),
+   `Ignored` (always runs) and `Always off`.
+4. Prefer the classic interaction? Set `general.useGui = false` in `config/torcherino.toml` and you get
+   **right-click to change the area** and **hold Left Shift + right-click to change the speed** again,
+   with the action bar showing e.g. `Area: 3x3x3 | Speed: 200%`. Only one of the two modes is active.
 
+> Slider feel is controlled by `gui.smoothSlider`: `false` (default) snaps every step,
+> `true` drags continuously and rounds on release.
 > Left Shift is only the default. You can rebind it in *Options → Controls* by searching for
 > *Torcherino Modifier*.
 
@@ -131,6 +146,7 @@ does it several times in the same tick.
 | Jack o'Lanterino | ×1 | pumpkin shaped, emits light |
 | Compressed Jack o'Lanterino | ×9 | |
 | Double Compressed Jack o'Lanterino | ×81 | |
+| Triple Compressed Jack o'Lanterino | ×729 | |
 
 Higher tiers perform more acceleration ticks at once, which is what you want for large farms and
 late-game factories.

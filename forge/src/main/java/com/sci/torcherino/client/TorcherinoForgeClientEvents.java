@@ -5,13 +5,18 @@
 package com.sci.torcherino.client;
 
 import com.sci.torcherino.blocks.ModBlocks;
+import com.sci.torcherino.client.screen.TorcherinoConfigScreen;
+import com.sci.torcherino.client.screen.TorcherinoScreen;
 import com.sci.torcherino.network.TorcherinoNetwork;
+
+import net.minecraft.client.gui.screens.Screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -66,5 +71,23 @@ public final class TorcherinoForgeClientEvents {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
             }
         });
+    }
+
+    /**
+     * Client side half of the editor: the server asked for it, so open it. Only reachable
+     * on the physical client, which is why this class is never touched on a server.
+     */
+    public static void openScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speed,
+                                  int redstoneMode, int tierMultiplier) {
+        Minecraft.getInstance().setScreen(
+                new TorcherinoScreen(pos, titleKey, xRange, zRange, yRange, speed, redstoneMode, tierMultiplier));
+    }
+
+    /**
+     * Entry point of the configuration screen, handed to Forge so that the mod list (and
+     * "Configured") can open it.
+     */
+    public static Screen createConfigScreen(Screen parent) {
+        return new TorcherinoConfigScreen(parent);
     }
 }
