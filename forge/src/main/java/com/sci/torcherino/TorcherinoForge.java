@@ -53,14 +53,11 @@ public class TorcherinoForge {
         modEventBus.addListener(TorcherinoForgeEvents::onBuildCreativeTabContents);
 
         MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeEvents::onRightClickBlock);
-        MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeEvents::onPlayerLoggedOut);
 
         // Client only listeners are registered behind a dist guard so that the client
         // only classes are never loaded on a dedicated server.
         if (FMLLoader.getDist().isClient()) {
-            modEventBus.addListener(TorcherinoForgeClientEvents::onRegisterKeyMappings);
             modEventBus.addListener(TorcherinoForgeClientEvents::onClientSetup);
-            MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onClientTick);
 
             // Lets the vanilla mod list and "Configured" show a config button. Registered
             // behind the dist guard because the handler class is client only.

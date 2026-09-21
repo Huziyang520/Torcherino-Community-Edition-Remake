@@ -58,10 +58,10 @@ public final class TorcherinoInteraction {
         }
 
         if (!level.isClientSide()) {
-            // Classic interaction: sneaking counts as the modifier again (that is how the
-            // original mod behaved), and the rebindable key is an alternative to it.
-            final Boolean modifier = TorcherinoKeyStates.get(player);
-            torcherino.changeMode(player.isShiftKeyDown() || (modifier != null && modifier));
+            // Sneaking is the modifier, exactly like the original mod: right click cycles the
+            // area, sneak + right click cycles the speed. No key is registered for this, so
+            // nothing can conflict with vanilla sneak.
+            torcherino.changeMode(player.isShiftKeyDown());
             if (player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.displayClientMessage(torcherino.getDescription(), true);
             }
