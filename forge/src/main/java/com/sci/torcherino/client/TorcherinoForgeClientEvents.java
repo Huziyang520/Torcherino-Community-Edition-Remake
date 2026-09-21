@@ -32,7 +32,10 @@ public final class TorcherinoForgeClientEvents {
     public static final KeyMapping USAGE_KEY = new KeyMapping(
             "key.torcherino.useage_key",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_LEFT_SHIFT,
+            // Right shift, not left: the left one is vanilla's sneak key, and sharing it made
+            // the key list show a conflict (and made sneak look broken). Sneaking still works
+            // as the modifier in the classic interaction, so nothing is lost.
+            GLFW.GLFW_KEY_RIGHT_SHIFT,
             "key.categories.gameplay");
 
     private static boolean lastState;
