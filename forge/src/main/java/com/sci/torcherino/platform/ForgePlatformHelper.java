@@ -4,6 +4,7 @@
  */
 package com.sci.torcherino.platform;
 
+import com.sci.torcherino.TorcherinoForgeConfig;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.network.TorcherinoNetwork;
 import com.sci.torcherino.platform.services.IPlatformHelper;
@@ -48,6 +49,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean usesForgeConfigSystem() {
         return true;
+    }
+
+    @Override
+    public void persistClientConfig() {
+        TorcherinoForgeConfig.persistClient();
+    }
+
+    @Override
+    public void persistServerConfig() {
+        TorcherinoForgeConfig.persistServer();
     }
 
     @Override

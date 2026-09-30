@@ -58,6 +58,8 @@ public class TorcherinoForge {
         // only classes are never loaded on a dedicated server.
         if (FMLLoader.getDist().isClient()) {
             modEventBus.addListener(TorcherinoForgeClientEvents::onClientSetup);
+            // Chat notice about the recipe switches, printed once per world join.
+            MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onLoggedIn);
 
             // Lets the vanilla mod list and "Configured" show a config button. Registered
             // behind the dist guard because the handler class is client only.

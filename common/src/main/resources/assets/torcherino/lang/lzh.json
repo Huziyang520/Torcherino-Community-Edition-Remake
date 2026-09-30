@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "方與禁單，須重啟或行 /reload",
   "gui.torcherino.config.compressedTorcherino": "壓縮之方",
   "gui.torcherino.config.doubleCompressedTorcherino": "再壓之方",
-  "gui.torcherino.config.tripleCompressedTorcherino": "三壓之方"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "三壓之方",
+  "gui.torcherino.config.server": "伺服之制",
+  "gui.torcherino.config.client": "本機之制",
+  "gui.torcherino.config.serverNote": "注意：多人遊戲之中，若權限不足，所調者乃本機之制",
+  "gui.torcherino.config.joinNotice": "入世之示",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake ：加速火把之方，繫於伺服之制，自 1.4.0 版始，預設開啟。若無其方，請察遊戲之制或文書，此示可於文書中閉之。"}

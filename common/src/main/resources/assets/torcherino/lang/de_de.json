@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "Rezepte gelten nach Neustart oder /reload",
   "gui.torcherino.config.compressedTorcherino": "Komprimiertes Rezept",
   "gui.torcherino.config.doubleCompressedTorcherino": "Doppelt komprimiertes Rezept",
-  "gui.torcherino.config.tripleCompressedTorcherino": "Dreifach komprimiertes Rezept"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "Dreifach komprimiertes Rezept",
+  "gui.torcherino.config.server": "Servereinstellungen",
+  "gui.torcherino.config.client": "Clienteinstellungen",
+  "gui.torcherino.config.serverNote": "Hinweis: Im Mehrspieler änderst du ohne Berechtigung nur die Konfiguration dieses Computers.",
+  "gui.torcherino.config.joinNotice": "Beitrittshinweis",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : Die Torcherino-Rezepte werden von der Serverkonfiguration gesteuert und sind seit 1.4.0 standardmäßig aktiviert. Fehlt ein Rezept, prüfe die Einstellungen im Spiel oder die Konfigurationsdatei. Dieser Hinweis lässt sich in der Konfigurationsdatei abschalten."}

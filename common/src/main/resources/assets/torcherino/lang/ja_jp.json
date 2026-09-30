@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "レシピは再起動か /reload で反映",
   "gui.torcherino.config.compressedTorcherino": "圧縮レシピ",
   "gui.torcherino.config.doubleCompressedTorcherino": "二重圧縮レシピ",
-  "gui.torcherino.config.tripleCompressedTorcherino": "三重圧縮レシピ"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "三重圧縮レシピ",
+  "gui.torcherino.config.server": "サーバー設定",
+  "gui.torcherino.config.client": "クライアント設定",
+  "gui.torcherino.config.serverNote": "注意: マルチプレイで権限がない場合、変更されるのはこのPCの設定です。",
+  "gui.torcherino.config.joinNotice": "参加時の通知",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : 加速火把のレシピはサーバー設定ファイルで管理され、1.4.0 から既定で有効です。レシピが無い場合はゲーム内設定か設定ファイルを確認してください。この通知は設定ファイルで無効にできます。"}

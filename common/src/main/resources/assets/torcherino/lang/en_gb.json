@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "Recipes apply after a restart or /reload",
   "gui.torcherino.config.compressedTorcherino": "Compressed recipe",
   "gui.torcherino.config.doubleCompressedTorcherino": "Double compressed recipe",
-  "gui.torcherino.config.tripleCompressedTorcherino": "Triple compressed recipe"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "Triple compressed recipe",
+  "gui.torcherino.config.server": "Server settings",
+  "gui.torcherino.config.client": "Client settings",
+  "gui.torcherino.config.serverNote": "Note: in multiplayer, if you lack the permission you are changing this computer's own configuration.",
+  "gui.torcherino.config.joinNotice": "Join notice",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : the Torcherino recipes are controlled by the server configuration file and are enabled by default since 1.4.0. If a recipe is missing, check the in-game settings or the configuration file. This notice can be turned off in the configuration file."}

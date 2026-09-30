@@ -48,17 +48,22 @@ public final class TorcherinoConfig {
      * (default) pulls every handle onto the nearest step while dragging.
      */
     public static boolean freeSpeedMultiplier = false;
+    /**
+     * {@code true} (default) prints the "recipes are controlled by the server" notice in
+     * chat when a world is joined. Client side, purely informational.
+     */
+    public static boolean joinNotice = true;
 
     // ---- server file -------------------------------------------------------------------
 
     /** Is the cheap recipe used instead of the nether star one? */
     public static boolean overPoweredRecipe = true;
-    /** Is the recipe for the Compressed Torcherino enabled? */
-    public static boolean compressedTorcherino = false;
-    /** Only takes effect if Compressed Torcherinos are enabled. */
-    public static boolean doubleCompressedTorcherino = false;
-    /** Only takes effect if Compressed and Double Compressed Torcherinos are enabled. */
-    public static boolean tripleCompressedTorcherino = false;
+    /** Is the recipe for the Compressed Torcherino enabled? On by default since 1.4.0. */
+    public static boolean compressedTorcherino = true;
+    /** Only takes effect if Compressed Torcherinos are enabled. On by default since 1.4.0. */
+    public static boolean doubleCompressedTorcherino = true;
+    /** Only takes effect if Compressed and Double Compressed Torcherinos are enabled. On by default since 1.4.0. */
+    public static boolean tripleCompressedTorcherino = true;
 
 
     /** Entries of the form {@code modid:unlocalized}. */
@@ -116,11 +121,16 @@ public final class TorcherinoConfig {
      * configuration screen.
      */
     public static synchronized void saveClient() {
+        if (Services.PLATFORM.usesForgeConfigSystem()) {
+            Services.PLATFORM.persistClientConfig();
+            return;
+        }
         final Path path = Services.PLATFORM.getConfigDir().resolve(CLIENT_FILE_NAME);
         try (CommentedFileConfig cfg = CommentedFileConfig.builder(path).preserveInsertionOrder().build()) {
             cfg.load();
             cfg.set(GUI + ".useGui", useGui);
             cfg.set(GUI + ".freeSpeedMultiplier", freeSpeedMultiplier);
+            cfg.set(GUI + ".joinNotice", joinNotice);
             cfg.save();
             Constants.LOG.info("Saved Torcherino client configuration to {}", path.toAbsolutePath());
         } catch (Exception e) {
@@ -133,6 +143,10 @@ public final class TorcherinoConfig {
      * entries are left untouched.
      */
     public static synchronized void saveServer() {
+        if (Services.PLATFORM.usesForgeConfigSystem()) {
+            Services.PLATFORM.persistServerConfig();
+            return;
+        }
         final Path path = Services.PLATFORM.getConfigDir().resolve(SERVER_FILE_NAME);
         try (CommentedFileConfig cfg = CommentedFileConfig.builder(path).preserveInsertionOrder().build()) {
             cfg.load();
@@ -156,11 +170,14 @@ public final class TorcherinoConfig {
                     "CLIENT SIDE. Open the graphical editor when right clicking a Torcherino. Set to false to use the classic quick interaction instead; only one of the two is active.");
             changed |= put(cfg, legacy, GUI + ".freeSpeedMultiplier", false,
                     "CLIENT SIDE. true = the editor handles can be dragged continuously inside a step (the value is still rounded to a whole step); false = every handle snaps onto the nearest step.");
+            changed |= put(cfg, legacy, GUI + ".joinNotice", true,
+                    "CLIENT SIDE. Print a chat notice about the recipe switches every time a world is joined. Set to false to silence it.");
             if (changed) {
                 cfg.save();
             }
             useGui = bool(cfg, GUI + ".useGui", true);
             freeSpeedMultiplier = bool(cfg, GUI + ".freeSpeedMultiplier", false);
+            joinNotice = bool(cfg, GUI + ".joinNotice", true);
         } catch (Exception e) {
             Constants.LOG.error("Failed to load {}", path, e);
         }
@@ -173,12 +190,12 @@ public final class TorcherinoConfig {
             boolean changed = false;
             changed |= put(cfg, legacy, GENERAL + ".overPoweredRecipe", true,
                     "SERVER SIDE. Use the cheap recipe instead of the nether star one. Recipes are read while the data pack loads, so a change needs a restart or /reload.");
-            changed |= put(cfg, legacy, GENERAL + ".compressedTorcherino", false,
-                    "SERVER SIDE. Enable the recipes of the Compressed Torcherino. Needs a restart or /reload.");
-            changed |= put(cfg, legacy, GENERAL + ".doubleCompressedTorcherino", false,
-                    "SERVER SIDE. Enable the recipes of the Double Compressed Torcherino. Only takes effect if compressedTorcherino is enabled as well. Needs a restart or /reload.");
-            changed |= put(cfg, legacy, GENERAL + ".tripleCompressedTorcherino", false,
-                    "SERVER SIDE. Enable the recipes of the Triple Compressed Torcherino. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well. Needs a restart or /reload.");
+            changed |= put(cfg, legacy, GENERAL + ".compressedTorcherino", true,
+                    "SERVER SIDE. Enable the recipes of the Compressed Torcherino. On by default since 1.4.0. Needs a restart or /reload.");
+            changed |= put(cfg, legacy, GENERAL + ".doubleCompressedTorcherino", true,
+                    "SERVER SIDE. Enable the recipes of the Double Compressed Torcherino. Only takes effect if compressedTorcherino is enabled as well. On by default since 1.4.0. Needs a restart or /reload.");
+            changed |= put(cfg, legacy, GENERAL + ".tripleCompressedTorcherino", true,
+                    "SERVER SIDE. Enable the recipes of the Triple Compressed Torcherino. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well. On by default since 1.4.0. Needs a restart or /reload.");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedBlocks", new ArrayList<String>(),
                     "Blocks the Torcherino may not accelerate. Format: modid:unlocalized");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedTiles", new ArrayList<String>(),
@@ -187,9 +204,9 @@ public final class TorcherinoConfig {
                 cfg.save();
             }
             overPoweredRecipe = bool(cfg, GENERAL + ".overPoweredRecipe", true);
-            compressedTorcherino = bool(cfg, GENERAL + ".compressedTorcherino", false);
-            doubleCompressedTorcherino = bool(cfg, GENERAL + ".doubleCompressedTorcherino", false);
-            tripleCompressedTorcherino = bool(cfg, GENERAL + ".tripleCompressedTorcherino", false);
+            compressedTorcherino = bool(cfg, GENERAL + ".compressedTorcherino", true);
+            doubleCompressedTorcherino = bool(cfg, GENERAL + ".doubleCompressedTorcherino", true);
+            tripleCompressedTorcherino = bool(cfg, GENERAL + ".tripleCompressedTorcherino", true);
             blacklistedBlocks = stringList(cfg, BLACKLIST + ".blacklistedBlocks");
             blacklistedTiles = stringList(cfg, BLACKLIST + ".blacklistedTiles");
         } catch (Exception e) {

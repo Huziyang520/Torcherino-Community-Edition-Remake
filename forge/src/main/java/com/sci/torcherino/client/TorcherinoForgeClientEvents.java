@@ -5,6 +5,7 @@
  */
 package com.sci.torcherino.client;
 
+import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.client.screen.TorcherinoConfigScreen;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -56,5 +58,16 @@ public final class TorcherinoForgeClientEvents {
      */
     public static Screen createConfigScreen(Screen parent) {
         return new TorcherinoConfigScreen(parent);
+    }
+
+    /**
+     * Prints the recipe notice in chat after joining a world, unless the player turned it
+     * off in the client configuration.
+     */
+    public static void onLoggedIn(net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingIn event) {
+        if (!TorcherinoConfig.joinNotice) {
+            return;
+        }
+        event.getPlayer().displayClientMessage(Component.translatable("message.torcherino.join_notice"), false);
     }
 }

@@ -29,6 +29,7 @@ public final class TorcherinoForgeConfig {
         public static final ForgeConfigSpec SPEC;
         private static final ForgeConfigSpec.BooleanValue USE_GUI;
         private static final ForgeConfigSpec.BooleanValue FREE_SPEED_MULTIPLIER;
+        private static final ForgeConfigSpec.BooleanValue JOIN_NOTICE;
 
         static {
             final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -39,6 +40,9 @@ public final class TorcherinoForgeConfig {
             FREE_SPEED_MULTIPLIER = builder
                     .comment("Offer every hundredth of a level on the speed slider, so the multiplier can be dialled anywhere between 0 % and the tier maximum. Off = the classic eight gears. Only the speed slider is affected; the three ranges always count whole blocks.")
                     .define("freeSpeedMultiplier", false);
+            JOIN_NOTICE = builder
+                    .comment("Print a chat notice about the recipe switches every time a world is joined. Set to false to silence it.")
+                    .define("joinNotice", true);
             builder.pop();
             SPEC = builder.build();
         }
@@ -63,13 +67,13 @@ public final class TorcherinoForgeConfig {
                     .define("overPoweredRecipe", true);
             COMPRESSED = builder
                     .comment("Enable the recipes of the Compressed Torcherino and Jack o'Lanterino.")
-                    .define("compressedTorcherino", false);
+                    .define("compressedTorcherino", true);
             DOUBLE_COMPRESSED = builder
                     .comment("Enable the recipes of the Double Compressed variants. Only takes effect if compressedTorcherino is enabled as well.")
-                    .define("doubleCompressedTorcherino", false);
+                    .define("doubleCompressedTorcherino", true);
             TRIPLE_COMPRESSED = builder
                     .comment("Enable the recipes of the Triple Compressed variants. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well.")
-                    .define("tripleCompressedTorcherino", false);
+                    .define("tripleCompressedTorcherino", true);
             builder.pop();
             builder.comment("Things the Torcherino may never accelerate.").push("blacklist");
             BLACKLISTED_BLOCKS = builder
@@ -107,6 +111,7 @@ public final class TorcherinoForgeConfig {
         if (config.getSpec() == Client.SPEC) {
             TorcherinoConfig.useGui = Client.USE_GUI.get();
             TorcherinoConfig.freeSpeedMultiplier = Client.FREE_SPEED_MULTIPLIER.get();
+            TorcherinoConfig.joinNotice = Client.JOIN_NOTICE.get();
             return;
         }
         if (config.getSpec() == Server.SPEC) {
@@ -118,5 +123,27 @@ public final class TorcherinoForgeConfig {
             TorcherinoConfig.blacklistedTiles = new ArrayList<>(Server.BLACKLISTED_TILES.get());
             TorcherinoRegistry.registerDefaults();
         }
+    }
+
+    /**
+     * Writes the shared client fields back into the spec, which is how the in-game
+     * configuration screen saves on Forge.
+     */
+    public static void persistClient() {
+        Client.USE_GUI.set(TorcherinoConfig.useGui);
+        Client.FREE_SPEED_MULTIPLIER.set(TorcherinoConfig.freeSpeedMultiplier);
+        Client.JOIN_NOTICE.set(TorcherinoConfig.joinNotice);
+        Client.SPEC.save();
+        Constants.LOG.info("Saved the Torcherino client configuration");
+    }
+
+    /** Counterpart of {@link #persistClient()} for the server file. */
+    public static void persistServer() {
+        Server.OVER_POWERED_RECIPE.set(TorcherinoConfig.overPoweredRecipe);
+        Server.COMPRESSED.set(TorcherinoConfig.compressedTorcherino);
+        Server.DOUBLE_COMPRESSED.set(TorcherinoConfig.doubleCompressedTorcherino);
+        Server.TRIPLE_COMPRESSED.set(TorcherinoConfig.tripleCompressedTorcherino);
+        Server.SPEC.save();
+        Constants.LOG.info("Saved the Torcherino server configuration");
     }
 }

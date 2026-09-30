@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "Рецепты применятся после перезапуска или /reload",
   "gui.torcherino.config.compressedTorcherino": "Сжатый рецепт",
   "gui.torcherino.config.doubleCompressedTorcherino": "Двойной сжатый рецепт",
-  "gui.torcherino.config.tripleCompressedTorcherino": "Тройной сжатый рецепт"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "Тройной сжатый рецепт",
+  "gui.torcherino.config.server": "Настройки сервера",
+  "gui.torcherino.config.client": "Настройки клиента",
+  "gui.torcherino.config.serverNote": "Внимание: в многопользовательской игре без прав вы изменяете конфигурацию этого компьютера.",
+  "gui.torcherino.config.joinNotice": "Уведомление при входе",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : рецепты Torcherino управляются конфигурацией сервера и с версии 1.4.0 включены по умолчанию. Если рецепта нет, проверьте настройки в игре или файл конфигурации. Это уведомление можно отключить в файле конфигурации."}

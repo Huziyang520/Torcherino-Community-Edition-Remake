@@ -33,5 +33,9 @@
   "gui.torcherino.config.serverReload": "配方与黑名单需重启或 /reload 生效",
   "gui.torcherino.config.compressedTorcherino": "压缩配方",
   "gui.torcherino.config.doubleCompressedTorcherino": "二重压缩配方",
-  "gui.torcherino.config.tripleCompressedTorcherino": "三重压缩配方"
-}
+  "gui.torcherino.config.tripleCompressedTorcherino": "三重压缩配方",
+  "gui.torcherino.config.server": "服务端配置",
+  "gui.torcherino.config.client": "客户端配置",
+  "gui.torcherino.config.serverNote": "注意：在多人游戏中，若你的权限不足，你调整的是本机的配置",
+  "gui.torcherino.config.joinNotice": "进入世界提示",
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : 加速火把配方受服务端配置文件控制，自1.4.0版本开始默认开启。若没有配方，请检查游戏内配置或者配置文件，该提示可在配置文件中关闭。"}
