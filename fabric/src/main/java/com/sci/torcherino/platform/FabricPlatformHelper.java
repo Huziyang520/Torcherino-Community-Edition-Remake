@@ -53,4 +53,9 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public void sendTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         TorcherinoFabricNetworking.sendValues(pos, xRange, zRange, yRange, speed, redstoneMode);
     }
+
+    @Override
+    public void sendTorcherinoOwnerSettings(BlockPos pos, boolean othersCanEdit, boolean unclaim) {
+        TorcherinoFabricNetworking.sendOwnerSettings(pos, othersCanEdit, unclaim);
+    }
 }

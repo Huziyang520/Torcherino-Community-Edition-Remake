@@ -62,11 +62,25 @@ public class TorcherinoForge {
             MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onLoggedIn);
 
             // Lets the vanilla mod list and "Configured" show a config button. Registered
-            // behind the dist guard because the handler class is client only.
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                    () -> new ConfigScreenHandler.ConfigScreenFactory(
-                            (minecraft, parent) -> TorcherinoForgeClientEvents.createConfigScreen(parent)));
+            // behind the dist guard because the handler class is client only, and only when
+            // Cloth Config is installed: the screen is built with that API, which is an
+            // optional integration and never a dependency of this mod.
+            if (isClothConfigLoaded()) {
+                ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                        () -> new ConfigScreenHandler.ConfigScreenFactory(
+                                (minecraft, parent) -> TorcherinoForgeClientEvents.createConfigScreen(parent)));
+            }
         }
+    }
+
+    /**
+     * Is the optional Cloth Config API present? Queried through the loading mod list, because
+     * this runs while the mod is being constructed - {@code ModList} is not filled yet at
+     * that point.
+     */
+    private static boolean isClothConfigLoaded() {
+        return FMLLoader.getLoadingModList().getMods().stream()
+                .anyMatch(info -> "cloth_config".equals(info.getModId()) || "cloth-config".equals(info.getModId()));
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

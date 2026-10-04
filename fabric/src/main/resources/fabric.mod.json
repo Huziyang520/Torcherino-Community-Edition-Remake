@@ -13,9 +13,16 @@
         "artiks4471 (Community Edition)"
     ],
     "contact": {
-        "homepage": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake",
+        "homepage": "https://www.curseforge.com/minecraft/mc-mods/torcherino-community-edition-remake",
         "sources": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake",
         "issues": "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/issues"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "gui.torcherino.link.backupIssue": "https://issue.mengcai.online/"
+            }
+        }
     },
     "license": "${license}",
     "icon": "assets/torcherino/torcherino.png",
@@ -29,6 +36,9 @@
         ],
         "modmenu": [
             "com.sci.torcherino.client.TorcherinoModMenu"
+        ],
+        "jade": [
+            "com.sci.torcherino.compat.jade.TorcherinoJadeFabricPlugin"
         ]
     },
     "depends": {
@@ -38,6 +48,8 @@
         "java": ">=17"
     },
     "suggests": {
-        "projecte": "*"
+        "projecte": "*",
+        "cloth-config": "*",
+        "modmenu": "*"
     }
 }

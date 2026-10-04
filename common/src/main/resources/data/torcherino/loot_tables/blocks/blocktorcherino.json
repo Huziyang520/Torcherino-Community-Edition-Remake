@@ -10,6 +10,19 @@
           "name": "torcherino:blocktorcherino"
         }
       ],
+      "functions": [
+        {
+          "function": "minecraft:copy_nbt",
+          "source": "block_entity",
+          "ops": [
+            {
+              "source": "",
+              "target": "BlockEntityTag",
+              "op": "replace"
+            }
+          ]
+        }
+      ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"

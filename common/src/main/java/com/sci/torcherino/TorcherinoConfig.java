@@ -64,6 +64,83 @@ public final class TorcherinoConfig {
     public static boolean doubleCompressedTorcherino = true;
     /** Only takes effect if Compressed and Double Compressed Torcherinos are enabled. On by default since 1.4.0. */
     public static boolean tripleCompressedTorcherino = true;
+    /**
+     * Switch of the per Torcherino cap below. {@code false} (default) means the cap is not
+     * used at all, which is the uncapped behaviour of 1.4.0 and earlier.
+     */
+    public static boolean maxAcceleratedTicksEnabled = false;
+    /**
+     * Hard cap of acceleration calls (extra random ticks plus block entity ticks) a single
+     * Torcherino may spend per server tick, only read while the switch above is on. The
+     * default is the recommended starting point; {@code 0} still means unlimited, in case
+     * someone wants the switch to have no effect. A positive value stops the scan of that
+     * Torcherino once the budget is used up. Blocks are not skipped permanently: the scan
+     * starts at a rotating section, so every part of the area still gets its turn.
+     */
+    public static int maxAcceleratedTicksPerTick = 16384;
+    /**
+     * Adaptive brake. {@code false} (default) plays the configured speed back exactly as
+     * written, which is the behaviour of every release up to now. When switched on, a
+     * Torcherino divides its rounds while the server tick is slower than 50 ms and returns
+     * to full speed as soon as it recovers, which keeps the server playable instead of
+     * letting a large area or a high tier eat the whole tick.
+     */
+    public static boolean adaptiveThrottle = false;
+    /**
+     * Switch of the server wide cap below. {@code false} (default) leaves it unused, so only
+     * the per Torcherino cap can apply.
+     */
+    public static boolean maxAcceleratedTicksGlobalEnabled = false;
+    /**
+     * Hard cap of acceleration calls the whole mod may spend per server tick, shared by every
+     * Torcherino and divided over the ones that scanned in the previous tick. Only read while
+     * the switch above is on; {@code 0} means unlimited. The default is the recommended
+     * starting point for a server where the per Torcherino cap is not enough.
+     */
+    public static int maxAcceleratedTicksPerTickGlobal = 65536;
+    /** Tick duration above which the adaptive brake starts scaling down; 50 ms = TPS 20. */
+    public static int adaptiveThrottleThresholdMs = 50;
+    /** Upper bound of the adaptive brake divisor, so a stuck server cannot scale to zero. */
+    public static int adaptiveThrottleMaxDivisor = 256;
+    /**
+     * Saturation skip. {@code false} (default) plays the configured speed back everywhere.
+     * When switched on, a position whose block and six neighbours stayed the same for a
+     * couple of ticks is capped at one call per tick until something around it changes,
+     * which stops saturated farms from eating the whole tick. It lowers the configured rate,
+     * which is why it is off by default.
+     */
+    public static boolean skipSaturatedPositions = false;
+    /**
+     * Probabilistic random ticks. {@code true} (default since 1.4.1, user decision: this one is
+     * important enough to be on out of the box) turns the burst of {@code randomTick} calls per
+     * position into a single call with the probability {@code rounds * randomTickSpeed / 4096} -
+     * the vanilla random tick model scaled by the configured multiplier. The expected growth
+     * matches, while the cost per tick becomes proportional to the number of positions instead
+     * of positions x multiplier. Set it to {@code false} to get the call by call behaviour of
+     * the releases before it.
+     */
+    public static boolean probabilisticRandomTick = true;
+    /**
+     * Owner gate for servers: when on, a Torcherino only accelerates while the player who
+     * placed it is online. Off by default, and ignored for Torcherinos without a recorded
+     * owner (for example ones placed before this option existed).
+     */
+    public static boolean ownerOnlyWhenOnline = false;
+    /** Seconds between two diagnostic log lines of the acceleration loop; 0 = silent. */
+    public static int statsLogIntervalSeconds = 0;
+
+    /**
+     * @return the per Torcherino cap that is really in effect: {@code 0} while the switch is
+     *         off (or the value is {@code 0}), which is what the acceleration core reads.
+     */
+    public static int effectiveMaxAcceleratedTicksPerTick() {
+        return maxAcceleratedTicksEnabled ? Math.max(0, maxAcceleratedTicksPerTick) : 0;
+    }
+
+    /** @return the server wide cap that is really in effect; see the method above. */
+    public static int effectiveMaxAcceleratedTicksGlobal() {
+        return maxAcceleratedTicksGlobalEnabled ? Math.max(0, maxAcceleratedTicksPerTickGlobal) : 0;
+    }
 
 
     /** Entries of the form {@code modid:unlocalized}. */
@@ -139,8 +216,9 @@ public final class TorcherinoConfig {
     }
 
     /**
-     * Writes the server switches back to {@code torcherino-server.toml}. The blacklist
-     * entries are left untouched.
+     * Writes the server switches and the two black lists back to
+     * {@code torcherino-server.toml}. The lists are written too because the configuration
+     * screen lets a player edit them; comments already present in the file are preserved.
      */
     public static synchronized void saveServer() {
         if (Services.PLATFORM.usesForgeConfigSystem()) {
@@ -154,6 +232,21 @@ public final class TorcherinoConfig {
             cfg.set(GENERAL + ".compressedTorcherino", compressedTorcherino);
             cfg.set(GENERAL + ".doubleCompressedTorcherino", doubleCompressedTorcherino);
             cfg.set(GENERAL + ".tripleCompressedTorcherino", tripleCompressedTorcherino);
+            cfg.set(GENERAL + ".maxAcceleratedTicksEnabled", maxAcceleratedTicksEnabled);
+            cfg.set(GENERAL + ".maxAcceleratedTicksPerTick", maxAcceleratedTicksPerTick);
+            cfg.set(GENERAL + ".maxAcceleratedTicksGlobalEnabled", maxAcceleratedTicksGlobalEnabled);
+            cfg.set(GENERAL + ".maxAcceleratedTicksPerTickGlobal", maxAcceleratedTicksPerTickGlobal);
+            cfg.set(GENERAL + ".adaptiveThrottle", adaptiveThrottle);
+            cfg.set(GENERAL + ".adaptiveThrottleThresholdMs", adaptiveThrottleThresholdMs);
+            cfg.set(GENERAL + ".adaptiveThrottleMaxDivisor", adaptiveThrottleMaxDivisor);
+            cfg.set(GENERAL + ".skipSaturatedPositions", skipSaturatedPositions);
+            cfg.set(GENERAL + ".probabilisticRandomTick", probabilisticRandomTick);
+            cfg.set(GENERAL + ".ownerOnlyWhenOnline", ownerOnlyWhenOnline);
+            cfg.set(GENERAL + ".statsLogIntervalSeconds", statsLogIntervalSeconds);
+            // The lists are editable in the configuration screen too; a copy keeps the
+            // configuration free to keep its own list instance.
+            cfg.set(BLACKLIST + ".blacklistedBlocks", new ArrayList<>(blacklistedBlocks));
+            cfg.set(BLACKLIST + ".blacklistedTiles", new ArrayList<>(blacklistedTiles));
             cfg.save();
             Constants.LOG.info("Saved Torcherino server configuration to {}", path.toAbsolutePath());
         } catch (Exception e) {
@@ -196,6 +289,28 @@ public final class TorcherinoConfig {
                     "SERVER SIDE. Enable the recipes of the Double Compressed Torcherino. Only takes effect if compressedTorcherino is enabled as well. On by default since 1.4.0. Needs a restart or /reload.");
             changed |= put(cfg, legacy, GENERAL + ".tripleCompressedTorcherino", true,
                     "SERVER SIDE. Enable the recipes of the Triple Compressed Torcherino. Only takes effect if compressedTorcherino and doubleCompressedTorcherino are enabled as well. On by default since 1.4.0. Needs a restart or /reload.");
+            changed |= put(cfg, legacy, GENERAL + ".maxAcceleratedTicksEnabled", false,
+                    "SERVER SIDE. Switch of the per Torcherino cap below. false (default) leaves the acceleration uncapped, exactly like 1.4.0 and earlier. Turn it on when one Torcherino with a large area, a high speed or a high compression tier makes the tick too long. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".maxAcceleratedTicksPerTick", 16384,
+                    "SERVER SIDE. Maximum acceleration calls (extra random ticks plus block entity ticks) one Torcherino may spend per server tick. Only read while maxAcceleratedTicksEnabled is true; the default is the recommended starting point, and 0 still means unlimited. The scan starts at a rotating section, so every part of the area still gets accelerated. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".adaptiveThrottle", false,
+                    "SERVER SIDE. Adaptive brake. false (default) always plays back the configured speed, exactly like every release up to now. true divides the acceleration of every Torcherino while the server tick is slower than the configured healthy tick time and returns to full speed as soon as it recovers, so a large area or a high compression tier cannot make the server unplayable. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".maxAcceleratedTicksGlobalEnabled", false,
+                    "SERVER SIDE. Switch of the server wide cap below. false (default) leaves it unused, so only the per Torcherino cap can apply. Use it when one player has so many Torcherinos that the per Torcherino cap is not enough. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".maxAcceleratedTicksPerTickGlobal", 65536,
+                    "SERVER SIDE. Maximum acceleration calls (extra random ticks plus block entity ticks) the whole mod may spend per server tick, shared by every Torcherino and divided over the ones that scanned in the previous tick. Only read while maxAcceleratedTicksGlobalEnabled is true; the default is the recommended starting point, and 0 still means unlimited. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".adaptiveThrottleThresholdMs", 50,
+                    "SERVER SIDE. Tick duration in milliseconds above which the adaptive brake starts scaling the acceleration down. 50 ms is the TPS 20 warning line; raise it on a heavy modpack whose healthy tick is already longer. Only read while adaptiveThrottle is true. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".adaptiveThrottleMaxDivisor", 256,
+                    "SERVER SIDE. Upper bound of the adaptive brake divisor, so a completely stuck server cannot scale the acceleration down to nothing. Only read while adaptiveThrottle is true. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".skipSaturatedPositions", false,
+                    "SERVER SIDE. LOWER RATE, OFF BY DEFAULT. When true, a position whose block and six neighbouring blocks stayed the same for a couple of ticks is accelerated only once per tick until something around it changes - saturated farms stop consuming the whole tick, but stable blocks are no longer played back at the configured speed. Positions on the border of a chunk section are never throttled. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".probabilisticRandomTick", true,
+                    "SERVER SIDE. DIFFERENT MODEL, ON BY DEFAULT since 1.4.1. When true, a randomly ticking position receives a single random tick with the probability rounds * randomTickSpeed / 4096 instead of 'rounds' calls - that is the vanilla random tick model scaled by the configured multiplier. The expected amount of growth matches, while the cost per tick is proportional to the number of positions instead of positions x multiplier. Set it to false for the call by call behaviour of the older releases. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".ownerOnlyWhenOnline", false,
+                    "SERVER SIDE. When true, a Torcherino only accelerates while the player who placed it is online. Torcherinos without a recorded owner (placed before 1.4.1, or placed by a machine) keep running. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".statsLogIntervalSeconds", 0,
+                    "SERVER SIDE. Seconds between two diagnostic log lines that report how much work the acceleration loop asked for (positions, extra random ticks, extra block entity ticks, skipped sections, brake divisor, remaining global budget). 0 = silent (default). Applies immediately, no restart needed.");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedBlocks", new ArrayList<String>(),
                     "Blocks the Torcherino may not accelerate. Format: modid:unlocalized");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedTiles", new ArrayList<String>(),
@@ -207,6 +322,17 @@ public final class TorcherinoConfig {
             compressedTorcherino = bool(cfg, GENERAL + ".compressedTorcherino", true);
             doubleCompressedTorcherino = bool(cfg, GENERAL + ".doubleCompressedTorcherino", true);
             tripleCompressedTorcherino = bool(cfg, GENERAL + ".tripleCompressedTorcherino", true);
+            maxAcceleratedTicksEnabled = bool(cfg, GENERAL + ".maxAcceleratedTicksEnabled", false);
+            maxAcceleratedTicksPerTick = integer(cfg, GENERAL + ".maxAcceleratedTicksPerTick", 16384);
+            maxAcceleratedTicksGlobalEnabled = bool(cfg, GENERAL + ".maxAcceleratedTicksGlobalEnabled", false);
+            maxAcceleratedTicksPerTickGlobal = integer(cfg, GENERAL + ".maxAcceleratedTicksPerTickGlobal", 65536);
+            adaptiveThrottle = bool(cfg, GENERAL + ".adaptiveThrottle", false);
+            adaptiveThrottleThresholdMs = integer(cfg, GENERAL + ".adaptiveThrottleThresholdMs", 50);
+            adaptiveThrottleMaxDivisor = integer(cfg, GENERAL + ".adaptiveThrottleMaxDivisor", 256);
+            skipSaturatedPositions = bool(cfg, GENERAL + ".skipSaturatedPositions", false);
+            probabilisticRandomTick = bool(cfg, GENERAL + ".probabilisticRandomTick", true);
+            ownerOnlyWhenOnline = bool(cfg, GENERAL + ".ownerOnlyWhenOnline", false);
+            statsLogIntervalSeconds = integer(cfg, GENERAL + ".statsLogIntervalSeconds", 0);
             blacklistedBlocks = stringList(cfg, BLACKLIST + ".blacklistedBlocks");
             blacklistedTiles = stringList(cfg, BLACKLIST + ".blacklistedTiles");
         } catch (Exception e) {
@@ -270,6 +396,11 @@ public final class TorcherinoConfig {
     private static boolean bool(CommentedFileConfig cfg, String key, boolean fallback) {
         final Object value = cfg.get(key);
         return value instanceof Boolean b ? b : fallback;
+    }
+
+    private static int integer(CommentedFileConfig cfg, String key, int fallback) {
+        final Object value = cfg.get(key);
+        return value instanceof Number number ? number.intValue() : fallback;
     }
 
     private static List<String> stringList(CommentedFileConfig cfg, String key) {

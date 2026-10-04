@@ -4,6 +4,7 @@
  */
 package com.sci.torcherino;
 
+import com.sci.torcherino.api.AccelerationCache;
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.blocks.tiles.TileCompressedTorcherino;
 import com.sci.torcherino.blocks.tiles.TileDoubleCompressedTorcherino;
@@ -100,6 +101,9 @@ public final class TorcherinoRegistry {
     public static void registerDefaults() {
         BLACKLISTED_BLOCKS.clear();
         BLACKLISTED_TILES.clear();
+        // The acceleration core caches "can this state be accelerated", which depends on the
+        // blacklist that is about to be rebuilt.
+        AccelerationCache.invalidate();
 
         // Air and fluids are never worth accelerating; each fluid is a single block here.
         blacklistBlock(Blocks.AIR);

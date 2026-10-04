@@ -7,7 +7,7 @@ package com.sci.torcherino.client;
 
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.ModBlocks;
-import com.sci.torcherino.client.screen.TorcherinoConfigScreen;
+import com.sci.torcherino.client.screen.TorcherinoClothConfig;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
 
 import net.minecraft.client.Minecraft;
@@ -47,17 +47,22 @@ public final class TorcherinoForgeClientEvents {
      * on the physical client, which is why this class is never touched on a server.
      */
     public static void openScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speed,
-                                  int redstoneMode, int tierMultiplier) {
-        Minecraft.getInstance().setScreen(
-                new TorcherinoScreen(pos, titleKey, xRange, zRange, yRange, speed, redstoneMode, tierMultiplier));
+                                  int redstoneMode, int tierMultiplier, String ownerDisplay, boolean othersCanEdit,
+                                  boolean viewerIsOwner) {
+        Minecraft.getInstance().setScreen(new TorcherinoScreen(pos, titleKey, xRange, zRange, yRange, speed,
+                redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit, viewerIsOwner));
     }
 
     /**
      * Entry point of the configuration screen, handed to Forge so that the mod list can
      * open it (Configured reads the ForgeConfigSpec instead).
+     *
+     * <p>The screen is built with Cloth Config, which is an optional integration: the
+     * extension point that reaches this method is only registered when the API is installed
+     * (see {@code TorcherinoForge}), so the class below is never loaded without it.</p>
      */
     public static Screen createConfigScreen(Screen parent) {
-        return new TorcherinoConfigScreen(parent);
+        return TorcherinoClothConfig.create(parent);
     }
 
     /**

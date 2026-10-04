@@ -60,6 +60,15 @@ public interface IPlatformHelper {
      */
     void sendTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode);
 
+    /**
+     * Sends an owner setting change to the server. Client side only, and only the owner of the
+     * Torcherino is allowed to send it - the server checks that again.
+     *
+     * @param unclaim when {@code true} the claim is dropped entirely and {@code othersCanEdit}
+     *                is ignored.
+     */
+    void sendTorcherinoOwnerSettings(BlockPos pos, boolean othersCanEdit, boolean unclaim);
+
     default String getEnvironmentName() {
         return this.isDevelopmentEnvironment() ? "development" : "production";
     }

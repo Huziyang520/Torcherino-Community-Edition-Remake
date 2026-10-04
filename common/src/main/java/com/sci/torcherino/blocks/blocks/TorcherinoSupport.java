@@ -7,6 +7,7 @@ package com.sci.torcherino.blocks.blocks;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -31,6 +32,24 @@ final class TorcherinoSupport {
         }
         if (level.getBlockEntity(pos) instanceof TileTorcherino torcherino) {
             torcherino.setPoweredByRedstone(level.hasNeighborSignal(pos));
+        }
+    }
+
+    /**
+     * Remembers who placed the Torcherino, which is what the optional owner gate reads. The
+     * player reference is never kept: only the UUID and, for display, the name at that moment.
+     *
+     * <p>A claim is never taken over by placing the block again: the item carries the block
+     * entity data of the Torcherino it was broken from (loot table {@code copy_nbt}), that data
+     * is applied before this hook runs, and an existing owner wins. The owner only changes
+     * when the original owner uses "unclaim" in the editor.</p>
+     */
+    static void recordOwner(Level level, BlockPos pos, LivingEntity placer) {
+        if (level.isClientSide() || placer == null) {
+            return;
+        }
+        if (level.getBlockEntity(pos) instanceof TileTorcherino torcherino && torcherino.getOwnerId() == null) {
+            torcherino.setOwner(placer.getUUID(), placer.getName().getString());
         }
     }
 

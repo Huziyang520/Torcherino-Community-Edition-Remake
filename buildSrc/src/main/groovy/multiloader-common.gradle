@@ -67,6 +67,17 @@ repositories {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'
     }
+    // Cloth Config API. Compile time only: the mod is an optional integration, it is never
+    // bundled into the jar and never declared as a dependency.
+    maven {
+        name = 'Shedaniel'
+        url = 'https://maven.shedaniel.me/'
+    }
+    // Jade (Waila) API, also an optional integration and also compile time only.
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+    }
 }
 
 // Declare capabilities on the outgoing configurations.

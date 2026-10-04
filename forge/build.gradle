@@ -44,6 +44,11 @@ dependencies {
     // because the common sources are compiled a second time inside this project.
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
+    // Cloth Config API, optional: the mod list config button is only registered when the mod
+    // is present at runtime.
+    compileOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+    // Jade (Waila) API, optional: the plugin class is only loaded by Jade itself.
+    compileOnly "maven.modrinth:jade:${jade_version}+forge"
 }
 
 jar {

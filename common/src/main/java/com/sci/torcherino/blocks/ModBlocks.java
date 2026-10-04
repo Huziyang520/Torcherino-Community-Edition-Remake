@@ -1,7 +1,4 @@
-/*
- * 本文件：全部方块与方块物品的注册。
- * 说明：共 12 个方块（四档火把各有落地 / 贴墙两种形态，另有四个南瓜灯），注册名规则见类注释；所有实例都延迟到加载器的注册窗口内创建。
- */
+
 package com.sci.torcherino.blocks;
 
 import com.sci.torcherino.blocks.blocks.BlockCompressedLanterino;
@@ -16,13 +13,13 @@ import com.sci.torcherino.blocks.blocks.BlockWallCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallDoubleCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallTripleCompressedTorcherino;
+import com.sci.torcherino.blocks.items.TorcherinoBlockItem;
+import com.sci.torcherino.blocks.items.TorcherinoStandingAndWallBlockItem;
 import com.sci.torcherino.platform.services.IRegistrationHelper;
 import com.sci.torcherino.platform.services.RegistryEntry;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -120,27 +117,31 @@ public final class ModBlocks {
 
         // ---- items: one item per block --------------------------------------
         // Torches use StandingAndWallBlockItem so that placing against a wall produces
-        // the wall variant, exactly like the vanilla torch item does.
-        CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new StandingAndWallBlockItem(
+        // the wall variant, exactly like the vanilla torch item does. Both item classes
+        // also print the recorded owner in the tooltip, see OwnerTooltip.
+        CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new TorcherinoStandingAndWallBlockItem(
                 TORCHERINO.get(), WALL_TORCHERINO.get(), new Item.Properties(), Direction.DOWN)));
-        CREATIVE_ITEMS.add(helper.registerItem("blockcompressedtorcherino", () -> new StandingAndWallBlockItem(
-                COMPRESSED_TORCHERINO.get(), WALL_COMPRESSED_TORCHERINO.get(),
-                new Item.Properties(), Direction.DOWN)));
-        CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedtorcherino", () -> new StandingAndWallBlockItem(
-                DOUBLE_COMPRESSED_TORCHERINO.get(), WALL_DOUBLE_COMPRESSED_TORCHERINO.get(),
-                new Item.Properties(), Direction.DOWN)));
-        CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedtorcherino", () -> new StandingAndWallBlockItem(
-                TRIPLE_COMPRESSED_TORCHERINO.get(), WALL_TRIPLE_COMPRESSED_TORCHERINO.get(),
-                new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blockcompressedtorcherino",
+                () -> new TorcherinoStandingAndWallBlockItem(
+                        COMPRESSED_TORCHERINO.get(), WALL_COMPRESSED_TORCHERINO.get(),
+                        new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedtorcherino",
+                () -> new TorcherinoStandingAndWallBlockItem(
+                        DOUBLE_COMPRESSED_TORCHERINO.get(), WALL_DOUBLE_COMPRESSED_TORCHERINO.get(),
+                        new Item.Properties(), Direction.DOWN)));
+        CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedtorcherino",
+                () -> new TorcherinoStandingAndWallBlockItem(
+                        TRIPLE_COMPRESSED_TORCHERINO.get(), WALL_TRIPLE_COMPRESSED_TORCHERINO.get(),
+                        new Item.Properties(), Direction.DOWN)));
 
         CREATIVE_ITEMS.add(helper.registerItem("blocklanterino",
-                () -> new BlockItem(LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(LANTERINO.get(), new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blockcompressedlanterino",
-                () -> new BlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlanterino",
-                () -> new BlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlanterino",
-                () -> new BlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
     }
 
     /**

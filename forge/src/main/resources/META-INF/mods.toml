@@ -10,7 +10,7 @@ authors = "${mod_author}"
 credits = "${credits}"
 description = "${description}" #mandatory (single line; a line break must stay escaped in gradle.properties)
 logoFile = "${mod_id}.png"
-displayURL = "https://github.com/Huziyang520/Torcherino-Community-Edition-Remake"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/torcherino-community-edition-remake"
 [[dependencies.${mod_id}]]
 modId = "forge"
 mandatory = true

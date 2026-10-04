@@ -7,6 +7,8 @@ package com.sci.torcherino.blocks.blocks;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CarvedPumpkinBlock;
@@ -33,6 +35,12 @@ public class BlockLanterino extends CarvedPumpkinBlock implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileTorcherino(pos, state);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        TorcherinoSupport.recordOwner(level, pos, placer);
+        super.setPlacedBy(level, pos, state, placer, stack);
     }
 
     @Override

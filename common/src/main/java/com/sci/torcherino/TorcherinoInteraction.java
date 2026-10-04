@@ -5,15 +5,20 @@
  */
 package com.sci.torcherino;
 
+import com.mojang.authlib.GameProfile;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.platform.Services;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Shared right-click behaviour of every Torcherino block.
@@ -27,6 +32,38 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public final class TorcherinoInteraction {
 
     private TorcherinoInteraction() {
+    }
+
+    /**
+     * Human readable owner of a Torcherino, resolved server side where the player list and the
+     * name cache live.
+     *
+     * @return the online name, the cached name, a short UUID when neither is available, or an
+     *         empty string while the Torcherino has no owner.
+     */
+    public static String ownerDisplay(ServerPlayer viewer, TileTorcherino torcherino) {
+        final String owner = torcherino.getOwnerId();
+        if (owner == null || owner.isEmpty()) {
+            return "";
+        }
+        final UUID uuid;
+        try {
+            uuid = UUID.fromString(owner);
+        } catch (IllegalArgumentException e) {
+            // Unreadable owner: show what is stored instead of hiding it.
+            return owner;
+        }
+        final ServerPlayer online = viewer.server.getPlayerList().getPlayer(uuid);
+        if (online != null) {
+            return online.getGameProfile().getName();
+        }
+        if (viewer.server.getProfileCache() != null) {
+            final Optional<GameProfile> cached = viewer.server.getProfileCache().get(uuid);
+            if (cached.isPresent()) {
+                return cached.get().getName();
+            }
+        }
+        return owner.length() <= 8 ? owner : owner.substring(0, 8);
     }
 
     /**
@@ -58,6 +95,15 @@ public final class TorcherinoInteraction {
         }
 
         if (!level.isClientSide()) {
+            // A claimed Torcherino with "other players may not edit" rejects the quick
+            // interaction just like it rejects the editor values.
+            if (!torcherino.mayEdit(player)) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.displayClientMessage(
+                            Component.translatable("message.torcherino.locked"), true);
+                }
+                return true;
+            }
             // Sneaking is the modifier, exactly like the original mod: right click cycles the
             // area, sneak + right click cycles the speed. No key is registered for this, so
             // nothing can conflict with vanilla sneak.

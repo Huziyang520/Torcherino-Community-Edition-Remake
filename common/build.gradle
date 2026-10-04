@@ -21,6 +21,12 @@ dependencies {
     // the loader project's `include` configuration.
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
+    // Cloth Config API, optional. The Forge artifact is published in official mappings, so a
+    // plain compileOnly is enough; the screen is only built when the mod is installed.
+    compileOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+    // Jade (Waila) API, optional. The API package is loader independent; the Forge artifact
+    // is the one the common sources compile against.
+    compileOnly "maven.modrinth:jade:${jade_version}+forge"
 }
 
 configurations {

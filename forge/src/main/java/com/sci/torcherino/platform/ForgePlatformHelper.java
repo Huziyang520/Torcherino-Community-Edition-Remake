@@ -75,4 +75,9 @@ public class ForgePlatformHelper implements IPlatformHelper {
     public void sendTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         TorcherinoNetwork.sendValues(pos, xRange, zRange, yRange, speed, redstoneMode);
     }
+
+    @Override
+    public void sendTorcherinoOwnerSettings(BlockPos pos, boolean othersCanEdit, boolean unclaim) {
+        TorcherinoNetwork.sendOwnerSettings(pos, othersCanEdit, unclaim);
+    }
 }
