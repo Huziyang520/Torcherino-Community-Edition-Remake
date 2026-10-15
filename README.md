@@ -72,6 +72,32 @@ does it several times in the same tick.
 Higher tiers perform more acceleration ticks at once, which is what you want for large farms and
 late-game factories.
 
+### Three shapes: Torcherino, Jack o'Lanterino and Lanterino
+
+Every tier exists in three shapes. They all share the same settings (area, speed, redstone mode,
+owner) and the same acceleration logic, so pick the one that fits the build.
+
+- **Torcherino** — the torch itself. Place it on a block or against a wall; the wall variant is chosen
+  automatically, exactly like a vanilla torch.
+- **Jack o'Lanterino** — the pumpkin-shaped one. It is crafted from a vanilla carved pumpkin and a
+  Torcherino, and it emits light.
+- **Lanterino** — a **hanging lantern**, new in **1.5.0**. Place it on the ground or hang it from a
+  ceiling, exactly like a vanilla lantern, and it emits light like one too.
+
+Crafting a **Lanterino** is unordered: combine a vanilla **lantern** with the Torcherino of the
+matching tier.
+
+```
+lantern + Torcherino                  -> Lanterino
+lantern + Compressed Torcherino       -> Compressed Lanterino
+lantern + Double Compressed Torcherino-> Double Compressed Lanterino
+lantern + Triple Compressed Torcherino-> Triple Compressed Lanterino
+```
+
+A Lanterino can also be turned back into its Torcherino on its own, the same way a Jack o'Lanterino
+can. The compressed Lanterinos follow the same recipe switches as the compressed torches
+(`general.compressedTorcherino` / `doubleCompressedTorcherino` / `tripleCompressedTorcherino`).
+
 ### Configuration (two files)
 
 The configuration is split into two files with clearly different owners. Both halves can also be
@@ -300,6 +326,25 @@ Feedback: <https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/is
 | 三重压缩加速灯笼 | ×729 | |
 
 倍率越高，同一时间能加速的次数越多，适合后期大规模农场与工业流水线。
+
+### 三种形态：加速火把 / 加速南瓜灯 / 加速灯笼
+
+每个档位都有三种形态，它们的设置（范围、速度、红石模式、所有者）与加速逻辑完全一致，按建筑风格任选其一：
+
+- **加速火把** —— 火把本体。可插地上，也可贴墙（贴墙形态自动选择，与原版火把一致）。
+- **加速南瓜灯** —— 南瓜外形的加速火把，由南瓜（雕刻南瓜）+ 加速火把合成，会发光。
+- **加速灯笼** —— **1.5.0 新增**的**灯笼**外形。可放地上，也可挂在天花板下（与原版灯笼一致），同样会发光。
+
+**加速灯笼**的合成是**无序配方**：把原版**灯笼**与对应档位的加速火把放一起即可。
+
+```
+灯笼 + 加速火把            → 加速灯笼
+灯笼 + 压缩加速火把        → 压缩加速灯笼
+灯笼 + 二重压缩加速火把    → 二重压缩加速灯笼
+灯笼 + 三重压缩加速火把    → 三重压缩加速灯笼
+```
+
+加速灯笼也能单独变回对应档位的加速火把（与南瓜灯一致）。压缩系灯笼与压缩火把共用同一组服务端配方开关（`general.compressedTorcherino` / `doubleCompressedTorcherino` / `tripleCompressedTorcherino`）。
 
 ### 配置（两个文件）
 
