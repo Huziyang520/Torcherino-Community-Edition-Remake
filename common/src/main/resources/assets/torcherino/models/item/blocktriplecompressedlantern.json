@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "torcherino:item/triple_compressed_lantern"
+  }
+}

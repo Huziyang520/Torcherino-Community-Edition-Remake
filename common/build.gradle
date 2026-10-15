@@ -15,7 +15,7 @@ legacyForge {
 }
 
 dependencies {
-    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    // No Mixin is used anywhere in this mod, so the template's mixin dependency was removed.
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     // TOML configuration. Forge ships night-config at runtime; Fabric bundles it via
     // the loader project's `include` configuration.

@@ -1,12 +1,16 @@
 
 package com.sci.torcherino.blocks;
 
+import com.sci.torcherino.blocks.blocks.BlockCompressedLantern;
 import com.sci.torcherino.blocks.blocks.BlockCompressedLanterino;
 import com.sci.torcherino.blocks.blocks.BlockCompressedTorcherino;
+import com.sci.torcherino.blocks.blocks.BlockDoubleCompressedLantern;
 import com.sci.torcherino.blocks.blocks.BlockDoubleCompressedLanterino;
 import com.sci.torcherino.blocks.blocks.BlockDoubleCompressedTorcherino;
+import com.sci.torcherino.blocks.blocks.BlockLantern;
 import com.sci.torcherino.blocks.blocks.BlockLanterino;
 import com.sci.torcherino.blocks.blocks.BlockTorcherino;
+import com.sci.torcherino.blocks.blocks.BlockTripleCompressedLantern;
 import com.sci.torcherino.blocks.blocks.BlockTripleCompressedLanterino;
 import com.sci.torcherino.blocks.blocks.BlockTripleCompressedTorcherino;
 import com.sci.torcherino.blocks.blocks.BlockWallCompressedTorcherino;
@@ -59,6 +63,10 @@ public final class ModBlocks {
     public static RegistryEntry<BlockCompressedLanterino> COMPRESSED_LANTERINO;
     public static RegistryEntry<BlockDoubleCompressedLanterino> DOUBLE_COMPRESSED_LANTERINO;
     public static RegistryEntry<BlockTripleCompressedLanterino> TRIPLE_COMPRESSED_LANTERINO;
+    public static RegistryEntry<BlockLantern> LANTERN;
+    public static RegistryEntry<BlockCompressedLantern> COMPRESSED_LANTERN;
+    public static RegistryEntry<BlockDoubleCompressedLantern> DOUBLE_COMPRESSED_LANTERN;
+    public static RegistryEntry<BlockTripleCompressedLantern> TRIPLE_COMPRESSED_LANTERN;
 
     private static final List<RegistryEntry<Item>> CREATIVE_ITEMS = new ArrayList<>();
 
@@ -115,6 +123,16 @@ public final class ModBlocks {
         TRIPLE_COMPRESSED_LANTERINO = registerBlock(helper, "blocktriplecompressedlanterino",
                 () -> new BlockTripleCompressedLanterino(lanterinoProperties()));
 
+        // ---- Lantern: original registry names ------------------------------
+        LANTERN = registerBlock(helper, "blocklantern",
+                () -> new BlockLantern(lanternProperties()));
+        COMPRESSED_LANTERN = registerBlock(helper, "blockcompressedlantern",
+                () -> new BlockCompressedLantern(lanternProperties()));
+        DOUBLE_COMPRESSED_LANTERN = registerBlock(helper, "blockdoublecompressedlantern",
+                () -> new BlockDoubleCompressedLantern(lanternProperties()));
+        TRIPLE_COMPRESSED_LANTERN = registerBlock(helper, "blocktriplecompressedlantern",
+                () -> new BlockTripleCompressedLantern(lanternProperties()));
+
         // ---- items: one item per block --------------------------------------
         // Torches use StandingAndWallBlockItem so that placing against a wall produces
         // the wall variant, exactly like the vanilla torch item does. Both item classes
@@ -142,6 +160,15 @@ public final class ModBlocks {
                 () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlanterino",
                 () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+
+        CREATIVE_ITEMS.add(helper.registerItem("blocklantern",
+                () -> new TorcherinoBlockItem(LANTERN.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blockcompressedlantern",
+                () -> new TorcherinoBlockItem(COMPRESSED_LANTERN.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlantern",
+                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERN.get(), new Item.Properties())));
+        CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlantern",
+                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERN.get(), new Item.Properties())));
     }
 
     /**
@@ -200,6 +227,21 @@ public final class ModBlocks {
                 .strength(1.0F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 15)
+                .pushReaction(PushReaction.DESTROY);
+    }
+
+    /**
+     * Lantern-like properties: the vanilla lantern values (hardness 3.5, lantern sound,
+     * light level 15, no full occlusion) with the same zero-push behaviour as the other
+     * Torcherino blocks.
+     */
+    private static BlockBehaviour.Properties lanternProperties() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .strength(3.5F)
+                .sound(SoundType.LANTERN)
+                .lightLevel(state -> 15)
+                .noOcclusion()
                 .pushReaction(PushReaction.DESTROY);
     }
 }

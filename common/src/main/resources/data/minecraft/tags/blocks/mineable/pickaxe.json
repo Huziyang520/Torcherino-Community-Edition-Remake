@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "torcherino:blocklantern",
+    "torcherino:blockcompressedlantern",
+    "torcherino:blockdoublecompressedlantern",
+    "torcherino:blocktriplecompressedlantern"
+  ]
+}

@@ -4,7 +4,10 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    // Artifact name keeps the established "<mod_id>-<loader>-<MC range>-<version>.jar"
+    // layout used by the published files; the Minecraft part is a range slug because
+    // this branch supports 1.20 through 1.20.1.
+    archivesName = "${mod_id}-${project.name}-${minecraft_version_slug}"
 }
 
 java {

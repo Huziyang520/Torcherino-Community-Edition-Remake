@@ -1,6 +1,6 @@
 # Torcherino Community Edition Remake
 
-**Minecraft 1.20.1 · Forge / Fabric**
+**Minecraft 1.20–1.20.1 · Forge / Fabric** — the Forge build also runs on NeoForge 1.20.1.
 
 > [English](#english) ｜ [中文说明](#中文说明)
 
@@ -8,7 +8,8 @@
 
 ## English
 
-**Torcherino Community Edition Remake** — a torch that makes everything around it run faster.
+**Torcherino Community Edition Remake** — restores the content of the classic version and adds some new
+content. A torch that makes everything around it run faster.
 
 Place a Torcherino and the world inside its area speeds up: crops and saplings grow, furnaces smelt,
 hoppers move, mob spawners spawn — anything that normally does something once per game tick simply
@@ -22,8 +23,8 @@ does it several times in the same tick.
   step through 8 speed levels, up to **800%**.
 - **Four power tiers** — normal, **Compressed ×9**, **Double Compressed ×81**,
   **Triple Compressed ×729**.
-- **Two shapes** — the torch itself (place it on the floor or against a wall) and the pumpkin shaped
-  **Jack o'Lanterino**.
+- **Three shapes** — the torch itself (place it on the floor or against a wall), the pumpkin shaped
+  **Jack o'Lanterino** and the hanging **Lanterino** lantern.
 - **Redstone control** — a redstone signal stops a Torcherino completely, and removing the signal
   starts it again.
 - **Settings are remembered** — area, speed and redstone state are saved, so breaking and replacing
@@ -63,6 +64,10 @@ does it several times in the same tick.
 | Compressed Jack o'Lanterino | ×9 | |
 | Double Compressed Jack o'Lanterino | ×81 | |
 | Triple Compressed Jack o'Lanterino | ×729 | |
+| Lanterino | ×1 | hanging lantern, emits light |
+| Compressed Lanterino | ×9 | |
+| Double Compressed Lanterino | ×81 | |
+| Triple Compressed Lanterino | ×729 | |
 
 Higher tiers perform more acceleration ticks at once, which is what you want for large farms and
 late-game factories.
@@ -255,7 +260,7 @@ Feedback: <https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/is
 - **范围可调** —— 右键即可切换 16 档范围，从「已停止」一直到 15x15x15，想只加速一格也行。
 - **速度可调** —— 按住改装键（默认**潜行**）再右键，切换 8 档速度，最高 **800%**。
 - **四个等级** —— 普通、**压缩 ×9**、**二重压缩 ×81**、**三重压缩 ×729**，越压缩越猛。
-- **两种类型** —— 加速火把（可以插地上，也可以贴墙）和南瓜外形的**加速南瓜灯**。
+- **三种类型** —— 加速火把（可以插地上，也可以贴墙）、南瓜外形的**加速南瓜灯**，以及可挂在天花板下的**加速灯笼**。
 - **红石可控** —— 给加速火把通上红石信号，它就立刻停止工作；断掉信号又恢复。
 - **状态保留** —— 范围、速度和红石状态都会保存，拆下来再放回去还是原来的设置，不会重置。
 - **黑名单** —— 服主/房主可以指定哪些方块 / 机器不许被加速。
@@ -289,6 +294,10 @@ Feedback: <https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/is
 | 压缩加速南瓜灯 | ×9 | |
 | 二重压缩加速南瓜灯 | ×81 | |
 | 三重压缩加速南瓜灯 | ×729 | |
+| 加速灯笼 | ×1 | 灯笼外形，可挂天花板，会发光 |
+| 压缩加速灯笼 | ×9 | |
+| 二重压缩加速灯笼 | ×81 | |
+| 三重压缩加速灯笼 | ×729 | |
 
 倍率越高，同一时间能加速的次数越多，适合后期大规模农场与工业流水线。
 

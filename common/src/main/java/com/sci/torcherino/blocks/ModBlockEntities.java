@@ -33,22 +33,23 @@ public final class ModBlockEntities {
 
     public static void register(IRegistrationHelper helper) {
         TORCHERINO = helper.registerBlockEntityType("torcherino_tile", TileTorcherino::new,
-                () -> validBlocks(ModBlocks.TORCHERINO, ModBlocks.WALL_TORCHERINO, ModBlocks.LANTERINO));
+                () -> validBlocks(ModBlocks.TORCHERINO, ModBlocks.WALL_TORCHERINO, ModBlocks.LANTERINO,
+                        ModBlocks.LANTERN));
 
         COMPRESSED_TORCHERINO = helper.registerBlockEntityType("compressed_torcherino_tile",
                 TileCompressedTorcherino::new,
                 () -> validBlocks(ModBlocks.COMPRESSED_TORCHERINO, ModBlocks.WALL_COMPRESSED_TORCHERINO,
-                        ModBlocks.COMPRESSED_LANTERINO));
+                        ModBlocks.COMPRESSED_LANTERINO, ModBlocks.COMPRESSED_LANTERN));
 
         DOUBLE_COMPRESSED_TORCHERINO = helper.registerBlockEntityType("double_compressed_torcherino_tile",
                 TileDoubleCompressedTorcherino::new,
                 () -> validBlocks(ModBlocks.DOUBLE_COMPRESSED_TORCHERINO, ModBlocks.WALL_DOUBLE_COMPRESSED_TORCHERINO,
-                        ModBlocks.DOUBLE_COMPRESSED_LANTERINO));
+                        ModBlocks.DOUBLE_COMPRESSED_LANTERINO, ModBlocks.DOUBLE_COMPRESSED_LANTERN));
 
         TRIPLE_COMPRESSED_TORCHERINO = helper.registerBlockEntityType("triple_compressed_torcherino_tile",
                 TileTripleCompressedTorcherino::new,
                 () -> validBlocks(ModBlocks.TRIPLE_COMPRESSED_TORCHERINO, ModBlocks.WALL_TRIPLE_COMPRESSED_TORCHERINO,
-                        ModBlocks.TRIPLE_COMPRESSED_LANTERINO));
+                        ModBlocks.TRIPLE_COMPRESSED_LANTERINO, ModBlocks.TRIPLE_COMPRESSED_LANTERN));
     }
 
     @SafeVarargs

@@ -122,6 +122,11 @@ public final class TorcherinoRegistry {
         blacklistBlock(ModBlocks.LANTERINO.get());
         blacklistBlock(ModBlocks.COMPRESSED_LANTERINO.get());
         blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_LANTERINO.get());
+        blacklistBlock(ModBlocks.TRIPLE_COMPRESSED_LANTERINO.get());
+        blacklistBlock(ModBlocks.LANTERN.get());
+        blacklistBlock(ModBlocks.COMPRESSED_LANTERN.get());
+        blacklistBlock(ModBlocks.DOUBLE_COMPRESSED_LANTERN.get());
+        blacklistBlock(ModBlocks.TRIPLE_COMPRESSED_LANTERN.get());
 
         blacklistTile(TileTorcherino.class);
         blacklistTile(TileCompressedTorcherino.class);

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=true": {
+      "model": "torcherino:block/blocklantern_hanging"
+    },
+    "hanging=false": {
+      "model": "torcherino:block/blocklantern"
+    }
+  }
+}
