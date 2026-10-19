@@ -88,7 +88,12 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
             tooltip.add(state);
         }
         if (config.get(SHOW_OWNER)) {
-            tooltip.add(ownerLabel(torcherino));
+            final Component owner = ownerLabel(torcherino);
+            // Hidden while the Torcherino is unclaimed: the owner system may be switched off
+            // on the server, in which case there is never a claim to show.
+            if (owner != null) {
+                tooltip.add(owner);
+            }
         }
     }
 
@@ -100,8 +105,9 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
     private static Component ownerLabel(TileTorcherino torcherino) {
         final String owner = torcherino.getOwnerId();
         if (owner == null || owner.isEmpty()) {
-            return Component.translatable("gui.torcherino.owner",
-                    Component.translatable("gui.torcherino.owner.none"));
+            // Unclaimed: no line at all, so a server that runs without the owner system never
+            // shows an empty "no owner" row.
+            return null;
         }
         try {
             final UUID uuid = UUID.fromString(owner);

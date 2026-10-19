@@ -7,6 +7,7 @@
 package com.sci.torcherino.network;
 
 import com.sci.torcherino.Constants;
+import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.TorcherinoInteraction;
 import com.sci.torcherino.TorcherinoKeyStates;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -83,7 +84,8 @@ public final class TorcherinoNetwork {
                 torcherino.getTierMultiplier(),
                 TorcherinoInteraction.ownerDisplay(player, torcherino),
                 torcherino.othersCanEdit(),
-                torcherino.isOwner(player)));
+                torcherino.isOwner(player),
+                TorcherinoConfig.ownerSystem));
     }
 
     /** Client side: sends the values edited in the screen back to the server. */
@@ -211,11 +213,12 @@ public final class TorcherinoNetwork {
      */
     public record OpenScreenMessage(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speed,
                                     int redstoneMode, int tierMultiplier, String ownerDisplay,
-                                    boolean othersCanEdit, boolean viewerIsOwner) {
+                                    boolean othersCanEdit, boolean viewerIsOwner, boolean ownerEnabled) {
 
         public OpenScreenMessage(FriendlyByteBuf buf) {
             this(buf.readBlockPos(), buf.readUtf(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt(),
-                    buf.readInt(), buf.readInt(), buf.readUtf(), buf.readBoolean(), buf.readBoolean());
+                    buf.readInt(), buf.readInt(), buf.readUtf(), buf.readBoolean(), buf.readBoolean(),
+                    buf.readBoolean());
         }
 
         public void encode(FriendlyByteBuf buf) {
@@ -230,6 +233,7 @@ public final class TorcherinoNetwork {
             buf.writeUtf(this.ownerDisplay);
             buf.writeBoolean(this.othersCanEdit);
             buf.writeBoolean(this.viewerIsOwner);
+            buf.writeBoolean(this.ownerEnabled);
         }
 
         public static OpenScreenMessage decode(FriendlyByteBuf buf) {
@@ -243,7 +247,7 @@ public final class TorcherinoNetwork {
                 context.enqueueWork(() -> TorcherinoForgeClientEvents.openScreen(message.pos(), message.titleKey(),
                         message.xRange(), message.zRange(), message.yRange(), message.speed(),
                         message.redstoneMode(), message.tierMultiplier(), message.ownerDisplay(),
-                        message.othersCanEdit(), message.viewerIsOwner()));
+                        message.othersCanEdit(), message.viewerIsOwner(), message.ownerEnabled()));
             }
         }
     }

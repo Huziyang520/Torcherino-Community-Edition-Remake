@@ -124,12 +124,18 @@ public final class TorcherinoClothConfig {
                 tooltipWithWarning("skipSaturatedPositions", "skipSaturatedPositions.warning")));
         performance.add(toggle(entriesToFlush, "probabilisticRandomTick", () -> TorcherinoConfig.probabilisticRandomTick,
                 value -> TorcherinoConfig.probabilisticRandomTick = value, true, tooltip("probabilisticRandomTick")));
-        performance.add(toggle(entriesToFlush, "ownerOnlyWhenOnline", () -> TorcherinoConfig.ownerOnlyWhenOnline,
-                value -> TorcherinoConfig.ownerOnlyWhenOnline = value, false, tooltip("ownerOnlyWhenOnline")));
         performance.add(intField(entriesToFlush, "statsLogInterval", TorcherinoConfig.statsLogIntervalSeconds,
                 0, 0, 86400, value -> TorcherinoConfig.statsLogIntervalSeconds = value,
                 tooltip("statsLogInterval")));
         server.addEntry(entries.startSubCategory(group("performance"), performance).build());
+
+        // ---- owner system -----------------------------------------------------------------
+        final List<AbstractConfigListEntry> owner = new ArrayList<>();
+        owner.add(toggle(entriesToFlush, "ownerSystem", () -> TorcherinoConfig.ownerSystem,
+                value -> TorcherinoConfig.ownerSystem = value, false, tooltip("ownerSystem")));
+        owner.add(toggle(entriesToFlush, "ownerOnlyWhenOnline", () -> TorcherinoConfig.ownerOnlyWhenOnline,
+                value -> TorcherinoConfig.ownerOnlyWhenOnline = value, false, tooltip("ownerOnlyWhenOnline")));
+        server.addEntry(entries.startSubCategory(group("owner"), owner).build());
 
         final List<AbstractConfigListEntry> blacklist = new ArrayList<>();
         blacklist.add(strList(entriesToFlush, entries, "blacklistedBlocks", TorcherinoConfig.blacklistedBlocks,

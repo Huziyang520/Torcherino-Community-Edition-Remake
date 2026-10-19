@@ -1,6 +1,16 @@
 # Torcherino Community Edition Remake
 
-**Minecraft 1.20–1.20.1 · Forge / Fabric** — the Forge build also runs on NeoForge 1.20.1.
+**Minecraft 1.20 – 1.20.1 · 1.21 – 1.21.1 · 26.1 – 26.2 · 26.3** — NeoForge / Forge / Fabric.
+
+| Minecraft | Loaders | Configuration screen |
+|---|---|---|
+| 1.20 – 1.20.1 | Forge, Fabric | Cloth Config (optional) |
+| 1.21 – 1.21.1 | NeoForge, Fabric | NeoForge built-in screen / Cloth Config |
+| 26.1 – 26.2 | NeoForge, Fabric | NeoForge built-in screen / Cloth Config |
+| 26.3 | NeoForge, Fabric | NeoForge built-in screen / Cloth Config |
+
+The gameplay is the same on every line; only the available loaders differ. The Forge 1.20.1 build
+also runs on NeoForge 1.20.1.
 
 > [English](#english) ｜ [中文说明](#中文说明)
 
@@ -30,6 +40,8 @@ does it several times in the same tick.
 - **Settings are remembered** — area, speed and redstone state are saved, so breaking and replacing
   the block keeps your settings.
 - **Blacklist** — server owners can decide which blocks or machines must never be accelerated.
+- **Owner system (off by default)** — switch it on and the player who places a Torcherino owns it,
+  with an `Others may edit` switch and `Unclaim`.
 - **Editor** — right-click opens a screen with four sliders (speed, X/Z/Y range) plus a redstone mode
   button; it can be turned off in favour of the classic quick interaction.
 - **Translated** — the editor, the on-screen status text and every message follow your game language
@@ -237,8 +249,14 @@ tier Torcherinos at once. It applies immediately, and it can be toggled in game 
 
 ### Owner, permissions and Jade
 
-A Torcherino remembers **who placed it** (the UUID is stored in the block entity), and the editor
-shows that owner on the line under the panel:
+The owner system is **off by default** (since 1.6.0): nothing is claimed when you place a Torcherino,
+the editor shows no owner row, everybody may edit, and no owner line appears in Jade. Turn
+`general.ownerSystem` on in the server configuration to use what is described below. Switching it
+back off does not delete anything — claims already stored in a world are kept and simply ignored, so
+turning it on again restores them.
+
+When it is on, a Torcherino remembers **who placed it** (the UUID is stored in the block entity), and
+the editor shows that owner on the line under the panel:
 
 - **unclaimed** — everyone may edit, exactly like before;
 - **claimed** — the owner can switch between `Others may edit` and `Owner only` with one click, and
@@ -290,6 +308,7 @@ Feedback: <https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/is
 - **红石可控** —— 给加速火把通上红石信号，它就立刻停止工作；断掉信号又恢复。
 - **状态保留** —— 范围、速度和红石状态都会保存，拆下来再放回去还是原来的设置，不会重置。
 - **黑名单** —— 服主/房主可以指定哪些方块 / 机器不许被加速。
+- **所有者系统（默认关闭）** —— 打开后，放置者成为所有者，可切换「他人可改」或取消认领。
 - **编辑界面** —— 右键方块打开界面，四条滑条（速度 / X / Z / Y 范围）加一个红石模式按钮；
   不想要界面也可以在配置里换回经典快捷操作。
 
@@ -460,7 +479,11 @@ Feedback: <https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/is
 
 ### 所有者、权限与 Jade
 
-加速火把会记住**是谁放的**（UUID 存在方块实体里），编辑界面在面板下方显示这一行：
+所有者系统**默认关闭**（自 1.6.0 起）：放置加速火把不会认领，界面不显示所有者行，所有人都能改，
+Jade 也不显示所有者。想要下文描述的功能，请在服务端配置里把 `general.ownerSystem` 打开；
+再关掉时不会删除任何东西 —— 存档里已记录的认领关系会保留但被忽略，重新打开即恢复。
+
+开启后，加速火把会记住**是谁放的**（UUID 存在方块实体里），编辑界面在面板下方显示这一行：
 
 - **无所有者** —— 和以前一样，谁都能改；
 - **已认领** —— 所有者可以一键在 `他人可改配置` / `他人不可改` 之间切换，也可以点 `取消认领` 变回无所有者。

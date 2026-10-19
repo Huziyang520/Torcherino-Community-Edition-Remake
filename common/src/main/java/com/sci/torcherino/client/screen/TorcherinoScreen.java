@@ -59,6 +59,12 @@ public class TorcherinoScreen extends Screen {
     /** Raised handle of a slider. */
     private static final ResourceLocation HANDLE_TEXTURE =
             new ResourceLocation("torcherino", "textures/gui/torcherino_slider_handle.png");
+    /** Faint veil painted over a hovered slider; a texture so the whole UI stays textured. */
+    private static final ResourceLocation HOVER_TEXTURE =
+            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_hover.png");
+    /** The hover veil is a flat 8x16 tile: used 1:1 vertically and stretched horizontally. */
+    private static final int HOVER_TEXTURE_WIDTH = 8;
+    private static final int HOVER_TEXTURE_HEIGHT = 16;
 
     /** Nine slice: 4 px corners and edges, the 212x115 centre is stretched. */
     private static final int PANEL_SLICE = 4;
@@ -119,6 +125,8 @@ public class TorcherinoScreen extends Screen {
     private boolean othersCanEdit;
     /** Whether the player looking at this screen is the recorded owner. */
     private boolean viewerIsOwner;
+    /** Whether the server runs with the owner system enabled; off hides the whole owner row. */
+    private final boolean ownerEnabled;
 
     private int xRange;
     private int zRange;
@@ -136,7 +144,7 @@ public class TorcherinoScreen extends Screen {
 
     public TorcherinoScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speedScaled,
                             int redstoneMode, int tierMultiplier, String ownerDisplay, boolean othersCanEdit,
-                            boolean viewerIsOwner) {
+                            boolean viewerIsOwner, boolean ownerEnabled) {
         super(Component.translatable(titleKey));
         this.pos = pos;
         this.titleKey = titleKey;
@@ -149,6 +157,13 @@ public class TorcherinoScreen extends Screen {
         this.ownerDisplay = ownerDisplay == null ? "" : ownerDisplay;
         this.othersCanEdit = othersCanEdit;
         this.viewerIsOwner = viewerIsOwner;
+        this.ownerEnabled = ownerEnabled;
+        if (!ownerEnabled) {
+            // The server never claims anything while the switch is off, so whatever an old
+            // world still carries must not show up here either.
+            this.ownerDisplay = "";
+            this.viewerIsOwner = false;
+        }
     }
 
     /**
@@ -240,7 +255,9 @@ public class TorcherinoScreen extends Screen {
 
         // ---- rows --------------------------------------------------------------------
         final int ownerRow = PADDING + TITLE_HEIGHT + 2;
-        final int firstSliderRow = ownerRow + OWNER_HEIGHT + 6;
+        // The owner row only exists while the server runs the owner system; the button row
+        // width stays measured with every button either way, so the panel keeps its size.
+        final int firstSliderRow = ownerRow + (this.ownerEnabled ? OWNER_HEIGHT + 6 : 6);
         final int buttonRow = firstSliderRow + 3 * SLIDER_STEP + SLIDER_HEIGHT + 8;
         this.panelHeight = buttonRow + BUTTON_HEIGHT + PADDING;
         this.left = (this.width - this.panelWidth) / 2;
@@ -280,7 +297,7 @@ public class TorcherinoScreen extends Screen {
         this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
                 .bounds(x, buttonY, buttonWidth, BUTTON_HEIGHT).build());
         x += buttonWidth + BUTTON_GAP;
-        if (this.viewerIsOwner) {
+        if (this.ownerEnabled && this.viewerIsOwner) {
             // Only the owner sees these two: everyone else just reads the owner line above.
             this.addRenderableWidget(Button.builder(Component.translatable("gui.torcherino.owner.unclaim"), button -> {
                 this.ownerDisplay = "";
@@ -324,11 +341,13 @@ public class TorcherinoScreen extends Screen {
         graphics.drawString(this.font, title, this.left + (this.panelWidth - this.font.width(title)) / 2,
                 this.top + PADDING, COLOR_TITLE, false);
         // The owner line can never bleed over the frame, however long the name is.
-        graphics.enableScissor(this.left + 1, this.ownerRowY - 1, this.left + this.panelWidth - 1,
-                this.ownerRowY + 9);
-        graphics.drawString(this.font, this.ownerLabel(), this.left + PADDING, this.ownerRowY,
-                this.ownerDisplay.isEmpty() ? COLOR_MUTED : COLOR_TEXT, false);
-        graphics.disableScissor();
+        if (this.ownerEnabled) {
+            graphics.enableScissor(this.left + 1, this.ownerRowY - 1, this.left + this.panelWidth - 1,
+                    this.ownerRowY + 9);
+            graphics.drawString(this.font, this.ownerLabel(), this.left + PADDING, this.ownerRowY,
+                    this.ownerDisplay.isEmpty() ? COLOR_MUTED : COLOR_TEXT, false);
+            graphics.disableScissor();
+        }
     }
 
     /**
@@ -512,8 +531,11 @@ public class TorcherinoScreen extends Screen {
             if (dimmed) {
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             } else if (this.isHoveredOrFocused()) {
-                // A faint veil is all the feedback the textured track needs.
-                graphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, 0x14FFFFFF);
+                // A faint veil is all the feedback the textured track needs - a texture as
+                // well, so the editor never paints a bare rectangle.
+                graphics.blit(HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
+                        HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
+                        HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
             }
 
             final var font = Minecraft.getInstance().font;

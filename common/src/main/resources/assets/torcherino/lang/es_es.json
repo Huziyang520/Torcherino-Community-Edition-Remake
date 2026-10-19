@@ -85,4 +85,8 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Valor del limite",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Valor del limite global",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "Puede dejar de acelerar algunas posiciones - activalo con cuidado",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : las recetas de Torcherino las controla la configuración del servidor y están activadas por defecto desde la 1.4.0. Si falta una receta, revisa los ajustes del juego o el archivo de configuración. Este aviso se puede desactivar en el archivo de configuración."}
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : las recetas de Torcherino las controla la configuración del servidor y están activadas por defecto desde la 1.4.0. Si falta una receta, revisa los ajustes del juego o el archivo de configuración. Este aviso se puede desactivar en el archivo de configuración.",
+  "gui.torcherino.config.ownerSystem": "Sistema de propietario",
+  "gui.torcherino.config.group.owner": "Propietario",
+  "gui.torcherino.config.tooltip.ownerSystem": "DESACTIVADO POR DEFECTO. Si está activo, colocar un Torcherino lo reclama para ti:\nel editor muestra la fila del propietario y los botones de liberar y de permisos.\nSi está desactivado, no se reclama nada y todos pueden editar; los reclamos antiguos se conservan pero se ignoran."
+}

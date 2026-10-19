@@ -48,9 +48,9 @@ public final class TorcherinoForgeClientEvents {
      */
     public static void openScreen(BlockPos pos, String titleKey, int xRange, int zRange, int yRange, int speed,
                                   int redstoneMode, int tierMultiplier, String ownerDisplay, boolean othersCanEdit,
-                                  boolean viewerIsOwner) {
+                                  boolean viewerIsOwner, boolean ownerEnabled) {
         Minecraft.getInstance().setScreen(new TorcherinoScreen(pos, titleKey, xRange, zRange, yRange, speed,
-                redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit, viewerIsOwner));
+                redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit, viewerIsOwner, ownerEnabled));
     }
 
     /**

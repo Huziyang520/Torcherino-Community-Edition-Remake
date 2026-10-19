@@ -646,6 +646,11 @@ public class TileTorcherino extends BlockEntity {
 
     /** @return {@code true} when this Torcherino may run, i.e. its owner is online. */
     private boolean ownerIsOnline(ServerLevel level) {
+        if (!TorcherinoConfig.ownerSystem) {
+            // The whole owner system is switched off: a stored claim is ignored, so it can
+            // never stop the acceleration either.
+            return true;
+        }
         if (this.owner == null || this.owner.isEmpty()) {
             // No owner recorded: the gate cannot judge, so it lets the Torcherino run.
             return true;
@@ -715,6 +720,10 @@ public class TileTorcherino extends BlockEntity {
      *         "other players may edit" flag is off.
      */
     public boolean mayEdit(Player player) {
+        if (!TorcherinoConfig.ownerSystem) {
+            // Owner system off: old claims are kept as data but have no say any more.
+            return true;
+        }
         return this.owner == null || this.owner.isEmpty() || this.othersCanEdit || this.isOwner(player);
     }
 

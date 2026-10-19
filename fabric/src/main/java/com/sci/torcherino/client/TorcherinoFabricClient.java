@@ -64,9 +64,10 @@ public class TorcherinoFabricClient implements ClientModInitializer {
                     final String ownerDisplay = buf.readUtf();
                     final boolean othersCanEdit = buf.readBoolean();
                     final boolean viewerIsOwner = buf.readBoolean();
+                    final boolean ownerEnabled = buf.readBoolean();
                     client.execute(() -> client.setScreen(new TorcherinoScreen(pos, titleKey, xRange, zRange,
                             yRange, speed, redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit,
-                            viewerIsOwner)));
+                            viewerIsOwner, ownerEnabled)));
                 });
     }
 }

@@ -7,6 +7,7 @@
 package com.sci.torcherino.network;
 
 import com.sci.torcherino.Constants;
+import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.TorcherinoInteraction;
 import com.sci.torcherino.TorcherinoKeyStates;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
@@ -104,6 +105,7 @@ public final class TorcherinoFabricNetworking {
         buf.writeUtf(TorcherinoInteraction.ownerDisplay(player, torcherino));
         buf.writeBoolean(torcherino.othersCanEdit());
         buf.writeBoolean(torcherino.isOwner(player));
+        buf.writeBoolean(TorcherinoConfig.ownerSystem);
         ServerPlayNetworking.send(player, OPEN_SCREEN, buf);
     }
 

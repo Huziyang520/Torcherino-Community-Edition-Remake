@@ -121,6 +121,14 @@ public final class TorcherinoConfig {
      */
     public static boolean probabilisticRandomTick = true;
     /**
+     * Owner system master switch, server side. {@code false} (default) means placing a
+     * Torcherino never claims it: no owner is recorded, the editor shows no owner row and no
+     * owner buttons, and everybody may edit. Already claimed Torcherinos keep their stored
+     * owner (the data is never cleared); they are simply ignored while the switch is off, so
+     * turning it back on restores the old claims.
+     */
+    public static boolean ownerSystem = false;
+    /**
      * Owner gate for servers: when on, a Torcherino only accelerates while the player who
      * placed it is online. Off by default, and ignored for Torcherinos without a recorded
      * owner (for example ones placed before this option existed).
@@ -241,6 +249,7 @@ public final class TorcherinoConfig {
             cfg.set(GENERAL + ".adaptiveThrottleMaxDivisor", adaptiveThrottleMaxDivisor);
             cfg.set(GENERAL + ".skipSaturatedPositions", skipSaturatedPositions);
             cfg.set(GENERAL + ".probabilisticRandomTick", probabilisticRandomTick);
+            cfg.set(GENERAL + ".ownerSystem", ownerSystem);
             cfg.set(GENERAL + ".ownerOnlyWhenOnline", ownerOnlyWhenOnline);
             cfg.set(GENERAL + ".statsLogIntervalSeconds", statsLogIntervalSeconds);
             // The lists are editable in the configuration screen too; a copy keeps the
@@ -307,6 +316,8 @@ public final class TorcherinoConfig {
                     "SERVER SIDE. LOWER RATE, OFF BY DEFAULT. When true, a position whose block and six neighbouring blocks stayed the same for a couple of ticks is accelerated only once per tick until something around it changes - saturated farms stop consuming the whole tick, but stable blocks are no longer played back at the configured speed. Positions on the border of a chunk section are never throttled. Applies immediately, no restart needed.");
             changed |= put(cfg, legacy, GENERAL + ".probabilisticRandomTick", true,
                     "SERVER SIDE. DIFFERENT MODEL, ON BY DEFAULT since 1.4.1. When true, a randomly ticking position receives a single random tick with the probability rounds * randomTickSpeed / 4096 instead of 'rounds' calls - that is the vanilla random tick model scaled by the configured multiplier. The expected amount of growth matches, while the cost per tick is proportional to the number of positions instead of positions x multiplier. Set it to false for the call by call behaviour of the older releases. Applies immediately, no restart needed.");
+            changed |= put(cfg, legacy, GENERAL + ".ownerSystem", false,
+                    "SERVER SIDE. Master switch of the owner system. false (default) means placing a Torcherino never claims it: no owner is recorded, the editor shows no owner row and no owner buttons, and everybody may edit. Already claimed Torcherinos keep their stored owner and get it back once this is turned on again. Applies immediately, no restart needed.");
             changed |= put(cfg, legacy, GENERAL + ".ownerOnlyWhenOnline", false,
                     "SERVER SIDE. When true, a Torcherino only accelerates while the player who placed it is online. Torcherinos without a recorded owner (placed before 1.4.1, or placed by a machine) keep running. Applies immediately, no restart needed.");
             changed |= put(cfg, legacy, GENERAL + ".statsLogIntervalSeconds", 0,
@@ -331,6 +342,7 @@ public final class TorcherinoConfig {
             adaptiveThrottleMaxDivisor = integer(cfg, GENERAL + ".adaptiveThrottleMaxDivisor", 256);
             skipSaturatedPositions = bool(cfg, GENERAL + ".skipSaturatedPositions", false);
             probabilisticRandomTick = bool(cfg, GENERAL + ".probabilisticRandomTick", true);
+            ownerSystem = bool(cfg, GENERAL + ".ownerSystem", false);
             ownerOnlyWhenOnline = bool(cfg, GENERAL + ".ownerOnlyWhenOnline", false);
             statsLogIntervalSeconds = integer(cfg, GENERAL + ".statsLogIntervalSeconds", 0);
             blacklistedBlocks = stringList(cfg, BLACKLIST + ".blacklistedBlocks");

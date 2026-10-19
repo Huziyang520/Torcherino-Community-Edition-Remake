@@ -4,6 +4,7 @@
  */
 package com.sci.torcherino.blocks.blocks;
 
+import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,11 @@ final class TorcherinoSupport {
      */
     static void recordOwner(Level level, BlockPos pos, LivingEntity placer) {
         if (level.isClientSide() || placer == null) {
+            return;
+        }
+        if (!TorcherinoConfig.ownerSystem) {
+            // Owner system switched off: nothing is claimed, so nothing has to be ignored
+            // later on. Old claims stay in the world and come back when the switch is on again.
             return;
         }
         if (level.getBlockEntity(pos) instanceof TileTorcherino torcherino && torcherino.getOwnerId() == null) {

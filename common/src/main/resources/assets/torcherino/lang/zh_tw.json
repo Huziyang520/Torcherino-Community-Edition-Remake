@@ -85,4 +85,8 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "上限值",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "全域上限值",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "可能導致部分位置加速失效，謹慎開啟",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : 加速火把配方受伺服器設定檔控制，自1.4.0版本開始預設開啟。若沒有配方，請檢查遊戲內設定或設定檔，該提示可在設定檔中關閉。"}
+  "message.torcherino.join_notice": "Torcherino Community Edition Remake : 加速火把配方受伺服器設定檔控制，自1.4.0版本開始預設開啟。若沒有配方，請檢查遊戲內設定或設定檔，該提示可在設定檔中關閉。",
+  "gui.torcherino.config.ownerSystem": "所有者系統",
+  "gui.torcherino.config.group.owner": "所有者",
+  "gui.torcherino.config.tooltip.ownerSystem": "預設關閉。開啟後，放置加速火把即歸放置者所有：\n編輯介面顯示所有者一行，並出現「取消認領」「他人可改」兩個按鈕。\n關閉時不記錄所有者，所有人都能改；舊存檔裡的認領記錄保留但被忽略，重新開啟即恢復。"
+}

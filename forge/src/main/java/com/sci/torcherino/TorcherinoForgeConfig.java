@@ -65,6 +65,7 @@ public final class TorcherinoForgeConfig {
         private static final ForgeConfigSpec.IntValue ADAPTIVE_THROTTLE_MAX_DIVISOR;
         private static final ForgeConfigSpec.BooleanValue SKIP_SATURATED_POSITIONS;
         private static final ForgeConfigSpec.BooleanValue PROBABILISTIC_RANDOM_TICK;
+        private static final ForgeConfigSpec.BooleanValue OWNER_SYSTEM;
         private static final ForgeConfigSpec.BooleanValue OWNER_ONLY_WHEN_ONLINE;
         private static final ForgeConfigSpec.IntValue STATS_LOG_INTERVAL_SECONDS;
         private static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_BLOCKS;
@@ -112,6 +113,9 @@ public final class TorcherinoForgeConfig {
             PROBABILISTIC_RANDOM_TICK = builder
                     .comment("DIFFERENT MODEL, ON BY DEFAULT since 1.4.1. When true, a randomly ticking position receives a single random tick with the probability rounds * randomTickSpeed / 4096 instead of 'rounds' calls, which is the vanilla random tick model scaled by the configured multiplier. The expected amount of growth matches, while the cost per tick is proportional to the number of positions instead of positions x multiplier. Set it to false for the call by call behaviour of the older releases.")
                     .define("probabilisticRandomTick", true);
+            OWNER_SYSTEM = builder
+                    .comment("Master switch of the owner system. false (default) means placing a Torcherino never claims it: no owner is recorded, the editor shows no owner row and no owner buttons, and everybody may edit. Already claimed Torcherinos keep their stored owner and get it back once this is turned on again.")
+                    .define("ownerSystem", false);
             OWNER_ONLY_WHEN_ONLINE = builder
                     .comment("When true, a Torcherino only accelerates while the player who placed it is online. Torcherinos without a recorded owner (placed before 1.4.1, or placed by a machine) keep running.")
                     .define("ownerOnlyWhenOnline", false);
@@ -172,6 +176,7 @@ public final class TorcherinoForgeConfig {
             TorcherinoConfig.adaptiveThrottleMaxDivisor = Server.ADAPTIVE_THROTTLE_MAX_DIVISOR.get();
             TorcherinoConfig.skipSaturatedPositions = Server.SKIP_SATURATED_POSITIONS.get();
             TorcherinoConfig.probabilisticRandomTick = Server.PROBABILISTIC_RANDOM_TICK.get();
+            TorcherinoConfig.ownerSystem = Server.OWNER_SYSTEM.get();
             TorcherinoConfig.ownerOnlyWhenOnline = Server.OWNER_ONLY_WHEN_ONLINE.get();
             TorcherinoConfig.statsLogIntervalSeconds = Server.STATS_LOG_INTERVAL_SECONDS.get();
             TorcherinoConfig.blacklistedBlocks = new ArrayList<>(Server.BLACKLISTED_BLOCKS.get());
@@ -207,6 +212,7 @@ public final class TorcherinoForgeConfig {
         Server.ADAPTIVE_THROTTLE_MAX_DIVISOR.set(TorcherinoConfig.adaptiveThrottleMaxDivisor);
         Server.SKIP_SATURATED_POSITIONS.set(TorcherinoConfig.skipSaturatedPositions);
         Server.PROBABILISTIC_RANDOM_TICK.set(TorcherinoConfig.probabilisticRandomTick);
+        Server.OWNER_SYSTEM.set(TorcherinoConfig.ownerSystem);
         Server.OWNER_ONLY_WHEN_ONLINE.set(TorcherinoConfig.ownerOnlyWhenOnline);
         Server.STATS_LOG_INTERVAL_SECONDS.set(TorcherinoConfig.statsLogIntervalSeconds);
         // The two lists are editable in the configuration screen as well.
