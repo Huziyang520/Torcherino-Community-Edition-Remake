@@ -14,15 +14,11 @@
     " C "
   ],
   "key": {
-    "C": {
-      "item": "minecraft:clock"
-    },
-    "T": {
-      "item": "minecraft:torch"
-    }
+    "C": "minecraft:clock",
+    "T": "minecraft:torch"
   },
   "result": {
-    "item": "torcherino:blocktorcherino"
+    "id": "torcherino:blocktorcherino"
   },
   "neoforge:conditions": [
     {

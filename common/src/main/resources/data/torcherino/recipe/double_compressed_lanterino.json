@@ -14,15 +14,11 @@
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blockdoublecompressedlanterino",
   "ingredients": [
-    {
-      "item": "minecraft:pumpkin"
-    },
-    {
-      "item": "torcherino:blockdoublecompressedtorcherino"
-    }
+    "minecraft:pumpkin",
+    "torcherino:blockdoublecompressedtorcherino"
   ],
   "result": {
-    "item": "torcherino:blockdoublecompressedlanterino"
+    "id": "torcherino:blockdoublecompressedlanterino"
   },
   "neoforge:conditions": [
     {

@@ -14,12 +14,10 @@
     "TTT"
   ],
   "key": {
-    "T": {
-      "item": "torcherino:blocktorcherino"
-    }
+    "T": "torcherino:blocktorcherino"
   },
   "result": {
-    "item": "torcherino:blockcompressedtorcherino"
+    "id": "torcherino:blockcompressedtorcherino"
   },
   "neoforge:conditions": [
     {

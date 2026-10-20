@@ -19,15 +19,11 @@
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blocktriplecompressedlantern",
   "ingredients": [
-    {
-      "item": "minecraft:lantern"
-    },
-    {
-      "item": "torcherino:blocktriplecompressedtorcherino"
-    }
+    "minecraft:lantern",
+    "torcherino:blocktriplecompressedtorcherino"
   ],
   "result": {
-    "item": "torcherino:blocktriplecompressedlantern"
+    "id": "torcherino:blocktriplecompressedlantern"
   },
   "neoforge:conditions": [
     {

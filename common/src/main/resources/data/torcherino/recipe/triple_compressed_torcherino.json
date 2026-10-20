@@ -24,12 +24,10 @@
     "TTT"
   ],
   "key": {
-    "T": {
-      "item": "torcherino:blockdoublecompressedtorcherino"
-    }
+    "T": "torcherino:blockdoublecompressedtorcherino"
   },
   "result": {
-    "item": "torcherino:blocktriplecompressedtorcherino"
+    "id": "torcherino:blocktriplecompressedtorcherino"
   },
   "neoforge:conditions": [
     {
