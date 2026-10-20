@@ -1,9 +1,10 @@
 {
-  "conditions": [
-    { "type": "torcherino:config", "config": "overPoweredRecipe", "value": false }
-  ],
   "fabric:load_conditions": [
-    { "condition": "torcherino:config", "config": "overPoweredRecipe", "value": false }
+    {
+      "condition": "torcherino:config",
+      "config": "overPoweredRecipe",
+      "value": false
+    }
   ],
   "type": "minecraft:crafting_shaped",
   "group": "torcherino:blocktorcherino",
@@ -13,11 +14,25 @@
     "SCS"
   ],
   "key": {
-    "C": { "item": "minecraft:clock" },
-    "T": { "item": "minecraft:torch" },
-    "S": { "item": "minecraft:nether_star" }
+    "C": {
+      "item": "minecraft:clock"
+    },
+    "T": {
+      "item": "minecraft:torch"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    }
   },
   "result": {
-    "item": "torcherino:blocktorcherino"
-  }
+    "id": "torcherino:blocktorcherino",
+    "count": 1
+  },
+  "neoforge:conditions": [
+    {
+      "type": "torcherino:config",
+      "config": "overPoweredRecipe",
+      "value": false
+    }
+  ]
 }

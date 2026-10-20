@@ -180,7 +180,7 @@ public final class TorcherinoConfig {
     }
 
     public static synchronized void load() {
-        if (Services.PLATFORM.usesForgeConfigSystem()) {
+        if (Services.PLATFORM.usesLoaderConfigSystem()) {
             // Forge reads the two files through its own config system (which is what
             // Configured turns into a screen), so the TOML code below must not touch them.
             return;
@@ -206,7 +206,7 @@ public final class TorcherinoConfig {
      * configuration screen.
      */
     public static synchronized void saveClient() {
-        if (Services.PLATFORM.usesForgeConfigSystem()) {
+        if (Services.PLATFORM.usesLoaderConfigSystem()) {
             Services.PLATFORM.persistClientConfig();
             return;
         }
@@ -229,7 +229,7 @@ public final class TorcherinoConfig {
      * screen lets a player edit them; comments already present in the file are preserved.
      */
     public static synchronized void saveServer() {
-        if (Services.PLATFORM.usesForgeConfigSystem()) {
+        if (Services.PLATFORM.usesLoaderConfigSystem()) {
             Services.PLATFORM.persistServerConfig();
             return;
         }

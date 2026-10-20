@@ -78,12 +78,12 @@ public interface IPlatformHelper {
      *         Forge does, because that is what Configured turns into an in-game screen;
      *         Fabric keeps the bundled TOML reader instead.
      */
-    default boolean usesForgeConfigSystem() {
+    default boolean usesLoaderConfigSystem() {
         return false;
     }
 
     /**
-     * Writes the client switches back to wherever this loader keeps them. Only Forge has to
+     * Writes the client switches back to wherever this loader keeps them. Only NeoForge has to
      * do anything here, since the TOML reader of the common code handles its own files.
      */
     default void persistClientConfig() {

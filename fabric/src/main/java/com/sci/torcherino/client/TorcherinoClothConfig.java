@@ -6,7 +6,7 @@
  *      因此"保存并退出"不会漏掉刚输入但还没失去焦点的值。
  *      自建的开关 / 数字条目只在鼠标位于左侧名称上时显示提示（悬停到控件上不弹），见 LabelTooltipToggle。
  */
-package com.sci.torcherino.client.screen;
+package com.sci.torcherino.client;
 
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.TorcherinoRegistry;

@@ -6,7 +6,7 @@
  */
 package com.sci.torcherino.client;
 
-import com.sci.torcherino.client.screen.TorcherinoClothConfig;
+import com.sci.torcherino.client.TorcherinoClothConfig;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 

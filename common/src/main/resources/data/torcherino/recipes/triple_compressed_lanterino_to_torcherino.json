@@ -1,20 +1,47 @@
 {
-  "conditions": [
-    { "type": "torcherino:config", "config": "compressedTorcherino", "value": true },
-    { "type": "torcherino:config", "config": "doubleCompressedTorcherino", "value": true },
-    { "type": "torcherino:config", "config": "tripleCompressedTorcherino", "value": true }
-  ],
   "fabric:load_conditions": [
-    { "condition": "torcherino:config", "config": "compressedTorcherino", "value": true },
-    { "condition": "torcherino:config", "config": "doubleCompressedTorcherino", "value": true },
-    { "condition": "torcherino:config", "config": "tripleCompressedTorcherino", "value": true }
+    {
+      "condition": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "condition": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    },
+    {
+      "condition": "torcherino:config",
+      "config": "tripleCompressedTorcherino",
+      "value": true
+    }
   ],
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blocktriplecompressedtorcherino",
   "ingredients": [
-    { "item": "torcherino:blocktriplecompressedlanterino" }
+    {
+      "item": "torcherino:blocktriplecompressedlanterino"
+    }
   ],
   "result": {
-    "item": "torcherino:blocktriplecompressedtorcherino"
-  }
+    "id": "torcherino:blocktriplecompressedtorcherino",
+    "count": 1
+  },
+  "neoforge:conditions": [
+    {
+      "type": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "type": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    },
+    {
+      "type": "torcherino:config",
+      "config": "tripleCompressedTorcherino",
+      "value": true
+    }
+  ]
 }

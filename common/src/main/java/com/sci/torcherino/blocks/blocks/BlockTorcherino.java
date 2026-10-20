@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockTorcherino extends TorchBlock implements EntityBlock {
 
     public BlockTorcherino(BlockBehaviour.Properties properties) {
-        super(properties, ParticleTypes.FLAME);
+        super(ParticleTypes.FLAME, properties);
     }
 
     @Override

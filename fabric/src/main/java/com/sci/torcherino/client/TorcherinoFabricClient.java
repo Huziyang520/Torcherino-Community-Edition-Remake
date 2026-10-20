@@ -1,6 +1,6 @@
 /*
  * 本文件：Fabric 侧客户端入口。
- * 说明：把 11 个方块登记进 cutout 渲染层（否则透明像素会变黑），并接收服务端的「打开编辑界面」包。
+ * 说明：把 16 个方块登记进 cutout 渲染层（否则透明像素会变黑），并接收服务端的「打开编辑界面」负载。
  *      改装键就是原版潜行（服务端直接读 isShiftKeyDown），因此这里不注册任何按键。
  */
 package com.sci.torcherino.client;
@@ -8,7 +8,7 @@ package com.sci.torcherino.client;
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
-import com.sci.torcherino.network.TorcherinoFabricNetworking;
+import com.sci.torcherino.network.TorcherinoPayloads.OpenScreen;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -16,12 +16,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
 /**
- * Client entry point: render layers and the editor screen.
+ * Client entry point: render layers, the join notice and the editor screen.
  */
 public class TorcherinoFabricClient implements ClientModInitializer {
 
@@ -51,23 +50,10 @@ public class TorcherinoFabricClient implements ClientModInitializer {
             }
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(TorcherinoFabricNetworking.OPEN_SCREEN,
-                (client, handler, buf, responseSender) -> {
-                    final BlockPos pos = buf.readBlockPos();
-                    final String titleKey = buf.readUtf();
-                    final int xRange = buf.readInt();
-                    final int zRange = buf.readInt();
-                    final int yRange = buf.readInt();
-                    final int speed = buf.readInt();
-                    final int redstoneMode = buf.readInt();
-                    final int tierMultiplier = buf.readInt();
-                    final String ownerDisplay = buf.readUtf();
-                    final boolean othersCanEdit = buf.readBoolean();
-                    final boolean viewerIsOwner = buf.readBoolean();
-                    final boolean ownerEnabled = buf.readBoolean();
-                    client.execute(() -> client.setScreen(new TorcherinoScreen(pos, titleKey, xRange, zRange,
-                            yRange, speed, redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit,
-                            viewerIsOwner, ownerEnabled)));
-                });
+        ClientPlayNetworking.registerGlobalReceiver(OpenScreen.TYPE, (payload, context) ->
+                context.client().execute(() -> context.client().setScreen(new TorcherinoScreen(
+                        payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
+                        payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
+                        payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()))));
     }
 }

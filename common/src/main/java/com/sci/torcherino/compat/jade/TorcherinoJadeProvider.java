@@ -38,11 +38,11 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
     public static final TorcherinoJadeProvider INSTANCE = new TorcherinoJadeProvider();
 
     /** Provider id, also the name shown in Jade's own provider list. */
-    private static final ResourceLocation UID = new ResourceLocation(Constants.MOD_ID, "acceleration");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "acceleration");
     /** Config keys of the three lines. */
-    private static final ResourceLocation SHOW_SPEED = new ResourceLocation(Constants.MOD_ID, "speed");
-    private static final ResourceLocation SHOW_STATE = new ResourceLocation(Constants.MOD_ID, "state");
-    private static final ResourceLocation SHOW_OWNER = new ResourceLocation(Constants.MOD_ID, "owner");
+    private static final ResourceLocation SHOW_SPEED = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "speed");
+    private static final ResourceLocation SHOW_STATE = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "state");
+    private static final ResourceLocation SHOW_OWNER = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "owner");
 
     private TorcherinoJadeProvider() {
     }

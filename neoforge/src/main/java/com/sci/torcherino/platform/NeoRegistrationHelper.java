@@ -1,6 +1,6 @@
 /*
- * 本文件：IRegistrationHelper 的 Forge 实现。
- * 说明：用 DeferredRegister 延迟注册；RegistryObject 未就绪时 get() 会抛异常，故包一层 isPresent() 以满足「未注册返回 null」的约定。
+ * 本文件：IRegistrationHelper 的 NeoForge 实现。
+ * 说明：用 DeferredRegister 延迟注册；DeferredHolder 未就绪时 get() 会抛异常，故包一层 isBound() 以满足「未注册返回 null」的约定。
  */
 package com.sci.torcherino.platform;
 
@@ -10,34 +10,34 @@ import com.sci.torcherino.platform.services.IRegistrationHelper;
 import com.sci.torcherino.platform.services.RegistryEntry;
 import com.sci.torcherino.platform.services.SimpleRegistryEntry;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 /**
- * Forge registration through deferred registers.
+ * NeoForge registration through deferred registers.
  *
- * <p>The suppliers are handed straight to Forge and only invoked while the matching
- * {@code RegisterEvent} is running, which is the only window in which writing to a
- * registry is allowed. Building the instances earlier - for example in the mod
- * constructor - fails with {@code IllegalStateException: Registry is already frozen},
- * because {@code Block}'s constructor registers an intrusive holder.</p>
+ * <p>The suppliers are handed straight to NeoForge and only invoked while the matching
+ * registry is being filled, which is the only window in which writing to a registry is
+ * allowed. Building the instances earlier - for example in the mod constructor - fails
+ * with {@code IllegalStateException: Registry is already frozen}, because
+ * {@code Block}'s constructor registers an intrusive holder.</p>
  */
-public class ForgeRegistrationHelper implements IRegistrationHelper {
+public class NeoRegistrationHelper implements IRegistrationHelper {
 
     private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
+            DeferredRegister.create(Registries.BLOCK, Constants.MOD_ID);
     private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
+            DeferredRegister.create(Registries.ITEM, Constants.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MOD_ID);
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID);
 
     /** Must be called from the mod constructor with the mod event bus. */
     public static void init(IEventBus modEventBus) {
@@ -68,11 +68,11 @@ public class ForgeRegistrationHelper implements IRegistrationHelper {
     }
 
     /**
-     * {@code RegistryObject#get} throws when the entry is not registered yet, whereas
+     * {@code DeferredHolder#get} throws when the entry is not registered yet, whereas
      * {@link RegistryEntry#get} is documented to answer {@code null}. The guard keeps the
      * common code free of that distinction.
      */
-    private static <T> RegistryEntry<T> wrap(RegistryObject<T> object) {
-        return new SimpleRegistryEntry<>(object.getId(), () -> object.isPresent() ? object.get() : null);
+    private static <R, T extends R> RegistryEntry<T> wrap(DeferredHolder<R, ? extends T> holder) {
+        return new SimpleRegistryEntry<>(holder.getId(), () -> holder.isBound() ? holder.get() : null);
     }
 }

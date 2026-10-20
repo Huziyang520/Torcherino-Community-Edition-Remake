@@ -52,16 +52,16 @@ public class TorcherinoScreen extends Screen {
 
     /** Panel artwork: the classic light grey frame, with the old power-button notch removed. */
     private static final ResourceLocation PANEL_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_panel.png");
+            ResourceLocation.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_panel.png");
     /** Recessed track of a slider. */
     private static final ResourceLocation TRACK_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_track.png");
+            ResourceLocation.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_track.png");
     /** Raised handle of a slider. */
     private static final ResourceLocation HANDLE_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_handle.png");
+            ResourceLocation.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_handle.png");
     /** Faint veil painted over a hovered slider; a texture so the whole UI stays textured. */
     private static final ResourceLocation HOVER_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_hover.png");
+            ResourceLocation.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_hover.png");
     /** The hover veil is a flat 8x16 tile: used 1:1 vertically and stretched horizontally. */
     private static final int HOVER_TEXTURE_WIDTH = 8;
     private static final int HOVER_TEXTURE_HEIGHT = 16;
@@ -333,7 +333,7 @@ public class TorcherinoScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.

@@ -11,6 +11,7 @@ import com.sci.torcherino.api.GlobalBudget;
 import com.sci.torcherino.blocks.ModBlockEntities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -509,12 +510,12 @@ public class TileTorcherino extends BlockEntity {
                     // is only matched in expectation, not call for call.
                     done = rollsRandomTick(level, rounds) ? 1 : 0;
                     if (done == 1) {
-                        block.randomTick(blockState, level, target, this.rand);
+                        blockState.randomTick(level, target, this.rand);
                     }
                 } else {
                     done = 0;
                     while (done < rounds) {
-                        block.randomTick(blockState, level, target, this.rand);
+                        blockState.randomTick(level, target, this.rand);
                         done++;
                         if (section.getBlockState(localX, localY, localZ) != blockState) {
                             // The block was replaced, removed or transformed: ticking the
@@ -882,8 +883,8 @@ public class TileTorcherino extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("XRange", this.xRange);
         tag.putInt("ZRange", this.zRange);
         tag.putInt("YRange", this.yRange);
@@ -907,8 +908,8 @@ public class TileTorcherino extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.poweredByRedstone = tag.getBoolean("PoweredByRedstone");
         this.owner = tag.contains("Owner") ? tag.getString("Owner") : null;
         this.ownerName = tag.contains("OwnerName") ? tag.getString("OwnerName") : null;
@@ -936,9 +937,9 @@ public class TileTorcherino extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         final CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag);
+        this.saveAdditional(tag, registries);
         return tag;
     }
 

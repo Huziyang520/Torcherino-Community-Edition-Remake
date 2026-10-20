@@ -2,9 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blocktorcherino",
   "ingredients": [
-    { "item": "torcherino:blocklantern" }
+    {
+      "item": "torcherino:blocklantern"
+    }
   ],
   "result": {
-    "item": "torcherino:blocktorcherino"
+    "id": "torcherino:blocktorcherino",
+    "count": 1
   }
 }

@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockWallTorcherino extends WallTorchBlock implements EntityBlock {
 
     public BlockWallTorcherino(BlockBehaviour.Properties properties) {
-        super(properties, ParticleTypes.FLAME);
+        super(ParticleTypes.FLAME, properties);
     }
 
     @Override
