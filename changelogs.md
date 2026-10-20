@@ -22,3 +22,5 @@
 - A hovered slider no longer turns solid white (the highlight texture was drawn without blending, so
   its transparency was ignored and the white label on the track became unreadable).
 - A slider no longer stays highlighted after it was dragged: only the hover state lights it up now.
+- The redstone button no longer repeats its own label in a tooltip - the button text already
+  states the current mode, so hovering it only got in the way.

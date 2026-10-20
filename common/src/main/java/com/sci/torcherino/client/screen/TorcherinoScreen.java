@@ -321,11 +321,7 @@ public class TorcherinoScreen extends Screen {
         final Button redstoneButton = Button.builder(redstoneButtonLabel(this.redstoneMode), button -> {
             this.redstoneMode = (this.redstoneMode + 1) % TileTorcherino.REDSTONE_MODES;
             button.setMessage(redstoneButtonLabel(this.redstoneMode));
-            // The tooltip is built once when the widget is created, so it has to be rebuilt
-            // here as well - otherwise it keeps showing the mode the screen was opened with.
-            button.setTooltip(Tooltip.create(redstoneButtonLabel(this.redstoneMode)));
         }).bounds(x, buttonY, buttonWidth, BUTTON_HEIGHT)
-                .tooltip(Tooltip.create(redstoneButtonLabel(this.redstoneMode)))
                 .build();
         redstoneButton.active = editable;
         this.addRenderableWidget(redstoneButton);
