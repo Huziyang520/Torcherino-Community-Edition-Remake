@@ -47,7 +47,9 @@ public final class TorcherinoNeoForgeClient {
 
     /** Handles the server's "open the editor" packet. Runs on the client thread. */
     public static void handleOpenScreen(TorcherinoPayloads.OpenScreen payload) {
-        Minecraft.getInstance().setScreen(new TorcherinoScreen(
+        // setScreenAndShow also renders one frame, which is what makes the screen stick when the
+        // packet arrives outside the tick; plain setScreen left it un-shown on this version.
+        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
                 payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));

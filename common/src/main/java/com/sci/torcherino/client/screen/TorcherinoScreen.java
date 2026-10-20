@@ -394,8 +394,13 @@ public class TorcherinoScreen extends Screen {
     /** One piece of the panel: the source rectangle is stretched onto the target rectangle. */
     private static void panelPiece(GuiGraphicsExtractor graphics, int x, int y, int width, int height,
                                    int u, int v, int uWidth, int vHeight) {
-        graphics.blit(GUI_TEXTURED, PANEL_TEXTURE, x, y, width, height, u, v, uWidth, vHeight,
-                PANEL_FILE_WIDTH, PANEL_FILE_HEIGHT);
+        // Argument order in this version is (x, y, u, v, width, height, uWidth, vHeight, texW, texH):
+        // the source point comes before the target size. Passing the old 1.21 order
+        // (x, y, width, height, u, v, ...) still compiles through the int -> float widening of the
+        // 26.x overload and silently draws a zero-sized piece, which is what made the editor look
+        // empty with a giant missing-texture slab behind it.
+        graphics.blit(GUI_TEXTURED, PANEL_TEXTURE, x, y, (float) u, (float) v, width, height,
+                uWidth, vHeight, PANEL_FILE_WIDTH, PANEL_FILE_HEIGHT);
     }
 
     /** {@code E} closes the editor, like the inventory; it reuses {@link #onClose()}. */
@@ -536,28 +541,28 @@ public class TorcherinoScreen extends Screen {
             }
 
             // Track: 2 px caps with a stretched middle, the texture is 16 px tall and used 1:1.
-            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x, y, TRACK_CAP, height, 0, 0, TRACK_CAP,
+            // Signature order is (x, y, u, v, width, height, uWidth, vHeight, texW, texH).
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x, y, 0.0F, 0.0F, TRACK_CAP, height, TRACK_CAP,
                     TRACK_TEXTURE_HEIGHT, TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
-            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + TRACK_CAP, y, width - TRACK_CAP * 2, height, TRACK_CAP, 0,
-                    TRACK_TEXTURE_WIDTH - TRACK_CAP * 2, TRACK_TEXTURE_HEIGHT,
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + TRACK_CAP, y, (float) TRACK_CAP, 0.0F,
+                    width - TRACK_CAP * 2, height, TRACK_TEXTURE_WIDTH - TRACK_CAP * 2, TRACK_TEXTURE_HEIGHT,
                     TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
-            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + width - TRACK_CAP, y, TRACK_CAP, height,
-                    TRACK_TEXTURE_WIDTH - TRACK_CAP, 0, TRACK_CAP, TRACK_TEXTURE_HEIGHT,
-                    TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + width - TRACK_CAP, y,
+                    (float) (TRACK_TEXTURE_WIDTH - TRACK_CAP), 0.0F, TRACK_CAP, height, TRACK_CAP,
+                    TRACK_TEXTURE_HEIGHT, TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
 
             // Handle: 1:1, centred on the current position.
             final int handleX = x + 1 + (int) Math.round(this.handlePosition() * this.handleTravel());
-            graphics.blit(GUI_TEXTURED, HANDLE_TEXTURE, handleX, y, HANDLE_WIDTH, height, 0, 0, HANDLE_TEXTURE_WIDTH,
-                    HANDLE_TEXTURE_HEIGHT, HANDLE_TEXTURE_WIDTH, HANDLE_TEXTURE_HEIGHT);
+            graphics.blit(GUI_TEXTURED, HANDLE_TEXTURE, handleX, y, 0.0F, 0.0F, HANDLE_WIDTH, height,
+                    HANDLE_WIDTH, height, HANDLE_TEXTURE_WIDTH, HANDLE_TEXTURE_HEIGHT);
 
             if (dimmed) {
                 this.setAlpha(1.0F);
             } else if (this.isHovered()) {
                 // A faint veil over the track; only the hover state lights it up, so the slider
                 // does not stay lit after a drag.
-                graphics.blit(GUI_TEXTURED, HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
-                        HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
-                        HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
+                graphics.blit(GUI_TEXTURED, HOVER_TEXTURE, x + 1, y + 1, 0.0F, 0.0F, width - 2, height - 2,
+                        width - 2, height - 2, HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
             }
 
             final var font = Minecraft.getInstance().font;
