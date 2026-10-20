@@ -220,8 +220,20 @@ public class TorcherinoScreen extends Screen {
         return Component.translatable("gui.torcherino.redstone", redstoneModeName(mode));
     }
 
+    /** Pre-loads the four GUI textures so the very first rendered frame already has them. */
+    private void warmUpTextures() {
+        // Texture upload happens on first use; without this the opening frame can still be the
+        // missing texture while the veil is already on screen, which reads as a flicker.
+        final var textures = Minecraft.getInstance().getTextureManager();
+        textures.getTexture(PANEL_TEXTURE);
+        textures.getTexture(TRACK_TEXTURE);
+        textures.getTexture(HANDLE_TEXTURE);
+        textures.getTexture(HOVER_TEXTURE);
+    }
+
     @Override
     protected void init() {
+        this.warmUpTextures();
         final boolean editable = this.editable();
         // Speed: eight classic gears by default; with the free multiplier the slider offers
         // every hundredth of a level, i.e. any value from 0 % up to the tier maximum.
@@ -340,9 +352,21 @@ public class TorcherinoScreen extends Screen {
      */
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        this.extractTransparentBackground(graphics);
-        graphics.nextStratum();
+        // Let the base class paint the veil: with isInGameUi() true that is exactly one
+        // extractTransparentBackground() call, i.e. the same gradient a chest screen draws.
+        // Drawing the panel into the same stratum keeps veil and panel in one batch, so the
+        // overlay can no longer arrive a frame before the panel (that was the flash on open).
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
+    }
+
+    /**
+     * In-game screen, not a menu: this is what makes {@link #extractBackground} paint the plain
+     * translucent veil instead of the panorama / blurred menu background.
+     */
+    @Override
+    public boolean isInGameUi() {
+        return true;
     }
 
     @Override
