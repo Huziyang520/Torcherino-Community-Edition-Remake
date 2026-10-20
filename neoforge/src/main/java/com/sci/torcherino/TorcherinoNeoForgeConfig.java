@@ -142,9 +142,33 @@ public final class TorcherinoNeoForgeConfig {
      */
     public static void register(ModContainer container) {
         container.registerConfig(ModConfig.Type.CLIENT, Client.SPEC, TorcherinoConfig.CLIENT_FILE_NAME);
-        container.registerConfig(ModConfig.Type.SERVER, Server.SPEC, TorcherinoConfig.SERVER_FILE_NAME);
+        container.registerConfig(serverType(), Server.SPEC, TorcherinoConfig.SERVER_FILE_NAME);
         container.getEventBus().addListener(TorcherinoNeoForgeConfig::onLoading);
         container.getEventBus().addListener(TorcherinoNeoForgeConfig::onReloading);
+    }
+
+    /**
+     * The server config type, resolved at runtime by name.
+     * <p>
+     * NeoForge renamed the config types in 26.3 (loader 12.0.12 ships LOCAL / CLIENT / SYNCED /
+     * STARTUP) while the build still compiles against loader 12.0.0, which only has COMMON /
+     * CLIENT / SERVER / STARTUP. Referencing either constant directly makes the jar die with
+     * {@code NoSuchFieldError} on the other loader, so pick whichever name exists.
+     */
+    private static ModConfig.Type serverType() {
+        for (ModConfig.Type type : ModConfig.Type.values()) {
+            if (type.name().equals("SYNCED")) {
+                return type;
+            }
+        }
+        for (ModConfig.Type type : ModConfig.Type.values()) {
+            if (type.name().equals("SERVER")) {
+                return type;
+            }
+        }
+        // Neither name is present: fall back to the first declared constant instead of naming
+        // COMMON, which no longer exists in the newer loaders either.
+        return ModConfig.Type.values()[0];
     }
 
     private static void onLoading(ModConfigEvent.Loading event) {

@@ -9,15 +9,11 @@
   "type": "minecraft:crafting_shapeless",
   "group": "torcherino:blockcompressedlantern",
   "ingredients": [
-    {
-      "item": "minecraft:lantern"
-    },
-    {
-      "item": "torcherino:blockcompressedtorcherino"
-    }
+    "minecraft:lantern",
+    "torcherino:blockcompressedtorcherino"
   ],
   "result": {
-    "item": "torcherino:blockcompressedlantern"
+    "id": "torcherino:blockcompressedlantern"
   },
   "neoforge:conditions": [
     {

@@ -14,18 +14,12 @@
     "SCS"
   ],
   "key": {
-    "C": {
-      "item": "minecraft:clock"
-    },
-    "T": {
-      "item": "minecraft:torch"
-    },
-    "S": {
-      "item": "minecraft:nether_star"
-    }
+    "C": "minecraft:clock",
+    "T": "minecraft:torch",
+    "S": "minecraft:nether_star"
   },
   "result": {
-    "item": "torcherino:blocktorcherino"
+    "id": "torcherino:blocktorcherino"
   },
   "neoforge:conditions": [
     {

@@ -45,6 +45,19 @@ jar {
     }
 }
 
+// Gradle 9 hands `gradle.properties` values back as ISO-8859-1 even though the file is UTF-8,
+// so every non-ASCII character arrives as mojibake (中文变成 "è¿™ä¸ª"). Re-decode such values;
+// a value that already contains characters above U+00FF was decoded correctly and is left alone.
+String decodeProp(Object value) {
+    String s = String.valueOf(value)
+    if (s.codePoints().anyMatch { int cp -> cp > 0xFF }) {
+        return s
+    }
+    String fixed = new String(s.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1),
+            java.nio.charset.StandardCharsets.UTF_8)
+    return fixed.contains('\uFFFD') ? s : fixed
+}
+
 processResources {
     // 钉住过滤字符集，避免中文经平台默认编码（GBK）二次编码。
     filteringCharset = 'UTF-8'
@@ -61,7 +74,7 @@ processResources {
             'mod_author'                   : mod_author,
             'mod_id'                       : mod_id,
             'license'                      : license,
-            'description'                  : project.description,
+            'description'                  : decodeProp(project.description),
             'neoforge_version'             : neoforge_version,
             'neoforge_loader_version_range': neoforge_loader_version_range,
             'credits'                      : credits,
