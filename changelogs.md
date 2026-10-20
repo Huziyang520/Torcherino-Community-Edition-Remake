@@ -26,3 +26,6 @@
   soft while the widgets stayed sharp. The screen now dims without the blur pass.
 - The NeoForge configuration screen no longer shows raw translation keys, and every section and entry
   has a label.
+- The redstone button no longer repeats its own label in a tooltip - the button text already
+  states the current mode, so hovering it only got in the way.
+- The NeoForge configuration screen tooltips are localized as well; earlier only the labels were.
