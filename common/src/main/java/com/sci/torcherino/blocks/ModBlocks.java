@@ -22,7 +22,13 @@ import com.sci.torcherino.blocks.items.TorcherinoStandingAndWallBlockItem;
 import com.sci.torcherino.platform.services.IRegistrationHelper;
 import com.sci.torcherino.platform.services.RegistryEntry;
 
+import com.sci.torcherino.Constants;
+
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -95,80 +101,80 @@ public final class ModBlocks {
 
         // ---- floor torches: original registry names ------------------------
         TORCHERINO = registerBlock(helper, "blocktorcherino",
-                () -> new BlockTorcherino(torchProperties()));
+                () -> new BlockTorcherino(torchProperties("blocktorcherino")));
         COMPRESSED_TORCHERINO = registerBlock(helper, "blockcompressedtorcherino",
-                () -> new BlockCompressedTorcherino(torchProperties()));
+                () -> new BlockCompressedTorcherino(torchProperties("blockcompressedtorcherino")));
         DOUBLE_COMPRESSED_TORCHERINO = registerBlock(helper, "blockdoublecompressedtorcherino",
-                () -> new BlockDoubleCompressedTorcherino(torchProperties()));
+                () -> new BlockDoubleCompressedTorcherino(torchProperties("blockdoublecompressedtorcherino")));
         TRIPLE_COMPRESSED_TORCHERINO = registerBlock(helper, "blocktriplecompressedtorcherino",
-                () -> new BlockTripleCompressedTorcherino(torchProperties()));
+                () -> new BlockTripleCompressedTorcherino(torchProperties("blocktriplecompressedtorcherino")));
 
         // ---- wall torches: new names, no items -----------------------------
         WALL_TORCHERINO = registerBlock(helper, "wall_blocktorcherino",
-                () -> new BlockWallTorcherino(torchProperties()));
+                () -> new BlockWallTorcherino(torchProperties("wall_blocktorcherino")));
         WALL_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blockcompressedtorcherino",
-                () -> new BlockWallCompressedTorcherino(torchProperties()));
+                () -> new BlockWallCompressedTorcherino(torchProperties("wall_blockcompressedtorcherino")));
         WALL_DOUBLE_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blockdoublecompressedtorcherino",
-                () -> new BlockWallDoubleCompressedTorcherino(torchProperties()));
+                () -> new BlockWallDoubleCompressedTorcherino(torchProperties("wall_blockdoublecompressedtorcherino")));
         WALL_TRIPLE_COMPRESSED_TORCHERINO = registerBlock(helper, "wall_blocktriplecompressedtorcherino",
-                () -> new BlockWallTripleCompressedTorcherino(torchProperties()));
+                () -> new BlockWallTripleCompressedTorcherino(torchProperties("wall_blocktriplecompressedtorcherino")));
 
         // ---- Lanterino: original registry names ----------------------------
         LANTERINO = registerBlock(helper, "blocklanterino",
-                () -> new BlockLanterino(lanterinoProperties()));
+                () -> new BlockLanterino(lanterinoProperties("blocklanterino")));
         COMPRESSED_LANTERINO = registerBlock(helper, "blockcompressedlanterino",
-                () -> new BlockCompressedLanterino(lanterinoProperties()));
+                () -> new BlockCompressedLanterino(lanterinoProperties("blockcompressedlanterino")));
         DOUBLE_COMPRESSED_LANTERINO = registerBlock(helper, "blockdoublecompressedlanterino",
-                () -> new BlockDoubleCompressedLanterino(lanterinoProperties()));
+                () -> new BlockDoubleCompressedLanterino(lanterinoProperties("blockdoublecompressedlanterino")));
         TRIPLE_COMPRESSED_LANTERINO = registerBlock(helper, "blocktriplecompressedlanterino",
-                () -> new BlockTripleCompressedLanterino(lanterinoProperties()));
+                () -> new BlockTripleCompressedLanterino(lanterinoProperties("blocktriplecompressedlanterino")));
 
         // ---- Lantern: original registry names ------------------------------
         LANTERN = registerBlock(helper, "blocklantern",
-                () -> new BlockLantern(lanternProperties()));
+                () -> new BlockLantern(lanternProperties("blocklantern")));
         COMPRESSED_LANTERN = registerBlock(helper, "blockcompressedlantern",
-                () -> new BlockCompressedLantern(lanternProperties()));
+                () -> new BlockCompressedLantern(lanternProperties("blockcompressedlantern")));
         DOUBLE_COMPRESSED_LANTERN = registerBlock(helper, "blockdoublecompressedlantern",
-                () -> new BlockDoubleCompressedLantern(lanternProperties()));
+                () -> new BlockDoubleCompressedLantern(lanternProperties("blockdoublecompressedlantern")));
         TRIPLE_COMPRESSED_LANTERN = registerBlock(helper, "blocktriplecompressedlantern",
-                () -> new BlockTripleCompressedLantern(lanternProperties()));
+                () -> new BlockTripleCompressedLantern(lanternProperties("blocktriplecompressedlantern")));
 
         // ---- items: one item per block --------------------------------------
         // Torches use StandingAndWallBlockItem so that placing against a wall produces
         // the wall variant, exactly like the vanilla torch item does. Both item classes
         // also print the recorded owner in the tooltip, see OwnerTooltip.
         CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new TorcherinoStandingAndWallBlockItem(
-                TORCHERINO.get(), WALL_TORCHERINO.get(), Direction.DOWN, new Item.Properties())));
+                TORCHERINO.get(), WALL_TORCHERINO.get(), Direction.DOWN, new Item.Properties().setId(itemKey("blocktorcherino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockcompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         COMPRESSED_TORCHERINO.get(), WALL_COMPRESSED_TORCHERINO.get(),
-                        Direction.DOWN, new Item.Properties())));
+                        Direction.DOWN, new Item.Properties().setId(itemKey("blockcompressedtorcherino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         DOUBLE_COMPRESSED_TORCHERINO.get(), WALL_DOUBLE_COMPRESSED_TORCHERINO.get(),
-                        Direction.DOWN, new Item.Properties())));
+                        Direction.DOWN, new Item.Properties().setId(itemKey("blockdoublecompressedtorcherino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         TRIPLE_COMPRESSED_TORCHERINO.get(), WALL_TRIPLE_COMPRESSED_TORCHERINO.get(),
-                        Direction.DOWN, new Item.Properties())));
+                        Direction.DOWN, new Item.Properties().setId(itemKey("blocktriplecompressedtorcherino")))));
 
         CREATIVE_ITEMS.add(helper.registerItem("blocklanterino",
-                () -> new TorcherinoBlockItem(LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(LANTERINO.get(), new Item.Properties().setId(itemKey("blocklanterino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockcompressedlanterino",
-                () -> new TorcherinoBlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(COMPRESSED_LANTERINO.get(), new Item.Properties().setId(itemKey("blockcompressedlanterino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlanterino",
-                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERINO.get(), new Item.Properties().setId(itemKey("blockdoublecompressedlanterino")))));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlanterino",
-                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERINO.get(), new Item.Properties().setId(itemKey("blocktriplecompressedlanterino")))));
 
         CREATIVE_ITEMS.add(helper.registerItem("blocklantern",
-                () -> new TorcherinoBlockItem(LANTERN.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(LANTERN.get(), new Item.Properties().setId(itemKey("blocklantern")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockcompressedlantern",
-                () -> new TorcherinoBlockItem(COMPRESSED_LANTERN.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(COMPRESSED_LANTERN.get(), new Item.Properties().setId(itemKey("blockcompressedlantern")))));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedlantern",
-                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERN.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(DOUBLE_COMPRESSED_LANTERN.get(), new Item.Properties().setId(itemKey("blockdoublecompressedlantern")))));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedlantern",
-                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERN.get(), new Item.Properties())));
+                () -> new TorcherinoBlockItem(TRIPLE_COMPRESSED_LANTERN.get(), new Item.Properties().setId(itemKey("blocktriplecompressedlantern")))));
     }
 
     /**
@@ -208,26 +214,28 @@ public final class ModBlocks {
     /**
      * Torch-like properties: light level 15, wood sound, zero hardness, no collision.
      */
-    private static BlockBehaviour.Properties torchProperties() {
+    private static BlockBehaviour.Properties torchProperties(String name) {
         return BlockBehaviour.Properties.of()
                 .noCollision()
                 .instabreak()
                 .lightLevel(state -> 15)
                 .sound(SoundType.WOOD)
-                .pushReaction(PushReaction.POPPED);
+                .pushReaction(PushReaction.POPPED)
+                .setId(blockKey(name));
     }
 
     /**
      * Pumpkin-like properties: hardness 1.0, wood sound, light level 15 and the pumpkin
      * map colour.
      */
-    private static BlockBehaviour.Properties lanterinoProperties() {
+    private static BlockBehaviour.Properties lanterinoProperties(String name) {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_ORANGE)
                 .strength(1.0F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 15)
-                .pushReaction(PushReaction.POPPED);
+                .pushReaction(PushReaction.POPPED)
+                .setId(blockKey(name));
     }
 
     /**
@@ -235,13 +243,24 @@ public final class ModBlocks {
      * light level 15, no full occlusion) with the same zero-push behaviour as the other
      * Torcherino blocks.
      */
-    private static BlockBehaviour.Properties lanternProperties() {
+    private static BlockBehaviour.Properties lanternProperties(String name) {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)
                 .strength(3.5F)
                 .sound(SoundType.LANTERN)
                 .lightLevel(state -> 15)
                 .noOcclusion()
-                .pushReaction(PushReaction.POPPED);
+                .pushReaction(PushReaction.POPPED)
+                .setId(blockKey(name));
+    }
+
+    /** Registry key of one of our blocks; 26.x requires it on the properties before construction. */
+    private static ResourceKey<Block> blockKey(String name) {
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+    }
+
+    /** Registry key of one of our block items. */
+    private static ResourceKey<Item> itemKey(String name) {
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
     }
 }

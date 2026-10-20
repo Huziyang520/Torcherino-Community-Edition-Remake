@@ -44,6 +44,10 @@ dependencies {
     compileOnly files("${rootDir}/libs/jade-neoforge-26.3.jar")
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
+    // Fabric does not ship night-config, so the TOML reader has to travel inside the jar
+    // (jar-in-jar). Without it the configuration loader dies with NoClassDefFoundError.
+    include group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
+    include group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
 }
 
 loom {
