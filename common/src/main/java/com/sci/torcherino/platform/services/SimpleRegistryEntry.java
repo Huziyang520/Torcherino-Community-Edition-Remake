@@ -4,7 +4,7 @@
  */
 package com.sci.torcherino.platform.services;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -15,16 +15,16 @@ import java.util.function.Supplier;
  */
 public final class SimpleRegistryEntry<T> implements RegistryEntry<T> {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final Supplier<T> supplier;
 
-    public SimpleRegistryEntry(ResourceLocation id, Supplier<T> supplier) {
+    public SimpleRegistryEntry(Identifier id, Supplier<T> supplier) {
         this.id = Objects.requireNonNull(id, "id");
         this.supplier = Objects.requireNonNull(supplier, "supplier");
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.id;
     }
 

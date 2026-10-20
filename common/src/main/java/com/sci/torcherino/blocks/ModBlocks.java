@@ -138,19 +138,19 @@ public final class ModBlocks {
         // the wall variant, exactly like the vanilla torch item does. Both item classes
         // also print the recorded owner in the tooltip, see OwnerTooltip.
         CREATIVE_ITEMS.add(helper.registerItem("blocktorcherino", () -> new TorcherinoStandingAndWallBlockItem(
-                TORCHERINO.get(), WALL_TORCHERINO.get(), new Item.Properties(), Direction.DOWN)));
+                TORCHERINO.get(), WALL_TORCHERINO.get(), Direction.DOWN, new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blockcompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         COMPRESSED_TORCHERINO.get(), WALL_COMPRESSED_TORCHERINO.get(),
-                        new Item.Properties(), Direction.DOWN)));
+                        Direction.DOWN, new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blockdoublecompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         DOUBLE_COMPRESSED_TORCHERINO.get(), WALL_DOUBLE_COMPRESSED_TORCHERINO.get(),
-                        new Item.Properties(), Direction.DOWN)));
+                        Direction.DOWN, new Item.Properties())));
         CREATIVE_ITEMS.add(helper.registerItem("blocktriplecompressedtorcherino",
                 () -> new TorcherinoStandingAndWallBlockItem(
                         TRIPLE_COMPRESSED_TORCHERINO.get(), WALL_TRIPLE_COMPRESSED_TORCHERINO.get(),
-                        new Item.Properties(), Direction.DOWN)));
+                        Direction.DOWN, new Item.Properties())));
 
         CREATIVE_ITEMS.add(helper.registerItem("blocklanterino",
                 () -> new TorcherinoBlockItem(LANTERINO.get(), new Item.Properties())));
@@ -210,7 +210,7 @@ public final class ModBlocks {
      */
     private static BlockBehaviour.Properties torchProperties() {
         return BlockBehaviour.Properties.of()
-                .noCollission()
+                .noCollision()
                 .instabreak()
                 .lightLevel(state -> 15)
                 .sound(SoundType.WOOD)

@@ -11,6 +11,7 @@ import com.sci.torcherino.api.GlobalBudget;
 import com.sci.torcherino.blocks.ModBlockEntities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -19,7 +20,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -29,6 +30,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -345,7 +348,7 @@ public class TileTorcherino extends BlockEntity {
 
     private void rebuildScanIfNeeded(ServerLevel level) {
         final BlockPos origin = this.worldPosition;
-        final int minSection = level.getMinSection();
+        final int minSection = level.getMinSectionY();
         final int sectionsCount = level.getSectionsCount();
         if (this.scanValid
                 && this.cachedXRange == this.xRange && this.cachedYRange == this.yRange
@@ -368,8 +371,8 @@ public class TileTorcherino extends BlockEntity {
         this.scanMaxX = origin.getX() + this.xRange;
         this.scanMinZ = origin.getZ() - this.zRange;
         this.scanMaxZ = origin.getZ() + this.zRange;
-        this.scanMinY = Math.max(level.getMinBuildHeight(), origin.getY() - this.yRange);
-        this.scanMaxY = Math.min(level.getMaxBuildHeight() - 1, origin.getY() + this.yRange);
+        this.scanMinY = Math.max(level.getMinY(), origin.getY() - this.yRange);
+        this.scanMaxY = Math.min(level.getMaxY() - 1, origin.getY() + this.yRange);
         this.scanValid = true;
         // A rebuilt window means different positions: saturation bookkeeping of the old area
         // says nothing about the new one.
@@ -509,12 +512,12 @@ public class TileTorcherino extends BlockEntity {
                     // is only matched in expectation, not call for call.
                     done = rollsRandomTick(level, rounds) ? 1 : 0;
                     if (done == 1) {
-                        block.randomTick(blockState, level, target, this.rand);
+                        blockState.randomTick(level, target, this.rand);
                     }
                 } else {
                     done = 0;
                     while (done < rounds) {
-                        block.randomTick(blockState, level, target, this.rand);
+                        blockState.randomTick(level, target, this.rand);
                         done++;
                         if (section.getBlockState(localX, localY, localZ) != blockState) {
                             // The block was replaced, removed or transformed: ticking the
@@ -636,7 +639,7 @@ public class TileTorcherino extends BlockEntity {
      * Torcherino passes to {@code randomTick}.</p>
      */
     private static boolean rollsRandomTick(ServerLevel level, int rounds) {
-        final int randomTickSpeed = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        final int randomTickSpeed = level.getGameRules().get(GameRules.RANDOM_TICK_SPEED);
         if (randomTickSpeed <= 0) {
             return false;
         }
@@ -882,64 +885,63 @@ public class TileTorcherino extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("XRange", this.xRange);
-        tag.putInt("ZRange", this.zRange);
-        tag.putInt("YRange", this.yRange);
-        tag.putInt("SpeedScaled", this.speedScaled);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt("XRange", this.xRange);
+        output.putInt("ZRange", this.zRange);
+        output.putInt("YRange", this.yRange);
+        output.putInt("SpeedScaled", this.speedScaled);
         // Readers that only know the classic model understand a whole level, not hundredths.
-        tag.putInt("Speed", this.speedScaled / SPEED_SCALE);
-        tag.putInt("RedstoneMode", this.redstoneMode);
-        tag.putBoolean("Active", this.active);
+        output.putInt("Speed", this.speedScaled / SPEED_SCALE);
+        output.putInt("RedstoneMode", this.redstoneMode);
+        output.putBoolean("Active", this.active);
         // Legacy keys are still written so a world stays readable by the classic radius
         // model; "Mode" mirrors the X range, which is what the old code used as radius.
-        tag.putByte("Mode", (byte) this.xRange);
-        tag.putBoolean("PoweredByRedstone", this.poweredByRedstone);
+        output.putByte("Mode", (byte) this.xRange);
+        output.putBoolean("PoweredByRedstone", this.poweredByRedstone);
         // Only written when known, so a world from before the owner gate is unchanged.
         if (this.owner != null) {
-            tag.putString("Owner", this.owner);
+            output.putString("Owner", this.owner);
             if (this.ownerName != null) {
-                tag.putString("OwnerName", this.ownerName);
+                output.putString("OwnerName", this.ownerName);
             }
-            tag.putBoolean("OthersCanEdit", this.othersCanEdit);
+            output.putBoolean("OthersCanEdit", this.othersCanEdit);
         }
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.poweredByRedstone = tag.getBoolean("PoweredByRedstone");
-        this.owner = tag.contains("Owner") ? tag.getString("Owner") : null;
-        this.ownerName = tag.contains("OwnerName") ? tag.getString("OwnerName") : null;
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        this.poweredByRedstone = input.getBooleanOr("PoweredByRedstone", false);
+        this.owner = input.getString("Owner").orElse(null);
+        this.ownerName = input.getString("OwnerName").orElse(null);
         // Missing key means "written before the flag existed" or "no owner": both are "others
         // may edit".
-        this.othersCanEdit = !tag.contains("OthersCanEdit") || tag.getBoolean("OthersCanEdit");
+        this.othersCanEdit = input.getBooleanOr("OthersCanEdit", true);
 
-        if (tag.contains("XRange")) {
-            this.xRange = clamp(tag.getInt("XRange"), MAX_XZ_RANGE);
-            this.zRange = clamp(tag.getInt("ZRange"), MAX_XZ_RANGE);
-            this.yRange = clamp(tag.getInt("YRange"), MAX_Y_RANGE);
-            this.speedScaled = clamp(tag.contains("SpeedScaled")
-                    ? tag.getInt("SpeedScaled") : tag.getInt("Speed") * SPEED_SCALE, MAX_SPEED_SCALED);
-            this.redstoneMode = clamp(tag.getInt("RedstoneMode"), REDSTONE_MODES - 1);
+        final Optional<Integer> xRange = input.getInt("XRange");
+        if (xRange.isPresent()) {
+            this.xRange = clamp(xRange.get(), MAX_XZ_RANGE);
+            this.zRange = clamp(input.getIntOr("ZRange", 0), MAX_XZ_RANGE);
+            this.yRange = clamp(input.getIntOr("YRange", 0), MAX_Y_RANGE);
+            this.speedScaled = clamp(input.getInt("SpeedScaled")
+                    .orElseGet(() -> input.getIntOr("Speed", 0) * SPEED_SCALE), MAX_SPEED_SCALED);
+            this.redstoneMode = clamp(input.getIntOr("RedstoneMode", 0), REDSTONE_MODES - 1);
         } else {
             // Classic save: one radius for all three axes, redstone could only switch it off.
-            final int radius = clamp(tag.getByte("Mode"), MAX_XZ_RANGE);
+            final int radius = clamp(input.getByteOr("Mode", (byte) 0), MAX_XZ_RANGE);
             this.xRange = radius;
             this.zRange = radius;
             this.yRange = radius;
-            this.speedScaled = clamp(tag.getByte("Speed") * SPEED_SCALE, MAX_SPEED_SCALED);
+            this.speedScaled = clamp(input.getByteOr("Speed", (byte) 0) * SPEED_SCALE, MAX_SPEED_SCALED);
             this.redstoneMode = REDSTONE_NORMAL;
         }
         this.updateActive();
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        final CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag);
-        return tag;
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return this.saveCustomOnly(registries);
     }
 
     @Override

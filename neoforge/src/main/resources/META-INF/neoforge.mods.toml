@@ -1,0 +1,44 @@
+# 本分支覆盖 26.1~26.2，按较低版 26.1.2 编译：
+# - modLoader / loaderVersion 在 26.3 起才降级为可选，26.1.2 线仍按旧写法保留，写了不影响 26.2。
+modLoader="javafml"
+loaderVersion="${neoforge_loader_version_range}"
+license="${license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+# displayURL / issueTrackerURL / 图标字段必须写在 [[mods]] 子表内；写在顶层会被
+# NeoForge 静默忽略，模组列表的“主页 / 问题”按钮点不动。
+displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino-community-edition-remake"
+issueTrackerURL="https://github.com/Huziyang520/Torcherino-Community-Edition-Remake/issues"
+# 图标字段存在跨版本分界：26.1.2 只读 logoFile；26.2 起读 iconFile（logoFile 已废弃）。
+# 一个 jar 要同时覆盖两版 => 两个都写。
+logoFile="${mod_id}.png"
+iconFile="${mod_id}.png"
+authors="${mod_author}"
+credits="${credits}"
+description='''${description}'''
+
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+# 不用 [26.1.2.94,)：那会漏掉 26.1 / 26.1.1 的 NeoForge 构建
+versionRange="[26.1,26.3)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+# 可选前置：装了 Jade 才显示倍率 / 状态 / 所有者行。
+modId="jade"
+type="optional"
+versionRange="[26.1,)"
+ordering="AFTER"
+side="CLIENT"

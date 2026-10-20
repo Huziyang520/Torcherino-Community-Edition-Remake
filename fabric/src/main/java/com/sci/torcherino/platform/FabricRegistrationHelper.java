@@ -13,7 +13,7 @@ import com.sci.torcherino.platform.services.SimpleRegistryEntry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,20 +32,20 @@ import java.util.function.Supplier;
  */
 public class FabricRegistrationHelper implements IRegistrationHelper {
 
-    private static ResourceLocation id(String name) {
-        return new ResourceLocation(Constants.MOD_ID, name);
+    private static Identifier id(String name) {
+        return Identifier.fromNamespaceAndPath(Constants.MOD_ID, name);
     }
 
     @Override
     public <T extends Block> RegistryEntry<T> registerBlock(String name, Supplier<T> supplier) {
-        final ResourceLocation id = id(name);
+        final Identifier id = id(name);
         final T value = Registry.register(BuiltInRegistries.BLOCK, id, supplier.get());
         return new SimpleRegistryEntry<>(id, () -> value);
     }
 
     @Override
     public <T extends Item> RegistryEntry<T> registerItem(String name, Supplier<T> supplier) {
-        final ResourceLocation id = id(name);
+        final Identifier id = id(name);
         final T value = Registry.register(BuiltInRegistries.ITEM, id, supplier.get());
         return new SimpleRegistryEntry<>(id, () -> value);
     }
@@ -53,7 +53,7 @@ public class FabricRegistrationHelper implements IRegistrationHelper {
     @Override
     public <T extends BlockEntity> RegistryEntry<BlockEntityType<T>> registerBlockEntityType(
             String name, BlockEntityFactory<T> factory, Supplier<Block[]> validBlocks) {
-        final ResourceLocation id = id(name);
+        final Identifier id = id(name);
         // Fabric API exists precisely so that mods do not have to touch the package
         // private BlockEntityType.BlockEntitySupplier.
         final BlockEntityType<T> type = FabricBlockEntityTypeBuilder

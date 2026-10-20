@@ -13,7 +13,7 @@ import com.sci.torcherino.blocks.tiles.TileTripleCompressedTorcherino;
 import com.sci.torcherino.platform.Services;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -64,12 +64,12 @@ public final class TorcherinoRegistry {
         }
 
         final String[] parts = trimmed.split(":", 2);
-        final ResourceLocation id = ResourceLocation.tryParse(parts[0] + ":" + parts[1]);
+        final Identifier id = Identifier.tryParse(parts[0] + ":" + parts[1]);
         if (id == null || !BuiltInRegistries.BLOCK.containsKey(id)) {
             Constants.LOG.info("Could not find block: {}, ignoring", trimmed);
             return;
         }
-        final Block block = BuiltInRegistries.BLOCK.get(id);
+        final Block block = BuiltInRegistries.BLOCK.get(id).map(net.minecraft.core.Holder::value).orElse(null);
         Constants.LOG.info("Blacklisting block: {}", id);
         blacklistBlock(block);
     }

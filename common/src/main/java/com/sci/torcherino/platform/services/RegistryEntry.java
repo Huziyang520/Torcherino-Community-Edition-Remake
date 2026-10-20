@@ -4,7 +4,7 @@
  */
 package com.sci.torcherino.platform.services;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Supplier;
 
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  */
 public interface RegistryEntry<T> extends Supplier<T> {
 
-    ResourceLocation getId();
+    Identifier getId();
 
     /** {@code true} when the entry has been registered and {@link #get()} is usable. */
     default boolean isPresent() {

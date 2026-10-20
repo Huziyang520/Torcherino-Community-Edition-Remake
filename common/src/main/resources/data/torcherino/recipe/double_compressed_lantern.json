@@ -1,0 +1,39 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "condition": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "torcherino:blockdoublecompressedlantern",
+  "ingredients": [
+    {
+      "item": "minecraft:lantern"
+    },
+    {
+      "item": "torcherino:blockdoublecompressedtorcherino"
+    }
+  ],
+  "result": {
+    "item": "torcherino:blockdoublecompressedlantern"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "type": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    }
+  ]
+}

@@ -5,7 +5,6 @@
  */
 package com.sci.torcherino;
 
-import com.mojang.authlib.GameProfile;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.platform.Services;
 
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -53,15 +51,9 @@ public final class TorcherinoInteraction {
             // Unreadable owner: show what is stored instead of hiding it.
             return owner;
         }
-        final ServerPlayer online = viewer.server.getPlayerList().getPlayer(uuid);
+        final ServerPlayer online = viewer.level().getServer().getPlayerList().getPlayer(uuid);
         if (online != null) {
-            return online.getGameProfile().getName();
-        }
-        if (viewer.server.getProfileCache() != null) {
-            final Optional<GameProfile> cached = viewer.server.getProfileCache().get(uuid);
-            if (cached.isPresent()) {
-                return cached.get().getName();
-            }
+            return online.getGameProfile().name();
         }
         return owner.length() <= 8 ? owner : owner.substring(0, 8);
     }
@@ -99,8 +91,8 @@ public final class TorcherinoInteraction {
             // interaction just like it rejects the editor values.
             if (!torcherino.mayEdit(player)) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.displayClientMessage(
-                            Component.translatable("message.torcherino.locked"), true);
+                    serverPlayer.sendOverlayMessage(
+                            Component.translatable("message.torcherino.locked"));
                 }
                 return true;
             }
@@ -109,7 +101,7 @@ public final class TorcherinoInteraction {
             // nothing can conflict with vanilla sneak.
             torcherino.changeMode(player.isShiftKeyDown());
             if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.displayClientMessage(torcherino.getDescription(), true);
+                serverPlayer.sendOverlayMessage(torcherino.getDescription());
             }
         }
 
