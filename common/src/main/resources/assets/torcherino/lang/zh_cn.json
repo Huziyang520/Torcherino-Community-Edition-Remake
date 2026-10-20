@@ -85,7 +85,7 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "上限值",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "全局上限值",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "可能导致部分位置加速失效，谨慎开启",
-  "message.torcherino.join_notice": "TorcherinoCER: 部分配方受服务端配置文件控制且默认均启用。若没有配方（可能是因为旧版本配置默认关闭），请检查游戏内配置（需安装Cloth Config API）或者配置文件。本模组内置一些优化配置（部分影响加速效率，可根据需求启用，默认仅开启部分）。该提示可配置关闭。",
+  "message.torcherino.join_notice": "TorcherinoCER: 随着模组更新默认配置可能会更新或修改，请检查配置文件或配置界面（1.20-1.20.1 版本或者 Fabric 端配置界面由 Cloth Config API 提供）。本模组可能存在性能或者功能上的问题，请反馈给作者。",
   "gui.torcherino.config.ownerSystem": "所有者系统",
   "gui.torcherino.config.group.owner": "所有者",
   "gui.torcherino.config.tooltip.ownerSystem": "默认关闭。开启后，放置加速火把即归放置者所有：\n编辑界面显示所有者一行，并出现「取消认领」「他人可改」两个按钮。\n关闭时不记录所有者，所有人都能改；旧存档里的认领记录保留但被忽略，重新开启即恢复。"

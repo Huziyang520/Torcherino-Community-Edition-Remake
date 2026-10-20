@@ -398,6 +398,20 @@ public class TorcherinoScreen extends Screen {
     }
 
     /**
+     * {@code E} closes the editor, the same way the inventory reacts to it. Going through
+     * {@link #onClose()} keeps the single save path, so the values are sent back exactly once
+     * no matter which way the screen is left.
+     */
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_E) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    /**
      * A slider whose handle position and reported value are kept apart.
      *
      * <p>The handle position is a raw {@code 0..1} fraction taken straight from the mouse,
@@ -530,12 +544,17 @@ public class TorcherinoScreen extends Screen {
 
             if (dimmed) {
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            } else if (this.isHoveredOrFocused()) {
-                // A faint veil is all the feedback the textured track needs - a texture as
-                // well, so the editor never paints a bare rectangle.
+            } else if (this.isHovered()) {
+                // A faint veil over the track. Blending must be on: without it the alpha byte
+                // of the tile is ignored and the white texture would cover the track (and the
+                // white label on it) completely. Only the hover state counts, so the slider
+                // does not stay lit after it was dragged and the mouse moved away.
+                RenderSystem.enableBlend();
                 graphics.blit(HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
+                graphics.flush();
+                RenderSystem.disableBlend();
             }
 
             final var font = Minecraft.getInstance().font;
