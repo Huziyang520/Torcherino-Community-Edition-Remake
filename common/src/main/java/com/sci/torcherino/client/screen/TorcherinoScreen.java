@@ -325,11 +325,7 @@ public class TorcherinoScreen extends Screen {
         final Button redstoneButton = Button.builder(redstoneButtonLabel(this.redstoneMode), button -> {
             this.redstoneMode = (this.redstoneMode + 1) % TileTorcherino.REDSTONE_MODES;
             button.setMessage(redstoneButtonLabel(this.redstoneMode));
-            // The tooltip is built once when the widget is created, so it has to be rebuilt
-            // here as well - otherwise it keeps showing the mode the screen was opened with.
-            button.setTooltip(Tooltip.create(redstoneButtonLabel(this.redstoneMode)));
         }).bounds(x, buttonY, buttonWidth, BUTTON_HEIGHT)
-                .tooltip(Tooltip.create(redstoneButtonLabel(this.redstoneMode)))
                 .build();
         redstoneButton.active = editable;
         this.addRenderableWidget(redstoneButton);
@@ -340,6 +336,10 @@ public class TorcherinoScreen extends Screen {
         // Dim only: the blurred pass treats everything drawn before it as world content, so the
         // panel came out soft while the widgets stayed sharp. This variant dims without blur.
         this.extractTransparentBackground(graphics);
+        // Everything drawn before nextStratum() belongs to the (blurred) background stratum,
+        // which is why the panel came out soft. Starting a new stratum puts the whole editor
+        // in the foreground, above the blur.
+        graphics.nextStratum();
         this.drawPanel(graphics);
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
