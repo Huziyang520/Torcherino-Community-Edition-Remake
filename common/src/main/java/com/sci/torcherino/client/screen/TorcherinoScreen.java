@@ -331,16 +331,22 @@ public class TorcherinoScreen extends Screen {
         this.addRenderableWidget(redstoneButton);
     }
 
+    /**
+     * The background hook, not {@code extractRenderState}: the framework calls
+     * {@code extractBackground(...)} first and then {@code extractRenderState(...)}, and every
+     * draw submitted before {@code nextStratum()} belongs to the background stratum, which gets
+     * blurred. Overriding the hook keeps the order dim -> panel -> widgets and takes the panel
+     * out of the blurred stratum (SKILL 10.40 / 10.43).
+     */
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        // Dim only: the blurred pass treats everything drawn before it as world content, so the
-        // panel came out soft while the widgets stayed sharp. This variant dims without blur.
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         this.extractTransparentBackground(graphics);
-        // Everything drawn before nextStratum() belongs to the (blurred) background stratum,
-        // which is why the panel came out soft. Starting a new stratum puts the whole editor
-        // in the foreground, above the blur.
         graphics.nextStratum();
         this.drawPanel(graphics);
+    }
+
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
         final Component title = this.getTitle();
