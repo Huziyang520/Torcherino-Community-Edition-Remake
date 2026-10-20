@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Valeur du plafond",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Valeur du plafond global",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "Peut cesser d'accelerer certaines positions - a activer avec prudence",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : les recettes Torcherino sont contrôlées par la configuration du serveur et sont activées par défaut depuis la 1.4.0. Si une recette manque, vérifiez les réglages en jeu ou le fichier de configuration. Cet avis peut être désactivé dans le fichier de configuration.",
   "gui.torcherino.config.ownerSystem": "Système de propriétaire",
   "gui.torcherino.config.group.owner": "Propriétaire",
   "gui.torcherino.config.tooltip.ownerSystem": "DÉSACTIVÉ PAR DÉFAUT. Activé, poser un Torcherino vous l'attribue :\nl'éditeur affiche la ligne du propriétaire et les boutons de libération et de permission.\nDésactivé, rien n'est attribué et tout le monde peut modifier ; les anciennes attributions sont conservées mais ignorées.",
@@ -93,7 +92,7 @@
   "torcherino.configuration.gui.useGui": "Open the graphical editor on right click",
   "torcherino.configuration.gui.freeSpeedMultiplier": "Free speed multiplier",
   "torcherino.configuration.gui.joinNotice": "Show the join notice",
-  "torcherino.configuration.general": "Server",
+  "torcherino.configuration.general": "Serveur",
   "torcherino.configuration.general.overPoweredRecipe": "Use the cheap recipe",
   "torcherino.configuration.general.compressedTorcherino": "Compressed Torcherino recipes",
   "torcherino.configuration.general.doubleCompressedTorcherino": "Double Compressed recipes",
@@ -110,7 +109,12 @@
   "torcherino.configuration.general.ownerSystem": "Owner system",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Only accelerate while the owner is online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Statistics log interval (s)",
-  "torcherino.configuration.blacklist": "Blacklist",
+  "torcherino.configuration.blacklist": "Liste noire",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blacklisted blocks",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities",
+  "torcherino.configuration.title": "Torcherino Settings",
+  "torcherino.configuration.section.torcherino.client.toml": "Client settings",
+  "torcherino.configuration.section.torcherino.client.toml.title": "Client settings",
+  "torcherino.configuration.section.torcherino.server.toml": "Server settings",
+  "torcherino.configuration.section.torcherino.server.toml.title": "Server settings"
 }

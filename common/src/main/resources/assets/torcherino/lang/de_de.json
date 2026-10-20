@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Limitwert",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Globaler Limitwert",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "Kann manche Positionen von der Beschleunigung ausschliessen - mit Bedacht aktivieren",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : Die Torcherino-Rezepte werden von der Serverkonfiguration gesteuert und sind seit 1.4.0 standardmäßig aktiviert. Fehlt ein Rezept, prüfe die Einstellungen im Spiel oder die Konfigurationsdatei. Dieser Hinweis lässt sich in der Konfigurationsdatei abschalten.",
   "gui.torcherino.config.ownerSystem": "Besitzersystem",
   "gui.torcherino.config.group.owner": "Besitzer",
   "gui.torcherino.config.tooltip.ownerSystem": "STANDARDMÄSSIG AUS. Wenn an, beansprucht das Setzen eines Torcherino ihn für dich:\nder Editor zeigt die Besitzerzeile und die Knöpfe zum Freigeben und für die Rechte.\nWenn aus, wird nichts beansprucht und jeder darf bearbeiten; alte Ansprüche bleiben erhalten, werden aber ignoriert.",
@@ -110,7 +109,12 @@
   "torcherino.configuration.general.ownerSystem": "Owner system",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Only accelerate while the owner is online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Statistics log interval (s)",
-  "torcherino.configuration.blacklist": "Blacklist",
+  "torcherino.configuration.blacklist": "Sperrliste",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blacklisted blocks",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities",
+  "torcherino.configuration.title": "Torcherino Settings",
+  "torcherino.configuration.section.torcherino.client.toml": "Client settings",
+  "torcherino.configuration.section.torcherino.client.toml.title": "Client settings",
+  "torcherino.configuration.section.torcherino.server.toml": "Server settings",
+  "torcherino.configuration.section.torcherino.server.toml.title": "Server settings"
 }

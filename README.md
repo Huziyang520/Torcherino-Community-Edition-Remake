@@ -12,6 +12,8 @@ Torcherino Community Edition Remake restores the content of the classic version 
 
 Place a Torcherino and the world inside its area speeds up: crops and saplings grow, furnaces smelt, hoppers move, mob spawners spawn — anything that normally does something once per game tick simply does it several times in the same tick.
 
+Release history and past changes: see [changelogs.md](changelogs.md).
+
 ### Features
 
 - **Area acceleration** — accelerates crop growth, random ticks and machine operations throughout a configurable area.
@@ -210,6 +212,8 @@ Feedback and suggestions: <https://github.com/Huziyang520/Torcherino-Community-E
 ## 中文说明
 
 **加速火把 社区版重制版**
+
+往期更新的改动见 [changelogs.md](changelogs.md)。
 
 ### 功能
 
