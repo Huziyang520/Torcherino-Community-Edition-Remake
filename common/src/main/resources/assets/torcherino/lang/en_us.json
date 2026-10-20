@@ -85,7 +85,7 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Cap value",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Global cap value",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "May stop some positions from being accelerated - enable with care",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : the Torcherino recipes are controlled by the server configuration file and are enabled by default since 1.4.0. If a recipe is missing, check the in-game settings or the configuration file. This notice can be turned off in the configuration file.",
+  "message.torcherino.join_notice": "TorcherinoCER: the default settings may change or be edited as the mod updates - please check the config file or the configuration screen (on 1.20-1.20.1 and on Fabric the screen comes from Cloth Config API). This mod may have performance or functionality issues; please report them to the author.",
   "gui.torcherino.config.ownerSystem": "Owner system",
   "gui.torcherino.config.group.owner": "Owner",
   "gui.torcherino.config.tooltip.ownerSystem": "OFF BY DEFAULT. When on, placing a Torcherino claims it for you:\nthe editor shows the owner row and the unclaim / permission buttons.\nWhen off, nothing is claimed and every player may edit; old claims are kept but ignored.",
@@ -114,5 +114,8 @@
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Owner must be online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Stats log interval (s)",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blocked blocks",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Blocked block entities"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Blocked block entities",
+  "torcherino.configuration.general": "Server",
+  "torcherino.configuration.blacklist": "Blacklist",
+  "torcherino.configuration.gui": "Client"
 }

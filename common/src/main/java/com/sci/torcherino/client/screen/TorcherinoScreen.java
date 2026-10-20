@@ -333,7 +333,10 @@ public class TorcherinoScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTick);
+        // Dim only, never the blurred pass: the blur treats everything drawn before it as
+        // world content, which made the panel (drawn right after it) come out soft while the
+        // widgets stayed sharp (SKILL 10.40). renderTransparentBackground dims without blur.
+        this.renderTransparentBackground(graphics);
         this.drawPanel(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
@@ -395,6 +398,19 @@ public class TorcherinoScreen extends Screen {
                     this.speedScaled, this.redstoneMode);
         }
         super.onClose();
+    }
+
+    /**
+     * {@code E} closes the editor, the same way the inventory reacts to it. It goes through
+     * {@link #onClose()} so the values are sent back exactly once.
+     */
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_E) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     /**
@@ -530,12 +546,16 @@ public class TorcherinoScreen extends Screen {
 
             if (dimmed) {
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            } else if (this.isHoveredOrFocused()) {
-                // A faint veil is all the feedback the textured track needs - a texture as
-                // well, so the editor never paints a bare rectangle.
+            } else if (this.isHovered()) {
+                // Blending has to be on, otherwise the alpha byte of the tile is ignored and
+                // the white texture covers the track and its white label completely. Only the
+                // hover state lights the slider up, so it does not stay lit after a drag.
+                RenderSystem.enableBlend();
                 graphics.blit(HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
+                graphics.flush();
+                RenderSystem.disableBlend();
             }
 
             final var font = Minecraft.getInstance().font;

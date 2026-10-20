@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Limitwert",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Globaler Limitwert",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "Kann manche Positionen von der Beschleunigung ausschliessen - mit Bedacht aktivieren",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : Die Torcherino-Rezepte werden von der Serverkonfiguration gesteuert und sind seit 1.4.0 standardmäßig aktiviert. Fehlt ein Rezept, prüfe die Einstellungen im Spiel oder die Konfigurationsdatei. Dieser Hinweis lässt sich in der Konfigurationsdatei abschalten.",
   "gui.torcherino.config.ownerSystem": "Besitzersystem",
   "gui.torcherino.config.group.owner": "Besitzer",
   "gui.torcherino.config.tooltip.ownerSystem": "STANDARDMÄSSIG AUS. Wenn an, beansprucht das Setzen eines Torcherino ihn für dich:\nder Editor zeigt die Besitzerzeile und die Knöpfe zum Freigeben und für die Rechte.\nWenn aus, wird nichts beansprucht und jeder darf bearbeiten; alte Ansprüche bleiben erhalten, werden aber ignoriert.",
@@ -114,5 +113,8 @@
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Nur wenn Besitzer online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Statistik-Logintervall (s)",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Gesperrte Bloecke",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Gesperrte Block-Entitaeten"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Gesperrte Block-Entitaeten",
+  "torcherino.configuration.general": "Server",
+  "torcherino.configuration.blacklist": "Sperrliste",
+  "torcherino.configuration.gui": "Client"
 }

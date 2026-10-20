@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "Значение лимита",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "Значение общего лимита",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "Некоторые позиции могут перестать ускоряться - включайте осторожно",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : рецепты Torcherino управляются конфигурацией сервера и с версии 1.4.0 включены по умолчанию. Если рецепта нет, проверьте настройки в игре или файл конфигурации. Это уведомление можно отключить в файле конфигурации.",
   "gui.torcherino.config.ownerSystem": "Система владельца",
   "gui.torcherino.config.group.owner": "Владелец",
   "gui.torcherino.config.tooltip.ownerSystem": "ПО УМОЛЧАНИЮ ВЫКЛЮЧЕНО. Если включено, установленный Torcherino сразу принадлежит вам:\nв редакторе появляются строка владельца и кнопки снятия владения и прав.\nЕсли выключено, владелец не записывается и редактировать может любой; старые записи сохраняются, но игнорируются.",
@@ -114,5 +113,8 @@
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Только когда владелец онлайн",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Интервал статистики (с)",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Запрещенные блоки",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Запрещенные блок-сущности"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Запрещенные блок-сущности",
+  "torcherino.configuration.general": "Сервер",
+  "torcherino.configuration.blacklist": "Чёрный список",
+  "torcherino.configuration.gui": "Client"
 }
