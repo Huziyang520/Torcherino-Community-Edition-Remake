@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "condition": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "group": "torcherino:blockdoublecompressedtorcherino",
+  "pattern": [
+    "TTT",
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "torcherino:blockcompressedtorcherino"
+    }
+  },
+  "result": {
+    "item": "torcherino:blockdoublecompressedtorcherino"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    },
+    {
+      "type": "torcherino:config",
+      "config": "doubleCompressedTorcherino",
+      "value": true
+    }
+  ]
+}

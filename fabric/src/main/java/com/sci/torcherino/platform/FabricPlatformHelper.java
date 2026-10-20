@@ -6,6 +6,8 @@ package com.sci.torcherino.platform;
 
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.network.TorcherinoFabricNetworking;
+import com.sci.torcherino.network.TorcherinoPayloads;
+import com.sci.torcherino.network.TorcherinoServerHandlers;
 import com.sci.torcherino.platform.services.IPlatformHelper;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -41,21 +43,21 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public void sendModifierKeyToServer(boolean pressed) {
-        TorcherinoFabricNetworking.sendModifierKey(pressed);
+        TorcherinoFabricNetworking.sendToServer(new TorcherinoPayloads.ModifierKey(pressed));
     }
 
     @Override
     public void openTorcherinoScreen(ServerPlayer player, TileTorcherino torcherino) {
-        TorcherinoFabricNetworking.openScreen(player, torcherino);
+        TorcherinoFabricNetworking.openScreen(player, TorcherinoServerHandlers.openScreenPacket(player, torcherino));
     }
 
     @Override
     public void sendTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        TorcherinoFabricNetworking.sendValues(pos, xRange, zRange, yRange, speed, redstoneMode);
+        TorcherinoFabricNetworking.sendToServer(new TorcherinoPayloads.SetValues(pos, xRange, zRange, yRange, speed, redstoneMode));
     }
 
     @Override
     public void sendTorcherinoOwnerSettings(BlockPos pos, boolean othersCanEdit, boolean unclaim) {
-        TorcherinoFabricNetworking.sendOwnerSettings(pos, othersCanEdit, unclaim);
+        TorcherinoFabricNetworking.sendToServer(new TorcherinoPayloads.OwnerSettings(pos, othersCanEdit, unclaim));
     }
 }

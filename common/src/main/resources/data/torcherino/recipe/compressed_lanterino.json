@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "torcherino:blockcompressedlanterino",
+  "ingredients": [
+    {
+      "item": "minecraft:pumpkin"
+    },
+    {
+      "item": "torcherino:blockcompressedtorcherino"
+    }
+  ],
+  "result": {
+    "item": "torcherino:blockcompressedlanterino"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "torcherino:config",
+      "config": "compressedTorcherino",
+      "value": true
+    }
+  ]
+}

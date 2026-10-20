@@ -5,14 +5,16 @@
  */
 package com.sci.torcherino.blocks.items;
 
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Block item that keeps showing the owner of the Torcherino it was broken from.
@@ -27,8 +29,9 @@ public class TorcherinoBlockItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        OwnerTooltip.appendOwner(stack, level, tooltip);
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display,
+                                Consumer<Component> tooltip, TooltipFlag flag) {
+        OwnerTooltip.appendOwner(stack, tooltip);
+        super.appendHoverText(stack, context, display, tooltip, flag);
     }
 }

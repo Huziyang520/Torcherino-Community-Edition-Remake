@@ -1,32 +1,52 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev.legacyforge'
+    id 'net.neoforged.moddev'
 }
 
-legacyForge {
-    mcpVersion = minecraft_version
-    if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
-        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
-    }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
+neoForge {
+    // 与 neoforge 模块使用同一个补丁过的 Minecraft：26.3 的 neoform 版本号在 nexus 上并非
+    // 26.3-1，直接用 NeoForge 版本让 MDG 自己解析，避免另建一条 vanilla 管线。
+    version = neoforge_version
+    // Automatically enable AccessTransformers if the file exists
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
     }
 }
 
 dependencies {
-    // No Mixin is used anywhere in this mod, so the template's mixin dependency was removed.
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    // TOML configuration. Forge ships night-config at runtime; Fabric bundles it via
-    // the loader project's `include` configuration.
+    // Fabric and NeoForge both bundle Fabric Mixin, so it is safe to use it in common.
+    // This mod does not use Mixin; the dependency is kept out on purpose.
+
+    repositories {
+        maven {
+            name = 'AliyunPublic'
+            url = 'https://maven.aliyun.com/repository/public'
+        }
+        mavenCentral()
+        maven {
+            name = 'Shedaniel'
+            url = 'https://maven.shedaniel.me/'
+        }
+    }
+
+    // TOML configuration reader used on the Fabric side (NeoForge has its own config system
+    // but the same common sources are compiled twice, so both need the classes on the
+    // compile classpath). Compile time only: on Fabric they are bundled through Loom's
+    // jar-in-jar, on NeoForge the loader ships them.
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
-    // Cloth Config API, optional. The Forge artifact is published in official mappings, so a
-    // plain compileOnly is enough; the screen is only built when the mod is installed.
-    compileOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-    // Jade (Waila) API, optional. The API package is loader independent; the Forge artifact
-    // is the one the common sources compile against.
-    compileOnly "maven.modrinth:jade:${jade_version}+forge"
+
+    // Optional Cloth Config API (Fabric only usage, but the common sources compile against
+    // it). Vendored under libs/ as a plain file dependency: this machine cannot reach some
+    // Maven hosts, and the NeoForge artifact ships in Mojang mappings, so compileOnly is
+    // enough. Never bundled, never a dependency.
+    compileOnly files("${rootDir}/libs/cloth-config-neoforge-26.3.159.jar")
+
+    // Optional Jade (Waila successor) API. The 26.x Jade jar is not on any reachable Maven
+    // for this machine, so it is vendored under libs/ (git ignored) and used as a plain
+    // file dependency. Compile time only.
+    compileOnly files("${rootDir}/libs/jade-neoforge-26.3.jar")
 }
 
 configurations {
@@ -43,4 +63,21 @@ configurations {
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+configurations.matching { it.name in ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'] }.configureEach {
+    attributes {
+        attribute(loaderAttribute, 'common')
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named(variant) {
+            attributes {
+                attribute(loaderAttribute, 'common')
+            }
+        }
+    }
 }

@@ -15,7 +15,7 @@ import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -38,11 +38,11 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
     public static final TorcherinoJadeProvider INSTANCE = new TorcherinoJadeProvider();
 
     /** Provider id, also the name shown in Jade's own provider list. */
-    private static final ResourceLocation UID = new ResourceLocation(Constants.MOD_ID, "acceleration");
+    private static final Identifier UID = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "acceleration");
     /** Config keys of the three lines. */
-    private static final ResourceLocation SHOW_SPEED = new ResourceLocation(Constants.MOD_ID, "speed");
-    private static final ResourceLocation SHOW_STATE = new ResourceLocation(Constants.MOD_ID, "state");
-    private static final ResourceLocation SHOW_OWNER = new ResourceLocation(Constants.MOD_ID, "owner");
+    private static final Identifier SHOW_SPEED = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "speed");
+    private static final Identifier SHOW_STATE = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "state");
+    private static final Identifier SHOW_OWNER = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "owner");
 
     private TorcherinoJadeProvider() {
     }
@@ -64,7 +64,7 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public Identifier getUid() {
         return UID;
     }
 
@@ -115,7 +115,7 @@ public final class TorcherinoJadeProvider implements IBlockComponentProvider {
             if (client.getConnection() != null) {
                 final PlayerInfo info = client.getConnection().getPlayerInfo(uuid);
                 if (info != null) {
-                    return Component.translatable("gui.torcherino.owner", info.getProfile().getName());
+                    return Component.translatable("gui.torcherino.owner", info.getProfile().name());
                 }
             }
         } catch (IllegalArgumentException e) {

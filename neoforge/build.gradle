@@ -1,0 +1,67 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+}
+
+repositories {
+    // 国内镜像与 Maven Central 放在前面：本机访问 maven.neoforged.net 会 TLS 握手失败，
+    // 而 LWJGL 一类公共依赖在镜像上都有，因此让它们优先被解析。
+    maven { name = 'AliyunPublic'; url = 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+        }
+        client {
+            client()
+            gameDirectory = this.mkdir(this.file('runs/client'))
+        }
+        server {
+            server()
+            gameDirectory = this.mkdir(this.file('runs/server'))
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    // The neoforge module compiles the common sources as well (see multiloader-loader.gradle),
+    // so every optional API common imports has to be on this classpath too. All of them are
+    // compile time only: nothing is bundled and nothing is required at runtime.
+    compileOnly files("${rootDir}/libs/cloth-config-neoforge-26.3.159.jar")
+    compileOnly files("${rootDir}/libs/jade-neoforge-26.3.jar")
+    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
+    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+configurations.matching { it.name in ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'] }.configureEach {
+    attributes {
+        attribute(loaderAttribute, 'neoforge')
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+        configurations.named(variant) {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
+    }
+}

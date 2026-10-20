@@ -4,33 +4,34 @@
  *      （以旧的 torcherino.png 为底，去掉右上角为红石按钮预留的凸块，成为完整矩形），以九宫格
  *      方式拉伸；滑条凹槽与手柄同样使用贴图；按钮直接使用原版 Button 控件。
  *      布局排在一条统一栅格上：标题 / 所有者行 / 四条等宽滑条 / 一行按钮；面板宽度只由按钮行
- *      （按"最多按钮 + 最长标签"计算）与滑条列决定，所以无论有没有所有者、红石模式是哪一个，
+ *      （按“最多按钮 + 最长标签”计算）与滑条列决定，所以无论有没有所有者、红石模式是哪一个，
  *      面板尺寸都完全一样。
  *      滑条为自绘控件：手柄位置（连续）与数值（整档）分开保存 —— 自由倍率模式下手柄可在档位之间
  *      自由拖动、数值仍取整；否则手柄被吸附到最近整档。文字一律无阴影绘制，避免叠加发虚。
  */
 package com.sci.torcherino.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.platform.Services;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 
@@ -50,18 +51,21 @@ public class TorcherinoScreen extends Screen {
 
     // ---- textures ------------------------------------------------------------
 
+    /** Pipeline every GUI texture is drawn with in this version. */
+    private static final RenderPipeline GUI_TEXTURED = RenderPipelines.GUI_TEXTURED;
+
     /** Panel artwork: the classic light grey frame, with the old power-button notch removed. */
-    private static final ResourceLocation PANEL_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_panel.png");
+    private static final Identifier PANEL_TEXTURE =
+            Identifier.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_panel.png");
     /** Recessed track of a slider. */
-    private static final ResourceLocation TRACK_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_track.png");
+    private static final Identifier TRACK_TEXTURE =
+            Identifier.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_track.png");
     /** Raised handle of a slider. */
-    private static final ResourceLocation HANDLE_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_handle.png");
+    private static final Identifier HANDLE_TEXTURE =
+            Identifier.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_handle.png");
     /** Faint veil painted over a hovered slider; a texture so the whole UI stays textured. */
-    private static final ResourceLocation HOVER_TEXTURE =
-            new ResourceLocation("torcherino", "textures/gui/torcherino_slider_hover.png");
+    private static final Identifier HOVER_TEXTURE =
+            Identifier.fromNamespaceAndPath("torcherino", "textures/gui/torcherino_slider_hover.png");
     /** The hover veil is a flat 8x16 tile: used 1:1 vertically and stretched horizontally. */
     private static final int HOVER_TEXTURE_WIDTH = 8;
     private static final int HOVER_TEXTURE_HEIGHT = 16;
@@ -109,10 +113,10 @@ public class TorcherinoScreen extends Screen {
 
     // ---- colours -------------------------------------------------------------
 
-    private static final int COLOR_TITLE = 0x404040;
-    private static final int COLOR_TEXT = 0x404040;
-    private static final int COLOR_MUTED = 0x707070;
-    private static final int COLOR_TRACK_TEXT = 0xFFFFFF;
+    private static final int COLOR_TITLE = 0xFF404040;
+    private static final int COLOR_TEXT = 0xFF404040;
+    private static final int COLOR_MUTED = 0xFF707070;
+    private static final int COLOR_TRACK_TEXT = 0xFFFFFFFF;
 
     private final BlockPos pos;
     /** Translation key of the block this editor belongs to, e.g. a compressed Lanterino. */
@@ -332,19 +336,19 @@ public class TorcherinoScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        this.extractBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
-        super.render(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
         final Component title = this.getTitle();
-        graphics.drawString(this.font, title, this.left + (this.panelWidth - this.font.width(title)) / 2,
+        graphics.text(this.font, title, this.left + (this.panelWidth - this.font.width(title)) / 2,
                 this.top + PADDING, COLOR_TITLE, false);
         // The owner line can never bleed over the frame, however long the name is.
         if (this.ownerEnabled) {
             graphics.enableScissor(this.left + 1, this.ownerRowY - 1, this.left + this.panelWidth - 1,
                     this.ownerRowY + 9);
-            graphics.drawString(this.font, this.ownerLabel(), this.left + PADDING, this.ownerRowY,
+            graphics.text(this.font, this.ownerLabel(), this.left + PADDING, this.ownerRowY,
                     this.ownerDisplay.isEmpty() ? COLOR_MUTED : COLOR_TEXT, false);
             graphics.disableScissor();
         }
@@ -355,7 +359,7 @@ public class TorcherinoScreen extends Screen {
      * stretched centre. Only the centre really changes size, so the frame stays crisp at any
      * panel size.
      */
-    private void drawPanel(GuiGraphics graphics) {
+    private void drawPanel(GuiGraphicsExtractor graphics) {
         final int s = PANEL_SLICE;
         final int sourceWidth = PANEL_SOURCE_WIDTH;
         final int sourceHeight = PANEL_SOURCE_HEIGHT;
@@ -380,9 +384,9 @@ public class TorcherinoScreen extends Screen {
     }
 
     /** One piece of the panel: the source rectangle is stretched onto the target rectangle. */
-    private static void panelPiece(GuiGraphics graphics, int x, int y, int width, int height,
+    private static void panelPiece(GuiGraphicsExtractor graphics, int x, int y, int width, int height,
                                    int u, int v, int uWidth, int vHeight) {
-        graphics.blit(PANEL_TEXTURE, x, y, width, height, u, v, uWidth, vHeight,
+        graphics.blit(GUI_TEXTURED, PANEL_TEXTURE, x, y, width, height, u, v, uWidth, vHeight,
                 PANEL_FILE_WIDTH, PANEL_FILE_HEIGHT);
     }
 
@@ -477,31 +481,31 @@ public class TorcherinoScreen extends Screen {
         }
 
         @Override
-        public void onClick(double mouseX, double mouseY) {
-            this.moveHandleTo(mouseX);
+        public void onClick(MouseButtonEvent event, boolean doubleClick) {
+            this.moveHandleTo(event.x());
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narration) {
+        public void onDrag(MouseButtonEvent event, double dragX, double dragY) {
+            this.moveHandleTo(event.x());
+        }
+
+        @Override
+        public void updateWidgetNarration(NarrationElementOutput narration) {
             this.defaultButtonNarrationText(narration);
         }
 
         @Override
-        protected void onDrag(double mouseX, double mouseY, double dragX, double dragY) {
-            this.moveHandleTo(mouseX);
-        }
-
-        @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT) {
-                this.step(keyCode == GLFW.GLFW_KEY_LEFT ? -1 : 1);
+        public boolean keyPressed(KeyEvent event) {
+            if (event.key() == InputConstants.KEY_LEFT || event.key() == InputConstants.KEY_RIGHT) {
+                this.step(event.key() == InputConstants.KEY_LEFT ? -1 : 1);
                 return true;
             }
-            return super.keyPressed(keyCode, scanCode, modifiers);
+            return super.keyPressed(event);
         }
 
         @Override
-        public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
             final int x = this.getX();
             final int y = this.getY();
             final int width = this.getWidth();
@@ -509,38 +513,38 @@ public class TorcherinoScreen extends Screen {
             final boolean dimmed = !this.active;
 
             if (dimmed) {
-                // Same texture, just darkened - the cheap way every vanilla widget does it.
-                RenderSystem.setShaderColor(0.6F, 0.6F, 0.6F, 1.0F);
+                // Same texture, just darker - the cheap way every vanilla widget does it.
+                this.setAlpha(0.6F);
             }
 
             // Track: 2 px caps with a stretched middle, the texture is 16 px tall and used 1:1.
-            graphics.blit(TRACK_TEXTURE, x, y, TRACK_CAP, height, 0, 0, TRACK_CAP,
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x, y, TRACK_CAP, height, 0, 0, TRACK_CAP,
                     TRACK_TEXTURE_HEIGHT, TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
-            graphics.blit(TRACK_TEXTURE, x + TRACK_CAP, y, width - TRACK_CAP * 2, height, TRACK_CAP, 0,
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + TRACK_CAP, y, width - TRACK_CAP * 2, height, TRACK_CAP, 0,
                     TRACK_TEXTURE_WIDTH - TRACK_CAP * 2, TRACK_TEXTURE_HEIGHT,
                     TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
-            graphics.blit(TRACK_TEXTURE, x + width - TRACK_CAP, y, TRACK_CAP, height,
+            graphics.blit(GUI_TEXTURED, TRACK_TEXTURE, x + width - TRACK_CAP, y, TRACK_CAP, height,
                     TRACK_TEXTURE_WIDTH - TRACK_CAP, 0, TRACK_CAP, TRACK_TEXTURE_HEIGHT,
                     TRACK_TEXTURE_WIDTH, TRACK_TEXTURE_HEIGHT);
 
             // Handle: 1:1, centred on the current position.
             final int handleX = x + 1 + (int) Math.round(this.handlePosition() * this.handleTravel());
-            graphics.blit(HANDLE_TEXTURE, handleX, y, HANDLE_WIDTH, height, 0, 0, HANDLE_TEXTURE_WIDTH,
+            graphics.blit(GUI_TEXTURED, HANDLE_TEXTURE, handleX, y, HANDLE_WIDTH, height, 0, 0, HANDLE_TEXTURE_WIDTH,
                     HANDLE_TEXTURE_HEIGHT, HANDLE_TEXTURE_WIDTH, HANDLE_TEXTURE_HEIGHT);
 
             if (dimmed) {
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                this.setAlpha(1.0F);
             } else if (this.isHoveredOrFocused()) {
                 // A faint veil is all the feedback the textured track needs - a texture as
                 // well, so the editor never paints a bare rectangle.
-                graphics.blit(HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
+                graphics.blit(GUI_TEXTURED, HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);
             }
 
             final var font = Minecraft.getInstance().font;
             final Component message = this.getMessage();
-            graphics.drawString(font, message, x + (width - font.width(message)) / 2,
+            graphics.text(font, message, x + (width - font.width(message)) / 2,
                     y + (height - 8) / 2, COLOR_TRACK_TEXT, false);
         }
     }
