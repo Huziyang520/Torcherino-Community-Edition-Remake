@@ -327,13 +327,23 @@ public class TorcherinoScreen extends Screen {
         this.addRenderableWidget(redstoneButton);
     }
 
+    /**
+     * The background hook, not {@link #render}: 1.21.1's {@code Screen#render} calls
+     * {@code renderBackground(...)} itself <b>after</b> subclasses have drawn their own content
+     * and <b>before</b> the widgets. Drawing the panel from {@code render()} therefore put it
+     * through the menu blur pass and the dark gradient - the panel came out soft and darker
+     * while the widgets, drawn later, stayed sharp. Overriding the hook keeps the order
+     * background -> panel -> widgets and skips the blur entirely (SKILL 10.40 / 10.43).
+     */
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.fill(0, 0, this.width, this.height, 0x66000000);
+        this.drawPanel(graphics);
+    }
+
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // Dim only, never the blurred pass: the blur treats everything drawn before it as
-        // world content, which made the panel (drawn right after it) come out soft while the
-        // widgets stayed sharp (SKILL 10.40). renderTransparentBackground dims without blur.
-        this.renderTransparentBackground(graphics);
-        this.drawPanel(graphics);
+        // super.render() runs the background hook (our dim + panel) and then the widgets.
         super.render(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
         final Component title = this.getTitle();
