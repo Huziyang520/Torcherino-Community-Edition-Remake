@@ -30,7 +30,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -337,7 +337,9 @@ public class TorcherinoScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        this.extractBackground(graphics, mouseX, mouseY, partialTick);
+        // Dim only: the blurred pass treats everything drawn before it as world content, so the
+        // panel came out soft while the widgets stayed sharp. This variant dims without blur.
+        this.extractTransparentBackground(graphics);
         this.drawPanel(graphics);
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
@@ -388,6 +390,16 @@ public class TorcherinoScreen extends Screen {
                                    int u, int v, int uWidth, int vHeight) {
         graphics.blit(GUI_TEXTURED, PANEL_TEXTURE, x, y, width, height, u, v, uWidth, vHeight,
                 PANEL_FILE_WIDTH, PANEL_FILE_HEIGHT);
+    }
+
+    /** {@code E} closes the editor, like the inventory; it reuses {@link #onClose()}. */
+    @Override
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == InputConstants.KEY_E) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(event);
     }
 
     @Override
@@ -497,8 +509,8 @@ public class TorcherinoScreen extends Screen {
 
         @Override
         public boolean keyPressed(KeyEvent event) {
-            if (event.key() == GLFW.GLFW_KEY_LEFT || event.key() == GLFW.GLFW_KEY_RIGHT) {
-                this.step(event.key() == GLFW.GLFW_KEY_LEFT ? -1 : 1);
+            if (event.key() == InputConstants.KEY_LEFT || event.key() == InputConstants.KEY_RIGHT) {
+                this.step(event.key() == InputConstants.KEY_LEFT ? -1 : 1);
                 return true;
             }
             return super.keyPressed(event);
@@ -534,9 +546,9 @@ public class TorcherinoScreen extends Screen {
 
             if (dimmed) {
                 this.setAlpha(1.0F);
-            } else if (this.isHoveredOrFocused()) {
-                // A faint veil is all the feedback the textured track needs - a texture as
-                // well, so the editor never paints a bare rectangle.
+            } else if (this.isHovered()) {
+                // A faint veil over the track; only the hover state lights it up, so the slider
+                // does not stay lit after a drag.
                 graphics.blit(GUI_TEXTURED, HOVER_TEXTURE, x + 1, y + 1, width - 2, height - 2, 0, 0,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT,
                         HOVER_TEXTURE_WIDTH, HOVER_TEXTURE_HEIGHT);

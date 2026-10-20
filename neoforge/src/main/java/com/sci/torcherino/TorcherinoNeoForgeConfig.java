@@ -127,10 +127,10 @@ public final class TorcherinoNeoForgeConfig {
             builder.comment("Things the Torcherino may never accelerate.").push("blacklist");
             BLACKLISTED_BLOCKS = builder
                     .comment("Blocks that must not be accelerated. Format: modid:unlocalized")
-                    .defineListAllowEmpty("blacklistedBlocks", List.of(), element -> element instanceof String);
+                    .defineList("blacklistedBlocks", List.of(), () -> "", element -> element instanceof String);
             BLACKLISTED_TILES = builder
                     .comment("BlockEntity classes that must not be accelerated. Format: fully qualified class name")
-                    .defineListAllowEmpty("blacklistedTiles", List.of(), element -> element instanceof String);
+                    .defineList("blacklistedTiles", List.of(), () -> "", element -> element instanceof String);
             builder.pop();
             SPEC = builder.build();
         }

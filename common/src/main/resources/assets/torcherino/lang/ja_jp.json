@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "上限値",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "全体の上限値",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "一部の位置が加速されなくなる可能性があります。慎重に有効化してください",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake : 加速火把のレシピはサーバー設定ファイルで管理され、1.4.0 から既定で有効です。レシピが無い場合はゲーム内設定か設定ファイルを確認してください。この通知は設定ファイルで無効にできます。",
   "gui.torcherino.config.ownerSystem": "所有者システム",
   "gui.torcherino.config.group.owner": "所有者",
   "gui.torcherino.config.tooltip.ownerSystem": "デフォルトはオフ。オンにするとトーチェリノを設置した時点で所有者になります。\nエディタに所有者の行と「解除」「権限」ボタンが表示されます。\nオフの場合は誰も所有せず、全員が編集できます（既存の所有者データは保持されますが無視されます）。",
@@ -93,7 +92,7 @@
   "torcherino.configuration.gui.useGui": "Open the graphical editor on right click",
   "torcherino.configuration.gui.freeSpeedMultiplier": "Free speed multiplier",
   "torcherino.configuration.gui.joinNotice": "Show the join notice",
-  "torcherino.configuration.general": "Server",
+  "torcherino.configuration.general": "サーバー",
   "torcherino.configuration.general.overPoweredRecipe": "Use the cheap recipe",
   "torcherino.configuration.general.compressedTorcherino": "Compressed Torcherino recipes",
   "torcherino.configuration.general.doubleCompressedTorcherino": "Double Compressed recipes",
@@ -110,7 +109,12 @@
   "torcherino.configuration.general.ownerSystem": "Owner system",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Only accelerate while the owner is online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Statistics log interval (s)",
-  "torcherino.configuration.blacklist": "Blacklist",
+  "torcherino.configuration.blacklist": "ブラックリスト",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blacklisted blocks",
-  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities"
+  "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities",
+  "torcherino.configuration.title": "Torcherino Settings",
+  "torcherino.configuration.section.torcherino.client.toml": "Client settings",
+  "torcherino.configuration.section.torcherino.client.toml.title": "Client settings",
+  "torcherino.configuration.section.torcherino.server.toml": "Server settings",
+  "torcherino.configuration.section.torcherino.server.toml.title": "Server settings"
 }

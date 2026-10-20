@@ -85,7 +85,6 @@
   "gui.torcherino.config.maxAcceleratedTicksValue": "限之數",
   "gui.torcherino.config.maxAcceleratedTicksGlobalValue": "總限之數",
   "gui.torcherino.config.tooltip.skipSaturatedPositions.warning": "或致諸位失其加速，慎啟",
-  "message.torcherino.join_notice": "Torcherino Community Edition Remake ：加速火把之方，繫於伺服之制，自 1.4.0 版始，預設開啟。若無其方，請察遊戲之制或文書，此示可於文書中閉之。",
   "gui.torcherino.config.ownerSystem": "所有者系統",
   "gui.torcherino.config.group.owner": "所有者",
   "gui.torcherino.config.tooltip.ownerSystem": "默認關閉。開啟後，置加速火把者即為其主：\n編輯界面顯示所有者一行，並有「解除」「權限」二鈕。\n關閉時不記其主，眾人皆可改之；舊有之記仍存，然不用也。",
@@ -112,5 +111,10 @@
   "torcherino.configuration.general.statsLogIntervalSeconds": "统计日志间隔（秒）",
   "torcherino.configuration.blacklist": "黑名單",
   "torcherino.configuration.blacklist.blacklistedBlocks": "黑名單方塊",
-  "torcherino.configuration.blacklist.blacklistedTiles": "黑名單方塊實體"
+  "torcherino.configuration.blacklist.blacklistedTiles": "黑名單方塊實體",
+  "torcherino.configuration.title": "Torcherino Settings",
+  "torcherino.configuration.section.torcherino.client.toml": "Client settings",
+  "torcherino.configuration.section.torcherino.client.toml.title": "Client settings",
+  "torcherino.configuration.section.torcherino.server.toml": "Server settings",
+  "torcherino.configuration.section.torcherino.server.toml.title": "Server settings"
 }
