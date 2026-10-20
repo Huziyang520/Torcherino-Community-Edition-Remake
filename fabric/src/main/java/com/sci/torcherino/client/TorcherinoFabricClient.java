@@ -43,7 +43,8 @@ public class TorcherinoFabricClient implements ClientModInitializer {
     }
 
     private static void open(TorcherinoPayloads.OpenScreen payload) {
-        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
+        // Same as the NeoForge side: no forced frame, just the plain Gui#setScreen on the client.
+        Minecraft.getInstance().gui.setScreen(new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
                 payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));

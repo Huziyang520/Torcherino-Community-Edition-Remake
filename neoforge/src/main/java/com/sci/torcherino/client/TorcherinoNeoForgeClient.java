@@ -47,9 +47,13 @@ public final class TorcherinoNeoForgeClient {
 
     /** Handles the server's "open the editor" packet. Runs on the client thread. */
     public static void handleOpenScreen(TorcherinoPayloads.OpenScreen payload) {
-        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
+        // 26.3 keeps the screen on Gui, and setScreenAndShow renders an extra frame from inside the
+        // packet handler; that half-ticked frame is what made the veil flash on open. Queue the
+        // plain Gui#setScreen on the client instead, which is the path vanilla uses.
+        final TorcherinoScreen screen = new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
-                payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));
+                payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled());
+        Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.setScreen(screen));
     }
 }
