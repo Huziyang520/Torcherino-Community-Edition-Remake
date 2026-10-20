@@ -47,14 +47,12 @@ public final class TorcherinoNeoForgeClient {
 
     /** Handles the server's "open the editor" packet. Runs on the client thread. */
     public static void handleOpenScreen(TorcherinoPayloads.OpenScreen payload) {
-        // Queue it on the client task queue instead of showing it right here: setScreenAndShow
-        // renders an extra frame from inside the packet handler, and that half-ticked frame is
-        // what made the veil flash. A plain setScreen inside the handler did nothing at all, so
-        // the screen is created on the next client tick instead - no forced render, still shown.
-        final TorcherinoScreen screen = new TorcherinoScreen(
+        // setScreenAndShow is the only call that reliably shows the editor from the packet
+        // handler on this version (a plain setScreen here did nothing). Do not "clean it up"
+        // without an in-game test: it is the state the user signed off on.
+        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
-                payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled());
-        Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(screen));
+                payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));
     }
 }

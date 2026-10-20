@@ -104,6 +104,12 @@ public class TorcherinoScreen extends Screen {
     private static final int MIN_SLIDER_WIDTH = 176;
     /** The panel never becomes narrower than this. */
     private static final int MIN_PANEL_WIDTH = 218;
+
+    // TEMPORARY: evidence gathering for the veil flicker on open (SKILL 10.49). Logs at most a
+    // handful of lines per opened editor and must be deleted once the cause is known.
+    private static final org.slf4j.Logger DIAG = org.slf4j.LoggerFactory.getLogger("torcherino.diag");
+    private static int diagInstances;
+    private int diagFrames;
     /**
      * Number of buttons the row is measured with: "Done", "Unclaim", the permission switch
      * and the redstone switch. The panel keeps this width even while only two of them are
@@ -234,6 +240,7 @@ public class TorcherinoScreen extends Screen {
     @Override
     protected void init() {
         this.warmUpTextures();
+        DIAG.info("[diag] init #{} {}x{}", ++diagInstances, this.width, this.height);
         final boolean editable = this.editable();
         // Speed: eight classic gears by default; with the free multiplier the slider offers
         // every hundredth of a level, i.e. any value from 0 % up to the tier maximum.
@@ -356,6 +363,9 @@ public class TorcherinoScreen extends Screen {
         // extractTransparentBackground() call, i.e. the same gradient a chest screen draws.
         // Drawing the panel into the same stratum keeps veil and panel in one batch, so the
         // overlay can no longer arrive a frame before the panel (that was the flash on open).
+        if (this.diagFrames < 3) {
+            DIAG.info("[diag] frame {} background", this.diagFrames);
+        }
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
     }
@@ -371,6 +381,10 @@ public class TorcherinoScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        if (this.diagFrames < 3) {
+            DIAG.info("[diag] frame {} render", this.diagFrames);
+        }
+        this.diagFrames++;
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         // Title and owner line last: nothing may be painted over them.
         final Component title = this.getTitle();
@@ -439,6 +453,7 @@ public class TorcherinoScreen extends Screen {
 
     @Override
     public void onClose() {
+        DIAG.info("[diag] close after {} frames", this.diagFrames);
         // Nothing was editable for this player, so there is nothing to send - and the server
         // would reject it anyway.
         if (this.editable()) {
