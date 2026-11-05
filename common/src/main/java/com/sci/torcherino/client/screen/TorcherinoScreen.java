@@ -105,7 +105,6 @@ public class TorcherinoScreen extends Screen {
     /** The panel never becomes narrower than this. */
     private static final int MIN_PANEL_WIDTH = 218;
 
-    // handful of lines per opened editor and must be deleted once the cause is known.
     /**
      * Number of buttons the row is measured with: "Done", "Unclaim", the permission switch
      * and the redstone switch. The panel keeps this width even while only two of them are
