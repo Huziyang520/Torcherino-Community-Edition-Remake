@@ -9,6 +9,7 @@ import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
 import com.sci.torcherino.network.TorcherinoPayloads;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -46,7 +47,7 @@ public final class TorcherinoNeoForgeClient {
 
     /** Handles the server's "open the editor" packet. Runs on the client thread. */
     public static void handleOpenScreen(TorcherinoPayloads.OpenScreen payload) {
-        TorcherinoScreenOpener.open(new TorcherinoScreen(
+        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
                 payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));

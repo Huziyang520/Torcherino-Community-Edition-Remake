@@ -14,6 +14,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -42,7 +43,7 @@ public class TorcherinoFabricClient implements ClientModInitializer {
     }
 
     private static void open(TorcherinoPayloads.OpenScreen payload) {
-        TorcherinoScreenOpener.open(new TorcherinoScreen(
+        Minecraft.getInstance().setScreenAndShow(new TorcherinoScreen(
                 payload.pos(), payload.titleKey(), payload.xRange(), payload.zRange(), payload.yRange(),
                 payload.speed(), payload.redstoneMode(), payload.tierMultiplier(), payload.ownerDisplay(),
                 payload.othersCanEdit(), payload.viewerIsOwner(), payload.ownerEnabled()));

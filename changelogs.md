@@ -10,9 +10,6 @@
 
 ### Fixed
 
-- Fixed the editor dimming layer flickering when it opens.
-  修复了打开编辑界面时调暗层闪烁的问题。
-
 - Fixed the game crashing when the editor is opened on 26.2.
   修复了在 26.2 上打开编辑界面时崩溃的问题。
 
