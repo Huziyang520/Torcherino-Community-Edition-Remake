@@ -109,6 +109,7 @@
   "torcherino.configuration.general.ownerSystem": "Owner system",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Only accelerate while the owner is online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Statistics log interval (s)",
+  "torcherino.configuration.general.configVersion": "Config version",
   "torcherino.configuration.blacklist": "Blacklist",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blacklisted blocks",
   "torcherino.configuration.blacklist.blacklistedTiles": "Blacklisted block entities",

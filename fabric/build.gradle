@@ -41,7 +41,7 @@ dependencies {
     // dependencies have to be here as well. Jade is vendor-provided and compile only:
     // 26.x has no Fabric Jade artifact on any reachable Maven for this machine, and the
     // Jade provider is shared code (the NeoForge jar exposes the same API classes).
-    compileOnly files("${rootDir}/libs/jade-neoforge-26.3.jar")
+    compileOnly files("${rootDir}/libs/${jade_jar}")
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
     // Fabric does not ship night-config, so the TOML reader has to travel inside the jar

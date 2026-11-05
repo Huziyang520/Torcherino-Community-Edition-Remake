@@ -40,9 +40,13 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
-// This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
+// One target of the 26.X line. The three modules below live in the repository root and are
+// shared by every target; this file only points at them.
 rootProject.name = 'Torcherino-26.3'
-includeBuild('build-logic')
-include('common')
-include('fabric')
-include('neoforge')
+includeBuild('../../build-logic')
+include 'common'
+include 'fabric'
+include 'neoforge'
+project(':common').projectDir = file('../../common')
+project(':fabric').projectDir = file('../../fabric')
+project(':neoforge').projectDir = file('../../neoforge')

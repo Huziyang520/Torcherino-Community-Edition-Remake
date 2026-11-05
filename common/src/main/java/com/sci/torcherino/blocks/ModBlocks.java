@@ -220,7 +220,7 @@ public final class ModBlocks {
                 .instabreak()
                 .lightLevel(state -> 15)
                 .sound(SoundType.WOOD)
-                .pushReaction(PushReaction.POPPED)
+                .pushReaction(poppedByPiston())
                 .setId(blockKey(name));
     }
 
@@ -234,7 +234,7 @@ public final class ModBlocks {
                 .strength(1.0F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 15)
-                .pushReaction(PushReaction.POPPED)
+                .pushReaction(poppedByPiston())
                 .setId(blockKey(name));
     }
 
@@ -250,7 +250,7 @@ public final class ModBlocks {
                 .sound(SoundType.LANTERN)
                 .lightLevel(state -> 15)
                 .noOcclusion()
-                .pushReaction(PushReaction.POPPED)
+                .pushReaction(poppedByPiston())
                 .setId(blockKey(name));
     }
 
@@ -262,5 +262,20 @@ public final class ModBlocks {
     /** Registry key of one of our block items. */
     private static ResourceKey<Item> itemKey(String name) {
         return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+    }
+
+    /**
+     * Torch like blocks are popped off by a piston. The constant is {@code POPPED} since 26.3
+     * and {@code DESTROY} before that, so it is looked up by name instead of being compiled in.
+     */
+    private static PushReaction poppedByPiston() {
+        for (String name : new String[] {"POPPED", "DESTROY"}) {
+            try {
+                return PushReaction.valueOf(name);
+            } catch (IllegalArgumentException ignored) {
+                // Not this version; try the next name.
+            }
+        }
+        return PushReaction.values()[0];
     }
 }

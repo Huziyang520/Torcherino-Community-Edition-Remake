@@ -28,6 +28,19 @@ public final class TorcherinoConfig {
     private static final String GENERAL = "general";
     private static final String BLACKLIST = "blacklist";
 
+    /**
+     * Bumped whenever a shipped default changes. Only used to migrate an existing file once:
+     * a value below this one triggers the migrations listed in {@code loadServer} /
+     * {@code TorcherinoNeoForgeConfig.apply} and is then written back, so they never run twice.
+     */
+    public static final int CONFIG_VERSION = 2;
+
+    /** The jukebox block entity restarts its song on every tick, so it is never accelerated. */
+    public static final String JUKEBOX_BLOCK = "minecraft:jukebox";
+
+    /** The default of {@code blacklist.blacklistedBlocks} on a fresh file. */
+    private static final List<String> DEFAULT_BLACKLISTED_BLOCKS = List.of(JUKEBOX_BLOCK);
+
     /** Client preferences. Never read by a dedicated server. */
     public static final String CLIENT_FILE_NAME = Constants.MOD_ID + "-client.toml";
     /** Server behaviour: recipe switches and the blacklist. */
@@ -322,10 +335,15 @@ public final class TorcherinoConfig {
                     "SERVER SIDE. When true, a Torcherino only accelerates while the player who placed it is online. Torcherinos without a recorded owner (placed before 1.4.1, or placed by a machine) keep running. Applies immediately, no restart needed.");
             changed |= put(cfg, legacy, GENERAL + ".statsLogIntervalSeconds", 0,
                     "SERVER SIDE. Seconds between two diagnostic log lines that report how much work the acceleration loop asked for (positions, extra random ticks, extra block entity ticks, skipped sections, brake divisor, remaining global budget). 0 = silent (default). Applies immediately, no restart needed.");
-            changed |= put(cfg, legacy, BLACKLIST + ".blacklistedBlocks", new ArrayList<String>(),
+            // Read before the default is written: an existing file has no version key and must
+            // count as 1 so the migrations below run exactly once.
+            final int configVersion = integer(cfg, GENERAL + ".configVersion", 1);
+            changed |= put(cfg, legacy, BLACKLIST + ".blacklistedBlocks", new ArrayList<>(DEFAULT_BLACKLISTED_BLOCKS),
                     "Blocks the Torcherino may not accelerate. Format: modid:unlocalized");
             changed |= put(cfg, legacy, BLACKLIST + ".blacklistedTiles", new ArrayList<String>(),
                     "BlockEntity classes the Torcherino may not accelerate. Format: Fully qualified class name");
+            changed |= put(cfg, legacy, GENERAL + ".configVersion", CONFIG_VERSION,
+                    "INTERNAL. Version of the shipped defaults; used to migrate an existing file once. Do not edit.");
             if (changed) {
                 cfg.save();
             }
@@ -347,6 +365,7 @@ public final class TorcherinoConfig {
             statsLogIntervalSeconds = integer(cfg, GENERAL + ".statsLogIntervalSeconds", 0);
             blacklistedBlocks = stringList(cfg, BLACKLIST + ".blacklistedBlocks");
             blacklistedTiles = stringList(cfg, BLACKLIST + ".blacklistedTiles");
+            migrate(cfg, configVersion, blacklistedBlocks);
         } catch (Exception e) {
             Constants.LOG.error("Failed to load {}", path, e);
         }
@@ -395,6 +414,28 @@ public final class TorcherinoConfig {
         cfg.set(key, migratedValue(legacy, key, value));
         cfg.setComment(key, comment);
         return true;
+    }
+
+    /**
+     * Applies the one time migrations up to {@link #CONFIG_VERSION} and stores the new
+     * version, so a second load does nothing. Called for the TOML files only; the NeoForge
+     * config system runs the same steps from its own apply method.
+     */
+    private static void migrate(CommentedFileConfig cfg, int version, List<String> blocks) {
+        if (version >= CONFIG_VERSION) {
+            return;
+        }
+        boolean changed = false;
+        if (version < 2 && !blocks.contains(JUKEBOX_BLOCK)) {
+            // 2: the jukebox joined the default blacklist; an existing file has to gain it once.
+            blocks.add(JUKEBOX_BLOCK);
+            changed = true;
+        }
+        cfg.set(GENERAL + ".configVersion", CONFIG_VERSION);
+        if (changed) {
+            cfg.set(BLACKLIST + ".blacklistedBlocks", new ArrayList<>(blocks));
+        }
+        cfg.save();
     }
 
     private static Object migratedValue(CommentedFileConfig legacy, String key, Object fallback) {

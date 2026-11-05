@@ -3,6 +3,10 @@ plugins {
     id 'maven-publish'
 }
 
+// 每个 target 有自己的输出目录：模块源码是共享的，产物不能互相覆盖
+// （targets/<target>/build/<module>/libs/…）。
+layout.buildDirectory = rootProject.layout.buildDirectory.dir(project.name)
+
 base {
     // 产物名：<mod_id>-<loader>-<MC 区间>-<version>.jar
     archivesName = "${mod_id}-${project.name}-${minecraft_version_slug}"
@@ -68,6 +72,8 @@ processResources {
             'minecraft_version'            : minecraft_version,
             'minecraft_version_slug'       : minecraft_version_slug,
             'minecraft_version_range'      : minecraft_version_range,
+            'minecraft_version_range_fabric': minecraft_version_range_fabric,
+            'neoforge_dependency_range'    : neoforge_dependency_range,
             'fabric_version'               : fabric_version,
             'fabric_loader_version'        : fabric_loader_version,
             'mod_name'                     : mod_name,

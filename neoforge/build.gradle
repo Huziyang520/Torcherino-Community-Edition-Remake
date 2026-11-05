@@ -43,8 +43,8 @@ dependencies {
     // The neoforge module compiles the common sources as well (see multiloader-loader.gradle),
     // so every optional API common imports has to be on this classpath too. All of them are
     // compile time only: nothing is bundled and nothing is required at runtime.
-    compileOnly files("${rootDir}/libs/cloth-config-neoforge-26.3.159.jar")
-    compileOnly files("${rootDir}/libs/jade-neoforge-26.3.jar")
+    compileOnly files("${rootDir}/libs/${cloth_jar}")
+    compileOnly files("${rootDir}/libs/${jade_jar}")
     compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
     compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
 }

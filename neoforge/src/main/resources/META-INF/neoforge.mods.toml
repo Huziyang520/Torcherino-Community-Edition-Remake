@@ -1,4 +1,4 @@
-# 本分支只覆盖 26.3：modLoader / loaderVersion 在 26.3 起降级为可选，仍按旧写法写全。
+# 26.X 线共用这一份元数据：版本区间与 loader 区间全部来自 targets/<target>/gradle.properties。
 modLoader="javafml"
 loaderVersion="${neoforge_loader_version_range}"
 license="${license}"
@@ -21,7 +21,7 @@ description='''${description}'''
 [[dependencies.${mod_id}]]
 modId="neoforge"
 type="required"
-versionRange="[26.3,)"
+versionRange="${neoforge_dependency_range}"
 ordering="NONE"
 side="BOTH"
 

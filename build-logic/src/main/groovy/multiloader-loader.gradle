@@ -22,6 +22,16 @@ dependencies {
     commonResources(project(path: ':common', configuration: 'commonResources'))
 }
 
+// The common module may merge a per target source overlay into a generated directory. The
+// loader modules consume that directory through the commonJava configuration, so they have to
+// depend on the producing task explicitly (Gradle 8+ validates that).
+final def commonMerge = project(':common').tasks.matching { it.name == 'mergeTargetJava' }
+tasks.configureEach {
+    if (name in ['compileJava', 'sourcesJar', 'javadoc', 'processResources']) {
+        dependsOn commonMerge
+    }
+}
+
 tasks.named('compileJava', JavaCompile) {
     dependsOn(configurations.commonJava)
     source(configurations.commonJava)

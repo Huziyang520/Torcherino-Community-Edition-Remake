@@ -1,3 +1,21 @@
+## 1.7.0
+
+### Changed
+
+- The jukebox is part of the default blacklist, so a Torcherino never speeds it up. Existing configurations gain the entry once.
+  唱片机已加入默认黑名单，加速火把不会加速它；已有配置会在首次启动时补上这一条。
+
+- The 26.1-26.2 and 26.3 lines are built from one source tree; install the file that matches your game version.
+  26.1-26.2 与 26.3 两条线由同一份源码构建，请安装与游戏版本对应的文件。
+
+### Fixed
+
+- Fixed the editor dimming layer flickering when it opens.
+  修复了打开编辑界面时调暗层闪烁的问题。
+
+- Fixed the game crashing when the editor is opened on 26.2.
+  修复了在 26.2 上打开编辑界面时崩溃的问题。
+
 ## 1.6.0
 
 ### Added

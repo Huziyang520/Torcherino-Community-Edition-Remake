@@ -41,3 +41,9 @@ Thumbs.db
 
 # local build logs
 .work/
+
+# per target build output and vendored compile-only jars
+targets/*/libs
+targets/*/build
+targets/*/.gradle
+targets/*/runs
