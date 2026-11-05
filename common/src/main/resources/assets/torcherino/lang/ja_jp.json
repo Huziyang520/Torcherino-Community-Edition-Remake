@@ -112,6 +112,7 @@
   "torcherino.configuration.general.ownerSystem": "所有者システム",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "所有者オンライン時のみ加速",
   "torcherino.configuration.general.statsLogIntervalSeconds": "統計ログ間隔 (秒)",
+  "torcherino.configuration.general.configVersion": "Config version",
   "torcherino.configuration.blacklist.blacklistedBlocks": "禁止ブロック",
   "torcherino.configuration.blacklist.blacklistedTiles": "禁止ブロックエンティティ",
   "torcherino.configuration.general": "サーバー",

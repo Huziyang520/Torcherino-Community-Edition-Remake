@@ -112,6 +112,7 @@
   "torcherino.configuration.general.ownerSystem": "소유자 시스템",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "소유자가 접속 중일 때만 가속",
   "torcherino.configuration.general.statsLogIntervalSeconds": "통계 로그 간격 (초)",
+  "torcherino.configuration.general.configVersion": "Config version",
   "torcherino.configuration.blacklist.blacklistedBlocks": "금지 블록",
   "torcherino.configuration.blacklist.blacklistedTiles": "금지 블록 엔티티",
   "torcherino.configuration.general": "서버",

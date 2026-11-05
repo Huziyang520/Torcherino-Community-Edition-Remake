@@ -113,6 +113,7 @@
   "torcherino.configuration.general.ownerSystem": "Owner system",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "Owner must be online",
   "torcherino.configuration.general.statsLogIntervalSeconds": "Stats log interval (s)",
+  "torcherino.configuration.general.configVersion": "Config version",
   "torcherino.configuration.blacklist.blacklistedBlocks": "Blocked blocks",
   "torcherino.configuration.blacklist.blacklistedTiles": "Blocked block entities",
   "torcherino.configuration.general": "Server",

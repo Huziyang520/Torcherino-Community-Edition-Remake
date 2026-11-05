@@ -112,6 +112,7 @@
   "torcherino.configuration.general.ownerSystem": "所有者系統",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "惟主在線乃行",
   "torcherino.configuration.general.statsLogIntervalSeconds": "記數之間（秒）",
+  "torcherino.configuration.general.configVersion": "設定版本",
   "torcherino.configuration.blacklist.blacklistedBlocks": "禁用之方塊",
   "torcherino.configuration.blacklist.blacklistedTiles": "禁用之方塊實體",
   "torcherino.configuration.general": "伺服端",

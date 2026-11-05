@@ -78,6 +78,7 @@ public final class TorcherinoNeoConfig {
         private static final ModConfigSpec.IntValue STATS_LOG_INTERVAL_SECONDS;
         private static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_BLOCKS;
         private static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_TILES;
+        private static final ModConfigSpec.IntValue CONFIG_VERSION;
 
         static {
             final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -151,11 +152,14 @@ public final class TorcherinoNeoConfig {
             BLACKLISTED_BLOCKS = builder
                     .comment("Blocks that must not be accelerated. Format: modid:unlocalized")
                     .translation(KEY + "blacklist.blacklistedBlocks")
-                    .defineList("blacklistedBlocks", List.of(), () -> "", element -> element instanceof String);
+                    .defineList("blacklistedBlocks", List.of(TorcherinoConfig.JUKEBOX_BLOCK), () -> "", element -> element instanceof String);
             BLACKLISTED_TILES = builder
                     .comment("BlockEntity classes that must not be accelerated. Format: fully qualified class name")
                     .translation(KEY + "blacklist.blacklistedTiles")
                     .defineList("blacklistedTiles", List.of(), () -> "", element -> element instanceof String);
+            CONFIG_VERSION = builder
+                    .comment("INTERNAL. Version of the shipped defaults; used to migrate an existing file once. Do not edit.")
+                    .defineInRange("configVersion", TorcherinoConfig.CONFIG_VERSION, 1, Integer.MAX_VALUE);
             builder.pop();
             SPEC = builder.build();
         }
@@ -207,8 +211,27 @@ public final class TorcherinoNeoConfig {
             TorcherinoConfig.statsLogIntervalSeconds = Server.STATS_LOG_INTERVAL_SECONDS.get();
             TorcherinoConfig.blacklistedBlocks = new ArrayList<>(Server.BLACKLISTED_BLOCKS.get());
             TorcherinoConfig.blacklistedTiles = new ArrayList<>(Server.BLACKLISTED_TILES.get());
+            migrateServerSpec();
             TorcherinoRegistry.registerDefaults();
         }
+    }
+
+    /**
+     * Applies the one time migrations up to {@link TorcherinoConfig#CONFIG_VERSION} to a file
+     * written by an older release, then stores the version so it never runs again.
+     */
+    private static void migrateServerSpec() {
+        final int version = Server.CONFIG_VERSION.get();
+        if (version >= TorcherinoConfig.CONFIG_VERSION) {
+            return;
+        }
+        if (version < 2 && !TorcherinoConfig.blacklistedBlocks.contains(TorcherinoConfig.JUKEBOX_BLOCK)) {
+            // 2: the jukebox joined the default blacklist; an existing file has to gain it once.
+            TorcherinoConfig.blacklistedBlocks.add(TorcherinoConfig.JUKEBOX_BLOCK);
+        }
+        Server.BLACKLISTED_BLOCKS.set(new ArrayList<>(TorcherinoConfig.blacklistedBlocks));
+        Server.CONFIG_VERSION.set(TorcherinoConfig.CONFIG_VERSION);
+        Server.SPEC.save();
     }
 
     /**

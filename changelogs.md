@@ -1,3 +1,21 @@
+## 1.7.0
+
+### Changed
+
+- The jukebox is part of the default blacklist, so a Torcherino never speeds it up. Existing configurations gain the entry once.
+  唱片机已加入默认黑名单，加速火把不会加速它；已有配置会在首次启动时补上这一条。
+
+### Fixed
+
+- Fixed the crafting recipes of the Torcherino and the Lanterino not showing up.
+  修复了加速火把与加速南瓜灯的合成配方不显示的问题。
+
+- Fixed the Torcherino dropping nothing when broken in survival.
+  修复了生存模式破坏加速火把后不掉落物品的问题。
+
+- Fixed the blocks not being mineable with the correct tool.
+  修复了方块无法用正确工具采集的问题。
+
 ## 1.6.0
 
 ### Added

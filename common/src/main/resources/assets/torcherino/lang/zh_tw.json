@@ -113,6 +113,7 @@
   "torcherino.configuration.general.ownerSystem": "所有者系統",
   "torcherino.configuration.general.ownerOnlyWhenOnline": "僅所有者線上時加速",
   "torcherino.configuration.general.statsLogIntervalSeconds": "統計日誌間隔（秒）",
+  "torcherino.configuration.general.configVersion": "設定版本",
   "torcherino.configuration.blacklist.blacklistedBlocks": "黑名单方块",
   "torcherino.configuration.blacklist.blacklistedTiles": "黑名单方块实体",
   "torcherino.configuration.general": "服务端",
