@@ -10,6 +10,9 @@
 
 ### Fixed
 
+- Fixed the screen dimming for one frame every time the editor opens.
+  修复了每次打开编辑界面时画面会暗一帧的问题。
+
 - Fixed the game crashing when the editor is opened on 26.2.
   修复了在 26.2 上打开编辑界面时崩溃的问题。
 
