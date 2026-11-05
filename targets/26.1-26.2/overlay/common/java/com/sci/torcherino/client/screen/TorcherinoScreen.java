@@ -1,3 +1,14 @@
+/*
+ * 本文件：加速火把的可视化编辑界面（仅客户端加载）。
+ * 说明：外观延续原版的浅灰界面 —— 面板用 assets/torcherino/textures/gui/torcherino_panel.png
+ *      （以旧的 torcherino.png 为底，去掉右上角为红石按钮预留的凸块，成为完整矩形），以九宫格
+ *      方式拉伸；滑条凹槽与手柄同样使用贴图；按钮直接使用原版 Button 控件。
+ *      布局排在一条统一栅格上：标题 / 所有者行 / 四条等宽滑条 / 一行按钮；面板宽度只由按钮行
+ *      （按“最多按钮 + 最长标签”计算）与滑条列决定，所以无论有没有所有者、红石模式是哪一个，
+ *      面板尺寸都完全一样。
+ *      滑条为自绘控件：手柄位置（连续）与数值（整档）分开保存 —— 自由倍率模式下手柄可在档位之间
+ *      自由拖动、数值仍取整；否则手柄被吸附到最近整档。文字一律无阴影绘制，避免叠加发虚。
+ */
 package com.sci.torcherino.client.screen;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -94,7 +105,6 @@ public class TorcherinoScreen extends Screen {
     /** The panel never becomes narrower than this. */
     private static final int MIN_PANEL_WIDTH = 218;
 
-    // handful of lines per opened editor and must be deleted once the cause is known.
     /**
      * Number of buttons the row is measured with: "Done", "Unclaim", the permission switch
      * and the redstone switch. The panel keeps this width even while only two of them are
@@ -347,6 +357,7 @@ public class TorcherinoScreen extends Screen {
         // extractTransparentBackground() call, i.e. the same gradient a chest screen draws.
         // Drawing the panel into the same stratum keeps veil and panel in one batch, so the
         // overlay can no longer arrive a frame before the panel (that was the flash on open).
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
     }
 

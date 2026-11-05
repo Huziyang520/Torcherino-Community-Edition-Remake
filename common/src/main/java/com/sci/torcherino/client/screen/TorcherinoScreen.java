@@ -357,6 +357,7 @@ public class TorcherinoScreen extends Screen {
         // extractTransparentBackground() call, i.e. the same gradient a chest screen draws.
         // Drawing the panel into the same stratum keeps veil and panel in one batch, so the
         // overlay can no longer arrive a frame before the panel (that was the flash on open).
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
         this.drawPanel(graphics);
     }
 
