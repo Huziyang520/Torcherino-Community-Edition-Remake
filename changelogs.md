@@ -1,3 +1,10 @@
+## 1.7.0
+
+### Changed
+
+- The jukebox is part of the default blacklist, so a Torcherino never speeds it up. Existing configurations gain the entry once.
+  唱片机已加入默认黑名单，加速火把不会加速它；已有配置会在首次启动时补上这一条。
+
 ## 1.6.0
 
 ### Added
