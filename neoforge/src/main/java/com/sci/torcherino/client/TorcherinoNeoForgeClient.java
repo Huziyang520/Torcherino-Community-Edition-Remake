@@ -29,7 +29,7 @@ public final class TorcherinoNeoForgeClient {
 
     public static void init(ModContainer container) {
         // NeoForge's own configuration screen, shown by the config button of the mod list.
-        // It replaces Cloth Config on this loader and needs no extra dependency.
+        // The same screen is what Forge Config API Port carries on Fabric.
         container.registerExtensionPoint(IConfigScreenFactory.class,
                 (IConfigScreenFactory) (modContainer, parent) -> new ConfigurationScreen(modContainer, parent));
 
