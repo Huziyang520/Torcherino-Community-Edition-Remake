@@ -28,6 +28,9 @@
     "icon": "torcherino.png",
     "environment": "*",
     "entrypoints": {
+        "preLaunch": [
+            "com.sci.torcherino.client.TorcherinoConfigScreenRegistrar"
+        ],
         "main": [
             "com.sci.torcherino.TorcherinoFabric"
         ],

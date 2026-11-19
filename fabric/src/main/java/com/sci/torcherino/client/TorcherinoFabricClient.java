@@ -5,8 +5,6 @@
  */
 package com.sci.torcherino.client;
 
-import com.huziyang.neoconfigurationscreenport.fabric.ConfigScreenRegistration;
-import com.sci.torcherino.Constants;
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
@@ -52,9 +50,6 @@ public class TorcherinoFabricClient implements ClientModInitializer {
                 client.player.displayClientMessage(Component.translatable("message.torcherino.join_notice"), false);
             }
         });
-
-        // The mod list config button, backed by Neo Configuration Screen Port.
-        ConfigScreenRegistration.register(Constants.MOD_ID);
 
         ClientPlayNetworking.registerGlobalReceiver(TorcherinoFabricNetworking.OPEN_SCREEN,
                 (client, handler, buf, responseSender) -> {
