@@ -85,16 +85,14 @@ A Lanterino can also be converted back into its corresponding Torcherino on its 
 
 ### Configuration (two files)
 
-Configuration is split into two files, each with a clearly defined owner. Both can also be edited in game: selecting the mod's configuration screen from the mod list opens two tabs, **Server settings** and **Client settings**. The server tab contains separate `Recipes` and `Performance` groups.
+Configuration is split into two files, each with a clearly defined owner. Both can also be edited in game: the mod's configuration screen lists the files, and each file shows its keys grouped by section (`gui` for the client preferences, `general` and `blacklist` on the server side).
 
-The configuration screen is provided by **Cloth Config**, an optional integration. The mod neither bundles nor requires Cloth Config. When the API is installed, the two tabs are available; without it, edit the two files below directly. Cloth Config is not declared in the mod metadata, so installing or removing it does not change the mod's dependency requirements.
+The screen is the one the loaders themselves provide: NeoForge ships it, and on Fabric it comes from **Forge Config API Port**, which this mod requires. Mod Menu is required on Fabric as well, because it is the mod list entry that opens the screen.
 
 | File | Owner | Contents |
 |---|---|---|
 | `config/torcherino-client.toml` | **Client** | `gui.useGui` (whether right-click opens the editor), `gui.freeSpeedMultiplier` (whether slider handles can be dragged continuously), `gui.joinNotice` (whether to show a chat notice when joining a world) |
 | `config/torcherino-server.toml` | **Server / server owner** | Recipe switches and blacklists |
-
-The configuration screen on Fabric and Forge for Minecraft 1.20–1.20.1 is provided by **Cloth Config**.
 
 Keys in `torcherino-server.toml`:
 
@@ -279,9 +277,9 @@ Feedback and suggestions: <https://github.com/Huziyang520/Torcherino-Community-E
 
 ### 配置（两个文件）
 
-配置拆成两份，各归各的。两份都可以在游戏里改：模组列表里点「配置」会打开一个界面，分成**服务端配置**与**客户端配置**两个标签页，服务端页里再分「配方」与「性能」两个分组。
+配置拆成两份，各归各的。两份都可以在游戏里改：模组列表里点「配置」会先列出两个配置文件，进去后按 `gui`（客户端偏好）、`general` 与 `blacklist`（服务端）分组显示条目。
 
-Fabric端和1.20-1.20.1Forge的配置界面由 **Cloth Config** 提供
+这个界面由加载器自带：NeoForge 侧是加载器的配置界面，Fabric 侧由本模组必需的 **Forge Config API Port** 提供；Fabric 侧还需要 **Mod Menu**，模组列表里的「配置」按钮由它提供。
 
 | 文件 | 归属 | 内容 |
 |---|---|---|

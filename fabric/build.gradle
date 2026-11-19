@@ -4,16 +4,12 @@ plugins {
 }
 
 repositories {
-    // 国内镜像优先；Cloth Config API 只有官方源。
+    // 国内镜像优先。
     maven {
         name = 'AliyunPublic'
         url = 'https://maven.aliyun.com/repository/public'
     }
     mavenCentral()
-    maven {
-        name = 'Shedaniel'
-        url = 'https://maven.shedaniel.me/'
-    }
     maven {
         name = 'TerraformersMC'
         url = 'https://maven.terraformersmc.com/releases/'
@@ -29,9 +25,10 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
     implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-    // Optional: Cloth Config API, compile time only. The Fabric entry point only registers
-    // the config screen factory when the mod is present at runtime; nothing is bundled.
-    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    // Forge Config API Port: required at runtime on this loader. The published Fabric jar
+    // already ships in the official mappings this target compiles against, so a plain
+    // compileOnly is enough and Loom remaps the produced jar as usual.
+    compileOnly files("${rootDir}/libs/${fcap_jar}")
 
     // Optional Mod Menu API (client only): the config button of the mod list. Compile time
     // only, the entrypoint is only loaded when Mod Menu is installed.
@@ -42,12 +39,6 @@ dependencies {
     // 26.x has no Fabric Jade artifact on any reachable Maven for this machine, and the
     // Jade provider is shared code (the NeoForge jar exposes the same API classes).
     compileOnly files("${rootDir}/libs/${jade_jar}")
-    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
-    // Fabric does not ship night-config, so the TOML reader has to travel inside the jar
-    // (jar-in-jar). Without it the configuration loader dies with NoClassDefFoundError.
-    include group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    include group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
 }
 
 loom {

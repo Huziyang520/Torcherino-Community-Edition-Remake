@@ -42,11 +42,11 @@
         "fabricloader": ">=${fabric_loader_version}",
         "fabric-api": "*",
         "minecraft": "${minecraft_version_range_fabric}",
-        "java": ">=${java_version}"
+        "java": ">=${java_version}",
+        "forgeconfigapiport": ">=${fcap_version}",
+        "modmenu": "*"
     },
     "suggests": {
-        "projecte": "*",
-        "cloth-config": "*",
-        "modmenu": "*"
+        "projecte": "*"
     }
 }

@@ -30,24 +30,7 @@ dependencies {
             url = 'https://maven.aliyun.com/repository/public'
         }
         mavenCentral()
-        maven {
-            name = 'Shedaniel'
-            url = 'https://maven.shedaniel.me/'
-        }
     }
-
-    // TOML configuration reader used on the Fabric side (NeoForge has its own config system
-    // but the same common sources are compiled twice, so both need the classes on the
-    // compile classpath). Compile time only: on Fabric they are bundled through Loom's
-    // jar-in-jar, on NeoForge the loader ships them.
-    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
-
-    // Optional Cloth Config API (Fabric only usage, but the common sources compile against
-    // it). Vendored under libs/ as a plain file dependency: this machine cannot reach some
-    // Maven hosts, and the NeoForge artifact ships in Mojang mappings, so compileOnly is
-    // enough. Never bundled, never a dependency.
-    compileOnly files("${rootDir}/libs/${cloth_jar}")
 
     // Optional Jade (Waila successor) API. The 26.x Jade jar is not on any reachable Maven
     // for this machine, so it is vendored under libs/ (git ignored) and used as a plain

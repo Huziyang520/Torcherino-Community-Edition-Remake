@@ -1,7 +1,7 @@
 /*
  * 本文件：Fabric 侧模组入口。
- * 说明：onInitialize 里依次做方块 / 方块实体 / 网络 / 事件注册，最后调用 Torcherino.init()
- *      （此时注册表尚未冻结，可以立即构造实例）。配方条件用 Fabric 自己的条件类型登记。
+ * 说明：onInitialize 里先登记配置（Forge Config API Port 承接两个 TOML），再做方块 / 方块实体 /
+ *      网络 / 事件注册，最后调用 Torcherino.init()。配方条件用 Fabric 自己的条件类型登记。
  */
 package com.sci.torcherino;
 
@@ -13,12 +13,16 @@ import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.network.TorcherinoFabricNetworking;
 import com.sci.torcherino.platform.Services;
 
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.v5.ModConfigEvents;
+
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditionType;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
+import net.neoforged.fml.config.ModConfig;
 
 /**
  * Fabric entry point. Registration happens first so that every {@code ModBlocks} field
@@ -28,12 +32,26 @@ public class TorcherinoFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        registerConfig();
         ModBlocks.register(Services.REGISTRATION);
         ModBlockEntities.register(Services.REGISTRATION);
         registerRecipeConditions();
         TorcherinoFabricNetworking.registerServerReceivers();
         TorcherinoFabricEvents.register();
         Torcherino.init();
+    }
+
+    /**
+     * Hands both files to Forge Config API Port, the config system this loader runs on, and
+     * mirrors every loaded or edited file into {@link TorcherinoConfig}.
+     */
+    private static void registerConfig() {
+        ConfigRegistry.INSTANCE.register(Constants.MOD_ID, ModConfig.Type.CLIENT,
+                TorcherinoConfigSpec.Client.SPEC, TorcherinoConfig.CLIENT_FILE_NAME);
+        ConfigRegistry.INSTANCE.register(Constants.MOD_ID, TorcherinoConfigSpec.serverType(),
+                TorcherinoConfigSpec.Server.SPEC, TorcherinoConfig.SERVER_FILE_NAME);
+        ModConfigEvents.loading(Constants.MOD_ID).register(TorcherinoConfigSpec::apply);
+        ModConfigEvents.reloading(Constants.MOD_ID).register(TorcherinoConfigSpec::apply);
     }
 
     /**

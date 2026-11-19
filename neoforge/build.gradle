@@ -41,12 +41,9 @@ neoForge {
 
 dependencies {
     // The neoforge module compiles the common sources as well (see multiloader-loader.gradle),
-    // so every optional API common imports has to be on this classpath too. All of them are
-    // compile time only: nothing is bundled and nothing is required at runtime.
-    compileOnly files("${rootDir}/libs/${cloth_jar}")
+    // so every API the shared sources import has to be on this classpath too. The config API
+    // comes from NeoForge itself, so only the optional integrations are listed.
     compileOnly files("${rootDir}/libs/${jade_jar}")
-    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
 }
 
 // Implement mcgradleconventions loader attribute

@@ -10,7 +10,6 @@ import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.nio.file.Path;
 
 /**
  * Loader agnostic access to the few platform specific primitives the common code
@@ -34,11 +33,6 @@ public interface IPlatformHelper {
      * @return true when running inside a development environment.
      */
     boolean isDevelopmentEnvironment();
-
-    /**
-     * @return the directory that holds the game configuration files.
-     */
-    Path getConfigDir();
 
     /**
      * Sends the client side "modifier key" state to the server.
@@ -71,27 +65,5 @@ public interface IPlatformHelper {
 
     default String getEnvironmentName() {
         return this.isDevelopmentEnvironment() ? "development" : "production";
-    }
-
-    /**
-     * @return true when the loader reads the configuration through its own config system.
-     *         Forge does, because that is what Configured turns into an in-game screen;
-     *         Fabric keeps the bundled TOML reader instead.
-     */
-    default boolean usesForgeConfigSystem() {
-        return false;
-    }
-
-    /**
-     * Writes the client switches back to wherever this loader keeps them. Only Forge has to
-     * do anything here, since the TOML reader of the common code handles its own files.
-     */
-    default void persistClientConfig() {
-    }
-
-    /**
-     * Writes the server switches back to wherever this loader keeps them.
-     */
-    default void persistServerConfig() {
     }
 }
