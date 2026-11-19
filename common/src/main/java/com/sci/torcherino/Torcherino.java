@@ -16,17 +16,16 @@ public final class Torcherino {
     }
 
     public static void init() {
-        TorcherinoConfig.load();
+        // The config values arrive through the loader's config events before this point.
         TorcherinoRegistry.registerDefaults();
         Constants.LOG.info("Torcherino {} initialised on {}",
                 Services.PLATFORM.getEnvironmentName(), Services.PLATFORM.getPlatformName());
     }
 
     /**
-     * Re-reads the configuration and rebuilds the default blacklist.
+     * Rebuilds the default blacklist after a configuration reload.
      */
     public static void reload() {
-        TorcherinoConfig.reload();
         TorcherinoRegistry.registerDefaults();
     }
 }

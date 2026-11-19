@@ -5,6 +5,7 @@
 package com.sci.torcherino;
 
 import com.sci.torcherino.blocks.ModBlockEntities;
+import com.huziyang.neoconfigurationscreenport.forge.ConfigScreenRegistration;
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.client.TorcherinoForgeClientEvents;
 import com.sci.torcherino.network.TorcherinoNetwork;
@@ -12,10 +13,8 @@ import com.sci.torcherino.platform.ForgeRegistrationHelper;
 import com.sci.torcherino.platform.Services;
 import com.sci.torcherino.platform.TorcherinoConfigCondition;
 
-import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -61,26 +60,10 @@ public class TorcherinoForge {
             // Chat notice about the recipe switches, printed once per world join.
             MinecraftForge.EVENT_BUS.addListener(TorcherinoForgeClientEvents::onLoggedIn);
 
-            // Lets the vanilla mod list and "Configured" show a config button. Registered
-            // behind the dist guard because the handler class is client only, and only when
-            // Cloth Config is installed: the screen is built with that API, which is an
-            // optional integration and never a dependency of this mod.
-            if (isClothConfigLoaded()) {
-                ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                        () -> new ConfigScreenHandler.ConfigScreenFactory(
-                                (minecraft, parent) -> TorcherinoForgeClientEvents.createConfigScreen(parent)));
-            }
+            // The mod list config button, backed by Neo Configuration Screen Port. Registered
+            // behind the dist guard because the extension point is client only.
+            ConfigScreenRegistration.register(Constants.MOD_ID);
         }
-    }
-
-    /**
-     * Is the optional Cloth Config API present? Queried through the loading mod list, because
-     * this runs while the mod is being constructed - {@code ModList} is not filled yet at
-     * that point.
-     */
-    private static boolean isClothConfigLoaded() {
-        return FMLLoader.getLoadingModList().getMods().stream()
-                .anyMatch(info -> "cloth_config".equals(info.getModId()) || "cloth-config".equals(info.getModId()));
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

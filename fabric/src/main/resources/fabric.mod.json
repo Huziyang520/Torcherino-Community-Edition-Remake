@@ -34,9 +34,6 @@
         "client": [
             "com.sci.torcherino.client.TorcherinoFabricClient"
         ],
-        "modmenu": [
-            "com.sci.torcherino.client.TorcherinoModMenu"
-        ],
         "jade": [
             "com.sci.torcherino.compat.jade.TorcherinoJadeFabricPlugin"
         ]
@@ -45,11 +42,12 @@
         "fabricloader": ">=0.16",
         "fabric-api": "*",
         "minecraft": ">=1.20 <1.20.2",
-        "java": ">=17"
+        "java": ">=17",
+        "forgeconfigapiport": ">=${fcap_version}",
+        "neoconfigurationscreenport": ">=${screen_port_version}",
+        "modmenu": "*"
     },
     "suggests": {
-        "projecte": "*",
-        "cloth-config": "*",
-        "modmenu": "*"
+        "projecte": "*"
     }
 }

@@ -1,3 +1,13 @@
+## 1.7.1
+
+### Changed
+
+- The configuration screen no longer needs Cloth Config: it is now NeoForge's own configuration screen, brought to this version by Neo Configuration Screen Port, on Forge and Fabric alike. Forge Config API Port (Fabric) and Neo Configuration Screen Port (both loaders) are required.
+  配置界面不再依赖 Cloth Config：改用 NeoForge 的配置界面，由 Neo Configuration Screen Port 移植到本版本，Forge 与 Fabric 表现一致；Forge 端需要 Neo Configuration Screen Port，Fabric 端还需要 Forge Config API Port。
+
+- The chat notice after joining a world now names the mod, invites feedback on the mod, and says where the notice can be turned off.
+  进入世界的提示改为：本模组有任何问题或建议都可以提交给作者，并说明该提示可在配置界面或配置文件中关闭。
+
 ## 1.7.0
 
 ### Changed

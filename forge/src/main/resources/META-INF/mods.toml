@@ -23,3 +23,9 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "neoconfigurationscreenport"
+mandatory = true
+versionRange = "[${screen_port_version},)"
+ordering = "NONE"
+side = "CLIENT"

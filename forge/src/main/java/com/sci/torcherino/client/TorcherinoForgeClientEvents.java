@@ -7,11 +7,9 @@ package com.sci.torcherino.client;
 
 import com.sci.torcherino.TorcherinoConfig;
 import com.sci.torcherino.blocks.ModBlocks;
-import com.sci.torcherino.client.screen.TorcherinoClothConfig;
 import com.sci.torcherino.client.screen.TorcherinoScreen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -51,18 +49,6 @@ public final class TorcherinoForgeClientEvents {
                                   boolean viewerIsOwner, boolean ownerEnabled) {
         Minecraft.getInstance().setScreen(new TorcherinoScreen(pos, titleKey, xRange, zRange, yRange, speed,
                 redstoneMode, tierMultiplier, ownerDisplay, othersCanEdit, viewerIsOwner, ownerEnabled));
-    }
-
-    /**
-     * Entry point of the configuration screen, handed to Forge so that the mod list can
-     * open it (Configured reads the ForgeConfigSpec instead).
-     *
-     * <p>The screen is built with Cloth Config, which is an optional integration: the
-     * extension point that reaches this method is only registered when the API is installed
-     * (see {@code TorcherinoForge}), so the class below is never loaded without it.</p>
-     */
-    public static Screen createConfigScreen(Screen parent) {
-        return TorcherinoClothConfig.create(parent);
     }
 
     /**
