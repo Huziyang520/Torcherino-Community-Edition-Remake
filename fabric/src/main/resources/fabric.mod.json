@@ -45,11 +45,11 @@
         "fabricloader": ">=0.16",
         "fabric-api": "*",
         "minecraft": ">=1.21 <1.22",
-        "java": ">=21"
+        "java": ">=21",
+        "forgeconfigapiport": ">=${fcap_version}",
+        "modmenu": "*"
     },
     "suggests": {
-        "projecte": "*",
-        "cloth-config": "*",
-        "modmenu": "*"
+        "projecte": "*"
     }
 }

@@ -43,11 +43,6 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     compileOnly project(":common")
-    // NeoForge ships night-config at runtime (its own config system uses it); it is only
-    // needed on the compile classpath because the common sources are compiled a second
-    // time inside this project.
-    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
     // Jade (Waila) API, optional: the plugin class is only loaded by Jade itself.
     compileOnly files("${rootDir}/libs/jade-neoforge-1.21.1.jar")
 }

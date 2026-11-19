@@ -1,10 +1,9 @@
 /*
  * 本文件：IPlatformHelper 的 NeoForge 实现。
- * 说明：用 FMLLoader / ModList / FMLPaths 回答平台信息，并把发包动作转交给 NeoForge 网络类。
+ * 说明：用 FML 的公开入口回答平台信息，并把发包动作转交给 NeoForge 网络类。
  */
 package com.sci.torcherino.platform;
 
-import com.sci.torcherino.TorcherinoNeoConfig;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 import com.sci.torcherino.network.TorcherinoNeoNetwork;
 import com.sci.torcherino.platform.services.IPlatformHelper;
@@ -12,10 +11,7 @@ import com.sci.torcherino.platform.services.IPlatformHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.fml.loading.FMLLoader;
-
-import java.nio.file.Path;
 
 /**
  * NeoForge implementation of the platform service.
@@ -35,31 +31,6 @@ public class NeoPlatformHelper implements IPlatformHelper {
     @Override
     public boolean isDevelopmentEnvironment() {
         return !FMLLoader.isProduction();
-    }
-
-    @Override
-    public Path getConfigDir() {
-        return FMLPaths.CONFIGDIR.get();
-    }
-
-    /**
-     * NeoForge owns the configuration files through {@code ModConfigSpec}, which is also the
-     * only thing its {@code ConfigurationScreen} can edit. The common TOML reader stays out of
-     * the way on this loader.
-     */
-    @Override
-    public boolean usesLoaderConfigSystem() {
-        return true;
-    }
-
-    @Override
-    public void persistClientConfig() {
-        TorcherinoNeoConfig.persistClient();
-    }
-
-    @Override
-    public void persistServerConfig() {
-        TorcherinoNeoConfig.persistServer();
     }
 
     @Override

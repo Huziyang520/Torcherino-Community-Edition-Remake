@@ -141,7 +141,8 @@ processResources {
             'neo_version'                  : neo_version,
             'neo_loader_version_range'     : neo_loader_version_range,
             'credits'                      : credits,
-            'java_version'                 : java_version
+            'java_version'                 : java_version,
+            'fcap_version'                 : findProperty('fcap_version') ?: ''
     ]
 
     var jsonExpandProps = expandProps.collectEntries {

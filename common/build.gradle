@@ -4,8 +4,9 @@ plugins {
 }
 
 neoForge {
-    // Vanilla Minecraft classes only: the common project must not see the loader API.
-    neoFormVersion = neo_form_version
+    // The shared sources declare their config with ModConfigSpec, so this module needs the
+    // loader API on its classpath; Fabric maps the same classes through Forge Config API Port.
+    version = neo_version
     if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
         accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
     }
@@ -18,10 +19,6 @@ neoForge {
 dependencies {
     // No Mixin is used anywhere in this mod, so the template's mixin dependency was removed.
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    // TOML configuration for the Fabric side. NeoForge ships night-config at runtime; the
-    // common sources are compiled in both loader projects, so it is needed here as well.
-    compileOnly group: 'com.electronwill.night-config', name: 'core', version: '3.6.4'
-    compileOnly group: 'com.electronwill.night-config', name: 'toml', version: '3.6.4'
     // Jade (Waila) API, optional. The API is loader independent, but the jar has to be the
     // official-mapping (NeoForge) one: the Fabric artifact is intermediary remapped and its
     // method descriptors cannot be compiled against official mappings. See libs/README.txt.
