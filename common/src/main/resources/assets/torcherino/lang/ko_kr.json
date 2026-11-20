@@ -138,5 +138,21 @@
   "gui.torcherino.jade.redstoneNote": " (레드스톤 제어)",
   "config.jade.plugin_torcherino.speed": "가속 배율",
   "config.jade.plugin_torcherino.state": "작동 상태",
-  "config.jade.plugin_torcherino.owner": "소유자"
+  "config.jade.plugin_torcherino.owner": "소유자",
+  "item.torcherino.blocktorcherino": "Torcherino",
+  "item.torcherino.blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklanterino": "Jack o'Lanterino",
+  "item.torcherino.blockcompressedlanterino": "Compressed Jack o'Lanterino",
+  "item.torcherino.blockdoublecompressedlanterino": "Double Compressed Jack o'Lanterino",
+  "item.torcherino.blocktriplecompressedlanterino": "Triple Compressed Jack o'Lanterino",
+  "item.torcherino.wall_blocktorcherino": "Torcherino",
+  "item.torcherino.wall_blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.wall_blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.wall_blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklantern": "Lanterino",
+  "item.torcherino.blockcompressedlantern": "Compressed Lanterino",
+  "item.torcherino.blockdoublecompressedlantern": "Double Compressed Lanterino",
+  "item.torcherino.blocktriplecompressedlantern": "Triple Compressed Lanterino"
 }
