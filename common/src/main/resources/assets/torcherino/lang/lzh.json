@@ -138,5 +138,21 @@
   "gui.torcherino.jade.redstoneNote": "（繫於紅石）",
   "config.jade.plugin_torcherino.speed": "加速之倍",
   "config.jade.plugin_torcherino.state": "運止之態",
-  "config.jade.plugin_torcherino.owner": "主者"
+  "config.jade.plugin_torcherino.owner": "主者",
+  "item.torcherino.blocktorcherino": "Torcherino",
+  "item.torcherino.blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklanterino": "Jack o'Lanterino",
+  "item.torcherino.blockcompressedlanterino": "Compressed Jack o'Lanterino",
+  "item.torcherino.blockdoublecompressedlanterino": "Double Compressed Jack o'Lanterino",
+  "item.torcherino.blocktriplecompressedlanterino": "Triple Compressed Jack o'Lanterino",
+  "item.torcherino.wall_blocktorcherino": "Torcherino",
+  "item.torcherino.wall_blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.wall_blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.wall_blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklantern": "Lanterino",
+  "item.torcherino.blockcompressedlantern": "Compressed Lanterino",
+  "item.torcherino.blockdoublecompressedlantern": "Double Compressed Lanterino",
+  "item.torcherino.blocktriplecompressedlantern": "Triple Compressed Lanterino"
 }

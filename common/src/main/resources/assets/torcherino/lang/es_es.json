@@ -138,5 +138,21 @@
   "gui.torcherino.jade.redstoneNote": " (controlado por redstone)",
   "config.jade.plugin_torcherino.speed": "Multiplicador de aceleracion",
   "config.jade.plugin_torcherino.state": "Estado",
-  "config.jade.plugin_torcherino.owner": "Dueno"
+  "config.jade.plugin_torcherino.owner": "Dueno",
+  "item.torcherino.blocktorcherino": "Torcherino",
+  "item.torcherino.blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklanterino": "Jack o'Lanterino",
+  "item.torcherino.blockcompressedlanterino": "Compressed Jack o'Lanterino",
+  "item.torcherino.blockdoublecompressedlanterino": "Double Compressed Jack o'Lanterino",
+  "item.torcherino.blocktriplecompressedlanterino": "Triple Compressed Jack o'Lanterino",
+  "item.torcherino.wall_blocktorcherino": "Torcherino",
+  "item.torcherino.wall_blockcompressedtorcherino": "Compressed Torcherino",
+  "item.torcherino.wall_blockdoublecompressedtorcherino": "Double Compressed Torcherino",
+  "item.torcherino.wall_blocktriplecompressedtorcherino": "Triple Compressed Torcherino",
+  "item.torcherino.blocklantern": "Lanterino",
+  "item.torcherino.blockcompressedlantern": "Compressed Lanterino",
+  "item.torcherino.blockdoublecompressedlantern": "Double Compressed Lanterino",
+  "item.torcherino.blocktriplecompressedlantern": "Triple Compressed Lanterino"
 }
